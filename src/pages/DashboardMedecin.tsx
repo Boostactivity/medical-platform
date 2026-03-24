@@ -167,7 +167,7 @@ export function DashboardMedecin() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F5F5F7] flex items-center justify-center">
+      <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-[#34C759] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <div className="text-[#34C759] text-xl">Chargement des données patients...</div>
@@ -310,7 +310,7 @@ export function DashboardMedecin() {
                   placeholder="Rechercher un patient..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10 pr-4 py-2 bg-[#F5F5F7] rounded-xl outline-none focus:ring-2 focus:ring-[#34C759] w-64"
+                  className="pl-10 pr-4 py-2 bg-[#f8fafc] rounded-xl outline-none focus:ring-2 focus:ring-[#34C759] w-64"
                 />
               </div>
               

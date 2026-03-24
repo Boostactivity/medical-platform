@@ -1,147 +1,183 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, RefreshControl, TouchableOpacity, ActivityIndicator } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  RefreshControl,
+  TouchableOpacity,
+  ActivityIndicator,
+  Animated,
+  Dimensions,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDatabase } from '@nozbe/watermelondb/hooks';
-import { SleepChart } from '../../components/charts/SleepChart';
-import { IAHChart } from '../../components/charts/IAHChart';
-import { Patient } from '../../database/models/Patient';
-import { SleepData } from '../../database/models/SleepData';
-import { Alert } from '../../database/models/Alert';
-import { Device } from '../../database/models/Device';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
+import Svg, { Circle } from 'react-native-svg';
 
-/**
- * Dashboard Patient - Page d'accueil de l'application mobile
- * 
- * Affiche :
- * - Statistiques du jour (heures, IAH, fuites)
- * - Graphique d'observance 30 jours
- * - Graphique IAH 30 jours
- * - Alertes actives
- * - Statut appareil
- * - Score la plateforme
- */
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+const BLUE = '#3b82f6';
+const VIOLET = '#8b5cf6';
 
-export default function DashboardPatient() {
-  // ============================================
-  // STATE
-  // ============================================
+// ============================================
+// COMPOSANT CERCLE ANIME (Score)
+// ============================================
 
-  const database = useDatabase();
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  
-  // Données
-  const [patient, setPatient] = useState<Patient | null>(null);
-  const [sleepData, setSleepData] = useState<SleepData[]>([]);
-  const [lastNight, setLastNight] = useState<SleepData | null>(null);
-  const [activeAlerts, setActiveAlerts] = useState<Alert[]>([]);
-  const [device, setDevice] = useState<Device | null>(null);
-  
-  // Statistiques
-  const [stats, setStats] = useState({
-    avgHours: 0,
-    avgAHI: 0,
-    compliance: 0,
-    expairScore: 0,
-  });
-
-  // Période d'affichage
-  const [period, setPeriod] = useState<7 | 14 | 30>(30);
-
-  // ============================================
-  // CHARGEMENT DES DONNÉES
-  // ============================================
+function AnimatedScoreCircle({ score, size = 140 }: { score: number; size?: number }) {
+  const animatedValue = useRef(new Animated.Value(0)).current;
+  const radius = (size - 12) / 2;
+  const circumference = 2 * Math.PI * radius;
 
   useEffect(() => {
-    loadData();
+    Animated.timing(animatedValue, {
+      toValue: score / 100,
+      duration: 1200,
+      useNativeDriver: false,
+    }).start();
+  }, [score]);
+
+  const strokeDashoffset = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [circumference, 0],
+  });
+
+  return (
+    <View style={{ width: size, height: size, alignItems: 'center', justifyContent: 'center' }}>
+      <Svg width={size} height={size} style={{ position: 'absolute' }}>
+        <Circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke="#f1f5f9"
+          strokeWidth={10}
+          fill="none"
+        />
+        <Circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke={BLUE}
+          strokeWidth={10}
+          fill="none"
+          strokeDasharray={`${circumference}`}
+          strokeDashoffset={(1 - score / 100) * circumference}
+          strokeLinecap="round"
+          transform={`rotate(-90 ${size / 2} ${size / 2})`}
+        />
+      </Svg>
+      <View style={{ alignItems: 'center' }}>
+        <Text style={{ fontSize: 36, fontWeight: '700', color: '#1e293b' }}>{score}</Text>
+        <Text style={{ fontSize: 13, color: '#94a3b8', fontWeight: '500' }}>/100</Text>
+      </View>
+    </View>
+  );
+}
+
+// ============================================
+// MINI BAR CHART 7 JOURS
+// ============================================
+
+function MiniBarChart({ data }: { data: { day: string; hours: number }[] }) {
+  const maxH = Math.max(...data.map((d) => d.hours), 8);
+  const barWidth = (SCREEN_WIDTH - 80) / data.length - 6;
+
+  return (
+    <View style={miniStyles.container}>
+      <View style={miniStyles.barsRow}>
+        {data.map((d, i) => {
+          const height = (d.hours / maxH) * 80;
+          const isGood = d.hours >= 4;
+          return (
+            <View key={i} style={miniStyles.barWrapper}>
+              <View
+                style={[
+                  miniStyles.bar,
+                  {
+                    height,
+                    width: barWidth,
+                    backgroundColor: isGood ? BLUE : '#e2e8f0',
+                    borderRadius: 4,
+                  },
+                ]}
+              />
+              <Text style={miniStyles.barLabel}>{d.day}</Text>
+            </View>
+          );
+        })}
+      </View>
+      <View style={miniStyles.targetLine}>
+        <View style={miniStyles.targetDash} />
+        <Text style={miniStyles.targetText}>4h min</Text>
+      </View>
+    </View>
+  );
+}
+
+const miniStyles = StyleSheet.create({
+  container: { marginTop: 8 },
+  barsRow: { flexDirection: 'row', alignItems: 'flex-end', justifyContent: 'space-between', height: 100, paddingBottom: 20 },
+  barWrapper: { alignItems: 'center' },
+  bar: { marginBottom: 6 },
+  barLabel: { fontSize: 10, color: '#94a3b8', fontWeight: '500' },
+  targetLine: { position: 'absolute', top: 100 - (4 / 8) * 80 - 20, left: 0, right: 0, flexDirection: 'row', alignItems: 'center' },
+  targetDash: { flex: 1, height: 1, borderStyle: 'dashed', borderWidth: 0.5, borderColor: '#cbd5e1' },
+  targetText: { fontSize: 9, color: '#94a3b8', marginLeft: 4 },
+});
+
+// ============================================
+// DONNEES MOCK
+// ============================================
+
+const MOCK_SCORE = 78;
+const MOCK_LAST_NIGHT = { hours: 6.5, ahi: 3.2, leaks: 12.4, compliant: true };
+const MOCK_WEEK = [
+  { day: 'Lun', hours: 7.1 },
+  { day: 'Mar', hours: 5.3 },
+  { day: 'Mer', hours: 6.8 },
+  { day: 'Jeu', hours: 3.2 },
+  { day: 'Ven', hours: 7.5 },
+  { day: 'Sam', hours: 6.1 },
+  { day: 'Dim', hours: 6.5 },
+];
+const MOCK_BADGE = { name: '7 nuits consecutives', icon: 'flame-outline' as const };
+const MOTIVATIONAL_MESSAGES = [
+  'Chaque nuit compte. Vous etes sur la bonne voie !',
+  'Bravo pour votre regularite, continuez ainsi !',
+  'Votre sommeil s ameliore, gardez le cap !',
+  'Une bonne nuit de plus, votre corps vous remercie.',
+];
+
+// ============================================
+// ECRAN PRINCIPAL
+// ============================================
+
+export default function DashboardPatient() {
+  const router = useRouter();
+  const [refreshing, setRefreshing] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const motivMessage = MOTIVATIONAL_MESSAGES[new Date().getDay() % MOTIVATIONAL_MESSAGES.length];
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 600,
+      useNativeDriver: true,
+    }).start();
   }, []);
-
-  async function loadData() {
-    try {
-      setLoading(true);
-      
-      // TODO: Récupérer l'ID du patient connecté depuis le context auth
-      const currentPatientId = 'PATIENT_ID_HERE';
-      
-      // Charger le patient
-      const patientData = await database.get<Patient>('patients').find(currentPatientId);
-      setPatient(patientData);
-      
-      // Charger les données de sommeil (30 derniers jours)
-      const sleepDataRecords = await patientData.getRecentSleepData(30);
-      setSleepData(sleepDataRecords);
-      
-      // Dernière nuit
-      if (sleepDataRecords.length > 0) {
-        setLastNight(sleepDataRecords[0]);
-      }
-      
-      // Charger les alertes actives
-      const alerts = await patientData.getActiveAlerts();
-      setActiveAlerts(alerts);
-      
-      // Charger l'appareil
-      const deviceData = await patientData.getCurrentDevice();
-      setDevice(deviceData);
-      
-      // Calculer les statistiques
-      await calculateStats(sleepDataRecords);
-      
-    } catch (error) {
-      console.error('Error loading dashboard data:', error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function calculateStats(data: SleepData[]) {
-    if (data.length === 0) {
-      setStats({ avgHours: 0, avgAHI: 0, compliance: 0, expairScore: 0 });
-      return;
-    }
-    
-    // Moyenne heures
-    const totalHours = data.reduce((sum, d) => sum + d.hoursUsed, 0);
-    const avgHours = totalHours / data.length;
-    
-    // Moyenne IAH
-    const ahiData = data.filter(d => d.ahi !== undefined);
-    const avgAHI = ahiData.length > 0
-      ? ahiData.reduce((sum, d) => sum + d.ahi!, 0) / ahiData.length
-      : 0;
-    
-    // Taux de compliance (≥4h)
-    const compliantNights = data.filter(d => d.isCompliant).length;
-    const compliance = (compliantNights / data.length) * 100;
-    
-    // Score la plateforme moyen
-    const scoresData = data.filter(d => d.expairScore !== undefined);
-    const expairScore = scoresData.length > 0
-      ? scoresData.reduce((sum, d) => sum + d.expairScore!, 0) / scoresData.length
-      : 0;
-    
-    setStats({ avgHours, avgAHI, compliance, expairScore });
-  }
-
-  // ============================================
-  // REFRESH
-  // ============================================
 
   async function onRefresh() {
     setRefreshing(true);
-    await loadData();
+    await new Promise((r) => setTimeout(r, 800));
     setRefreshing(false);
   }
-
-  // ============================================
-  // RENDER
-  // ============================================
 
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#5eb3d6" />
+          <ActivityIndicator size="large" color={BLUE} />
           <Text style={styles.loadingText}>Chargement...</Text>
         </View>
       </SafeAreaView>
@@ -153,206 +189,105 @@ export default function DashboardPatient() {
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={BLUE} />}
       >
         {/* Header */}
-        <View style={styles.header}>
+        <Animated.View style={[styles.header, { opacity: fadeAnim }]}>
           <View>
-            <Text style={styles.greeting}>Bonjour !</Text>
-            <Text style={styles.patientName}>{patient?.user?.name || 'Patient'}</Text>
+            <Text style={styles.greeting}>Bonjour,</Text>
+            <Text style={styles.patientName}>Marie Dupont</Text>
           </View>
-          <TouchableOpacity style={styles.profileButton}>
-            <Text style={styles.profileIcon}>👤</Text>
+          <TouchableOpacity style={styles.notifButton} onPress={() => router.push('/alerts')}>
+            <Ionicons name="notifications-outline" size={22} color="#1e293b" />
+            <View style={styles.notifDot} />
           </TouchableOpacity>
+        </Animated.View>
+
+        {/* Message motivationnel */}
+        <View style={styles.motivCard}>
+          <Ionicons name="sunny-outline" size={20} color={VIOLET} />
+          <Text style={styles.motivText}>{motivMessage}</Text>
         </View>
 
-        {/* Statistiques du jour */}
-        {lastNight && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Dernière nuit</Text>
-            <View style={styles.statsCard}>
-              <View style={styles.statItem}>
-                <Text style={styles.statValue}>{lastNight.hoursUsed.toFixed(1)}h</Text>
-                <Text style={styles.statLabel}>Utilisation</Text>
-                <View style={[styles.statBadge, { backgroundColor: lastNight.isCompliant ? '#dcfce7' : '#fee2e2' }]}>
-                  <Text style={[styles.statBadgeText, { color: lastNight.isCompliant ? '#16a34a' : '#dc2626' }]}>
-                    {lastNight.isCompliant ? '✓ Conforme' : '✗ Non conforme'}
-                  </Text>
-                </View>
-              </View>
-              
-              {lastNight.ahi !== undefined && (
-                <View style={styles.statItem}>
-                  <Text style={styles.statValue}>{lastNight.ahi.toFixed(1)}</Text>
-                  <Text style={styles.statLabel}>IAH</Text>
-                  <View style={[styles.statBadge, { backgroundColor: getAHIBadgeColor(lastNight.ahi).bg }]}>
-                    <Text style={[styles.statBadgeText, { color: getAHIBadgeColor(lastNight.ahi).text }]}>
-                      {lastNight.ahiLevel === 'normal' ? 'Normal' :
-                       lastNight.ahiLevel === 'mild' ? 'Léger' :
-                       lastNight.ahiLevel === 'moderate' ? 'Modéré' : 'Sévère'}
-                    </Text>
-                  </View>
-                </View>
-              )}
-              
-              {lastNight.leakage !== undefined && (
-                <View style={styles.statItem}>
-                  <Text style={styles.statValue}>{lastNight.leakage.toFixed(1)}</Text>
-                  <Text style={styles.statLabel}>Fuites (L/min)</Text>
-                  <View style={[styles.statBadge, { backgroundColor: lastNight.hasAcceptableLeakage ? '#dcfce7' : '#fef3c7' }]}>
-                    <Text style={[styles.statBadgeText, { color: lastNight.hasAcceptableLeakage ? '#16a34a' : '#ca8a04' }]}>
-                      {lastNight.hasAcceptableLeakage ? 'Bon' : 'Moyen'}
-                    </Text>
-                  </View>
-                </View>
-              )}
-            </View>
-          </View>
-        )}
-
-        {/* Alertes */}
-        {activeAlerts.length > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Alertes actives ({activeAlerts.length})</Text>
-            {activeAlerts.slice(0, 3).map((alert) => (
-              <TouchableOpacity key={alert.id} style={styles.alertCard}>
-                <View style={[styles.alertDot, { backgroundColor: alert.severityColor }]} />
-                <View style={styles.alertContent}>
-                  <Text style={styles.alertTitle}>{alert.title}</Text>
-                  <Text style={styles.alertMessage}>{alert.message}</Text>
-                  <Text style={styles.alertTime}>{alert.ageFormatted}</Text>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </View>
-        )}
-
-        {/* Statistiques 30 jours */}
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Statistiques ({period} jours)</Text>
-            <View style={styles.periodSelector}>
-              <TouchableOpacity
-                style={[styles.periodButton, period === 7 && styles.periodButtonActive]}
-                onPress={() => setPeriod(7)}
-              >
-                <Text style={[styles.periodButtonText, period === 7 && styles.periodButtonTextActive]}>7j</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.periodButton, period === 14 && styles.periodButtonActive]}
-                onPress={() => setPeriod(14)}
-              >
-                <Text style={[styles.periodButtonText, period === 14 && styles.periodButtonTextActive]}>14j</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.periodButton, period === 30 && styles.periodButtonActive]}
-                onPress={() => setPeriod(30)}
-              >
-                <Text style={[styles.periodButtonText, period === 30 && styles.periodButtonTextActive]}>30j</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          
-          <View style={styles.statsRow}>
-            <View style={styles.statsRowItem}>
-              <Text style={styles.statsRowValue}>{stats.avgHours.toFixed(1)}h</Text>
-              <Text style={styles.statsRowLabel}>Moyenne/nuit</Text>
-            </View>
-            <View style={styles.statsRowItem}>
-              <Text style={styles.statsRowValue}>{stats.compliance.toFixed(0)}%</Text>
-              <Text style={styles.statsRowLabel}>Observance</Text>
-            </View>
-            {stats.avgAHI > 0 && (
-              <View style={styles.statsRowItem}>
-                <Text style={styles.statsRowValue}>{stats.avgAHI.toFixed(1)}</Text>
-                <Text style={styles.statsRowLabel}>IAH moyen</Text>
-              </View>
-            )}
-          </View>
-        </View>
-
-        {/* Graphique observance */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Observance</Text>
-          <SleepChart data={sleepData} period={period} showTarget={true} />
-        </View>
-
-        {/* Graphique IAH */}
-        {sleepData.some(d => d.ahi !== undefined) && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Évolution de l'IAH</Text>
-            <IAHChart data={sleepData} period={period} showThresholds={true} />
-          </View>
-        )}
-
-        {/* Statut appareil */}
-        {device && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Mon appareil</Text>
-            <View style={styles.deviceCard}>
-              <View style={styles.deviceHeader}>
-                <Text style={styles.deviceIcon}>{device.manufacturerLogo}</Text>
-                <View style={styles.deviceInfo}>
-                  <Text style={styles.deviceName}>{device.fullName}</Text>
-                  <Text style={styles.deviceSerial}>S/N: {device.formattedSerialNumber}</Text>
-                </View>
-                <View style={[styles.deviceStatus, { backgroundColor: device.statusColor }]}>
-                  <Text style={styles.deviceStatusText}>{device.statusLabel}</Text>
-                </View>
-              </View>
-              
-              {device.needsMaintenance && (
-                <View style={styles.deviceMaintenance}>
-                  <Text style={styles.deviceMaintenanceIcon}>⚠️</Text>
-                  <Text style={styles.deviceMaintenanceText}>
-                    Maintenance : {device.maintenanceStatus}
-                  </Text>
-                </View>
-              )}
-            </View>
-          </View>
-        )}
-
-        {/* Score la plateforme */}
-        {stats.expairScore > 0 && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Score la plateforme</Text>
-            <View style={styles.scoreCard}>
-              <View style={styles.scoreCircle}>
-                <Text style={styles.scoreValue}>{Math.round(stats.expairScore)}</Text>
-                <Text style={styles.scoreMax}>/100</Text>
-              </View>
+        {/* Score global */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Score global</Text>
+          <View style={styles.scoreContainer}>
+            <AnimatedScoreCircle score={MOCK_SCORE} />
+            <View style={styles.scoreInfo}>
               <Text style={styles.scoreLabel}>
-                {stats.expairScore >= 85 ? 'Excellent !' :
-                 stats.expairScore >= 70 ? 'Très bien !' :
-                 stats.expairScore >= 50 ? 'Bien' : 'À améliorer'}
+                {MOCK_SCORE >= 85 ? 'Excellent !' : MOCK_SCORE >= 70 ? 'Tres bien !' : MOCK_SCORE >= 50 ? 'Bien' : 'A ameliorer'}
+              </Text>
+              <Text style={styles.scoreSubtext}>Basé sur vos 30 dernieres nuits</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Resume derniere nuit */}
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <Text style={styles.cardTitle}>Derniere nuit</Text>
+            <View style={[styles.complianceBadge, { backgroundColor: MOCK_LAST_NIGHT.compliant ? '#dcfce7' : '#fee2e2' }]}>
+              <Text style={[styles.complianceBadgeText, { color: MOCK_LAST_NIGHT.compliant ? '#16a34a' : '#dc2626' }]}>
+                {MOCK_LAST_NIGHT.compliant ? 'Conforme' : 'Non conforme'}
               </Text>
             </View>
           </View>
-        )}
+          <View style={styles.metricsRow}>
+            <View style={styles.metricItem}>
+              <Ionicons name="time-outline" size={20} color={BLUE} />
+              <Text style={styles.metricValue}>{MOCK_LAST_NIGHT.hours}h</Text>
+              <Text style={styles.metricLabel}>Duree</Text>
+            </View>
+            <View style={styles.metricDivider} />
+            <View style={styles.metricItem}>
+              <Ionicons name="pulse-outline" size={20} color={VIOLET} />
+              <Text style={styles.metricValue}>{MOCK_LAST_NIGHT.ahi}</Text>
+              <Text style={styles.metricLabel}>IAH</Text>
+            </View>
+            <View style={styles.metricDivider} />
+            <View style={styles.metricItem}>
+              <Ionicons name="water-outline" size={20} color="#06b6d4" />
+              <Text style={styles.metricValue}>{MOCK_LAST_NIGHT.leaks}</Text>
+              <Text style={styles.metricLabel}>Fuites L/min</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Graphique 7 jours */}
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>7 derniers jours</Text>
+          <MiniBarChart data={MOCK_WEEK} />
+        </View>
+
+        {/* Badge recent */}
+        <View style={styles.badgeCard}>
+          <View style={styles.badgeIconCircle}>
+            <Ionicons name={MOCK_BADGE.icon} size={24} color="#ffffff" />
+          </View>
+          <View style={styles.badgeInfo}>
+            <Text style={styles.badgeTitle}>Badge debloque !</Text>
+            <Text style={styles.badgeName}>{MOCK_BADGE.name}</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={18} color="#cbd5e1" />
+        </View>
+
+        {/* Bouton probleme */}
+        <TouchableOpacity style={styles.problemButton} onPress={() => router.push('/(tabs)/aide')}>
+          <Ionicons name="chatbubble-ellipses-outline" size={20} color="#ffffff" />
+          <Text style={styles.problemButtonText}>J'ai un probleme</Text>
+        </TouchableOpacity>
 
         {/* Footer */}
         <View style={styles.footer}>
           <Text style={styles.footerText}>
-            Dernière synchronisation : {new Date().toLocaleTimeString('fr-FR')}
+            Derniere synchronisation : {new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
           </Text>
         </View>
       </ScrollView>
     </SafeAreaView>
   );
-}
-
-// ============================================
-// HELPERS
-// ============================================
-
-function getAHIBadgeColor(ahi: number): { bg: string; text: string } {
-  if (ahi < 5) return { bg: '#dcfce7', text: '#16a34a' };
-  if (ahi < 15) return { bg: '#fef3c7', text: '#ca8a04' };
-  if (ahi < 30) return { bg: '#fed7aa', text: '#ea580c' };
-  return { bg: '#fee2e2', text: '#dc2626' };
 }
 
 // ============================================
@@ -371,8 +306,9 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     marginTop: 12,
-    fontSize: 16,
-    color: '#64748b',
+    fontSize: 15,
+    color: '#94a3b8',
+    fontWeight: '400',
   },
   scrollView: {
     flex: 1,
@@ -385,273 +321,200 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 24,
+    marginBottom: 20,
   },
   greeting: {
-    fontSize: 16,
-    color: '#64748b',
+    fontSize: 15,
+    color: '#94a3b8',
+    fontWeight: '400',
   },
   patientName: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: '700',
-    color: '#1e3a5f',
-    marginTop: 4,
+    color: '#1e293b',
+    marginTop: 2,
+    letterSpacing: -0.5,
   },
-  profileButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: 'white',
+  notifButton: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#ffffff',
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: 0.06,
+    shadowRadius: 6,
     elevation: 3,
   },
-  profileIcon: {
-    fontSize: 24,
+  notifDot: {
+    position: 'absolute',
+    top: 10,
+    right: 12,
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#ef4444',
+    borderWidth: 1.5,
+    borderColor: '#ffffff',
   },
-  section: {
-    marginBottom: 24,
+  motivCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f5f3ff',
+    borderRadius: 14,
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+    marginBottom: 20,
+    gap: 10,
   },
-  sectionHeader: {
+  motivText: {
+    flex: 1,
+    fontSize: 13,
+    color: '#6d28d9',
+    fontWeight: '500',
+    lineHeight: 18,
+  },
+  card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  cardHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
   },
-  sectionTitle: {
-    fontSize: 18,
+  cardTitle: {
+    fontSize: 16,
     fontWeight: '600',
-    color: '#1e3a5f',
-    marginBottom: 12,
-  },
-  periodSelector: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  periodButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
-  },
-  periodButtonActive: {
-    backgroundColor: '#5eb3d6',
-    borderColor: '#5eb3d6',
-  },
-  periodButtonText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#64748b',
-  },
-  periodButtonTextActive: {
-    color: 'white',
-  },
-  statsCard: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-    gap: 16,
-  },
-  statItem: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  statValue: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#1e3a5f',
-  },
-  statLabel: {
-    fontSize: 12,
-    color: '#64748b',
-    marginTop: 4,
-    textAlign: 'center',
-  },
-  statBadge: {
-    marginTop: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  statBadgeText: {
-    fontSize: 10,
-    fontWeight: '600',
-  },
-  alertCard: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  alertDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    marginTop: 6,
-    marginRight: 12,
-  },
-  alertContent: {
-    flex: 1,
-  },
-  alertTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1e3a5f',
-    marginBottom: 4,
-  },
-  alertMessage: {
-    fontSize: 13,
-    color: '#64748b',
-    marginBottom: 4,
-  },
-  alertTime: {
-    fontSize: 11,
-    color: '#94a3b8',
-  },
-  statsRow: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
+    color: '#1e293b',
     marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-    gap: 16,
+    letterSpacing: -0.3,
   },
-  statsRowItem: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  statsRowValue: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#5eb3d6',
-  },
-  statsRowLabel: {
-    fontSize: 11,
-    color: '#64748b',
-    marginTop: 4,
-    textAlign: 'center',
-  },
-  deviceCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  deviceHeader: {
+  scoreContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    gap: 20,
   },
-  deviceIcon: {
-    fontSize: 32,
-    marginRight: 12,
-  },
-  deviceInfo: {
+  scoreInfo: {
     flex: 1,
-  },
-  deviceName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1e3a5f',
-  },
-  deviceSerial: {
-    fontSize: 12,
-    color: '#64748b',
-    marginTop: 2,
-  },
-  deviceStatus: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 12,
-  },
-  deviceStatusText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: 'white',
-  },
-  deviceMaintenance: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 12,
-    padding: 12,
-    backgroundColor: '#fef3c7',
-    borderRadius: 8,
-  },
-  deviceMaintenanceIcon: {
-    fontSize: 16,
-    marginRight: 8,
-  },
-  deviceMaintenanceText: {
-    fontSize: 13,
-    color: '#92400e',
-    flex: 1,
-  },
-  scoreCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 24,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  scoreCircle: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    backgroundColor: '#5eb3d6',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  scoreValue: {
-    fontSize: 40,
-    fontWeight: '700',
-    color: 'white',
-  },
-  scoreMax: {
-    fontSize: 16,
-    color: 'rgba(255, 255, 255, 0.8)',
   },
   scoreLabel: {
-    fontSize: 18,
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1e293b',
+    marginBottom: 4,
+  },
+  scoreSubtext: {
+    fontSize: 13,
+    color: '#94a3b8',
+    fontWeight: '400',
+  },
+  complianceBadge: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 20,
+  },
+  complianceBadgeText: {
+    fontSize: 12,
     fontWeight: '600',
-    color: '#1e3a5f',
+  },
+  metricsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  metricItem: {
+    flex: 1,
+    alignItems: 'center',
+    gap: 6,
+  },
+  metricValue: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: '#1e293b',
+  },
+  metricLabel: {
+    fontSize: 11,
+    color: '#94a3b8',
+    fontWeight: '500',
+  },
+  metricDivider: {
+    width: 1,
+    height: 40,
+    backgroundColor: '#f1f5f9',
+  },
+  badgeCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 2,
+    gap: 14,
+  },
+  badgeIconCircle: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: VIOLET,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  badgeInfo: {
+    flex: 1,
+  },
+  badgeTitle: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: VIOLET,
+    marginBottom: 2,
+  },
+  badgeName: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#1e293b',
+  },
+  problemButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: BLUE,
+    borderRadius: 14,
+    paddingVertical: 16,
+    marginBottom: 16,
+    gap: 8,
+    shadowColor: BLUE,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  problemButtonText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#ffffff',
   },
   footer: {
     alignItems: 'center',
-    marginTop: 24,
+    marginTop: 8,
   },
   footerText: {
     fontSize: 12,
-    color: '#94a3b8',
+    color: '#cbd5e1',
+    fontWeight: '400',
   },
 });

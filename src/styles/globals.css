@@ -155,41 +155,41 @@
   :where(:not(:has([class*=' text-']), :not(:has([class^='text-'])))) {
     h1 {
       font-size: 4.5rem;
-      font-weight: 600;
+      font-weight: 300;
       line-height: 1.05;
-      letter-spacing: -0.015em;
+      letter-spacing: -0.02em;
     }
 
     h2 {
       font-size: 3rem;
-      font-weight: 600;
+      font-weight: 300;
       line-height: 1.08;
-      letter-spacing: -0.012em;
+      letter-spacing: -0.015em;
     }
 
     h3 {
       font-size: 2.25rem;
-      font-weight: 600;
+      font-weight: 400;
       line-height: 1.11;
-      letter-spacing: -0.008em;
+      letter-spacing: -0.01em;
     }
 
     h4 {
       font-size: 1.75rem;
-      font-weight: 600;
+      font-weight: 400;
       line-height: 1.14;
       letter-spacing: -0.005em;
     }
 
     h5 {
       font-size: 1.5rem;
-      font-weight: 600;
+      font-weight: 400;
       line-height: 1.17;
     }
 
     h6 {
       font-size: 1.25rem;
-      font-weight: 600;
+      font-weight: 500;
       line-height: 1.2;
     }
 

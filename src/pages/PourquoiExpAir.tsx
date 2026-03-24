@@ -21,19 +21,19 @@ export function PourquoiExpAir() {
       icon: <Shield className="w-10 h-10" />,
       title: 'Transparence totale',
       description: 'Nous expliquons clairement votre parcours, vos droits, le remboursement et le fonctionnement du traitement.',
-      color: 'from-[#007AFF] to-[#5AC8FA]',
+      color: 'from-[#3b82f6] to-[#5AC8FA]',
     },
     {
       icon: <Smartphone className="w-10 h-10" />,
       title: 'Digital-first',
       description: 'Espace patient moderne, télésuivi intelligent, communication fluide. La technologie au service de votre santé.',
-      color: 'from-[#5AC8FA] to-[#34C759]',
+      color: 'from-[#5AC8FA] to-[#10b981]',
     },
     {
       icon: <Users className="w-10 h-10" />,
       title: 'Accompagnement humain',
       description: 'Derrière la technologie, une équipe dédiée, disponible et à l\'écoute pour vous accompagner au quotidien.',
-      color: 'from-[#34C759] to-[#FF9500]',
+      color: 'from-[#10b981] to-[#FF9500]',
     },
   ];
 
@@ -63,7 +63,7 @@ export function PourquoiExpAir() {
   return (
     <div className="bg-white">
       {/* Hero */}
-      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#007AFF] to-[#5AC8FA] overflow-hidden">
+      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#3b82f6] to-[#5AC8FA] overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute top-20 left-10 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
@@ -91,14 +91,14 @@ export function PourquoiExpAir() {
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="max-w-4xl mx-auto">
-            <h2 className="text-4xl text-[#1D1D1F] mb-6 text-center">
+            <h2 className="text-4xl text-[#1a2b3c] mb-6 text-center">
               Le problème du modèle actuel
             </h2>
-            <div className="bg-[#F5F5F7] rounded-3xl p-12">
-              <p className="text-xl text-[#86868B] mb-6">
+            <div className="bg-[#f8fafc] rounded-3xl p-12">
+              <p className="text-xl text-[#6b7280] mb-6">
                 En France, le marché de l'appareillage pour l'apnée du sommeil souffre d'un fonctionnement opaque :
               </p>
-              <ul className="space-y-4 text-lg text-[#1D1D1F]">
+              <ul className="space-y-4 text-lg text-[#1a2b3c]">
                 <li className="flex items-start gap-3">
                   <div className="w-2 h-2 bg-[#FF3B30] rounded-full mt-2 flex-shrink-0"></div>
                   <span>Les médecins orientent systématiquement vers "leurs" prestataires habituels</span>
@@ -126,13 +126,13 @@ export function PourquoiExpAir() {
       </section>
 
       {/* Our Values */}
-      <section className="py-24 bg-gradient-to-br from-[#F5F5F7] via-white to-[#F5F5F7]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1D1D1F] mb-6">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
               Nos valeurs fondamentales
             </h2>
-            <p className="text-xl text-[#86868B] max-w-3xl mx-auto">
+            <p className="text-xl text-[#6b7280] max-w-3xl mx-auto">
               Ce qui guide chacune de nos décisions et actions au quotidien
             </p>
           </motion.div>
@@ -150,8 +150,8 @@ export function PourquoiExpAir() {
                 <div className={`w-20 h-20 bg-gradient-to-br ${value.color} rounded-3xl flex items-center justify-center text-white mb-6 shadow-lg`}>
                   {value.icon}
                 </div>
-                <h3 className="text-2xl text-[#1D1D1F] mb-3">{value.title}</h3>
-                <p className="text-lg text-[#86868B]">{value.description}</p>
+                <h3 className="text-2xl text-[#1a2b3c] mb-3">{value.title}</h3>
+                <p className="text-lg text-[#6b7280]">{value.description}</p>
               </motion.div>
             ))}
           </div>
@@ -162,10 +162,10 @@ export function PourquoiExpAir() {
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1D1D1F] mb-6">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
               Ce qui nous différencie
             </h2>
-            <p className="text-xl text-[#86868B] max-w-3xl mx-auto">
+            <p className="text-xl text-[#6b7280] max-w-3xl mx-auto">
               Concrètement, au quotidien, voici ce qui fait la différence la plateforme
             </p>
           </motion.div>
@@ -178,13 +178,13 @@ export function PourquoiExpAir() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-[#F5F5F7] rounded-3xl p-8 hover:shadow-xl transition-shadow"
+                className="bg-[#f8fafc] rounded-3xl p-8 hover:shadow-xl transition-shadow"
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-[#007AFF] to-[#5AC8FA] rounded-2xl flex items-center justify-center text-white mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#3b82f6] to-[#5AC8FA] rounded-2xl flex items-center justify-center text-white mb-6">
                   {item.icon}
                 </div>
-                <h3 className="text-xl text-[#1D1D1F] mb-3">{item.title}</h3>
-                <p className="text-[#86868B]">{item.description}</p>
+                <h3 className="text-xl text-[#1a2b3c] mb-3">{item.title}</h3>
+                <p className="text-[#6b7280]">{item.description}</p>
               </motion.div>
             ))}
           </div>
@@ -192,37 +192,37 @@ export function PourquoiExpAir() {
       </section>
 
       {/* Libre choix */}
-      <section className="py-24 bg-gradient-to-br from-[#F5F5F7] via-white to-[#F5F5F7]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div {...fadeInUp}>
-              <h2 className="text-4xl text-[#1D1D1F] mb-6">
+              <h2 className="text-4xl text-[#1a2b3c] mb-6">
                 Votre droit au libre choix
               </h2>
-              <p className="text-xl text-[#86868B] mb-6">
+              <p className="text-xl text-[#6b7280] mb-6">
                 En France, la loi vous garantit le libre choix de votre prestataire de santé à domicile. 
                 Même si votre médecin vous recommande un prestataire, vous pouvez choisir la plateforme.
               </p>
               <div className="bg-white rounded-2xl p-8 shadow-lg mb-6">
-                <h4 className="text-xl text-[#1D1D1F] mb-4">Comment faire valoir votre choix ?</h4>
-                <ol className="space-y-3 text-[#86868B]">
+                <h4 className="text-xl text-[#1a2b3c] mb-4">Comment faire valoir votre choix ?</h4>
+                <ol className="space-y-3 text-[#6b7280]">
                   <li className="flex gap-3">
-                    <span className="w-8 h-8 bg-[#007AFF] text-white rounded-full flex items-center justify-center flex-shrink-0">1</span>
+                    <span className="w-8 h-8 bg-[#3b82f6] text-white rounded-full flex items-center justify-center flex-shrink-0">1</span>
                     <span>Informez votre médecin que vous souhaitez être suivi par la plateforme</span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="w-8 h-8 bg-[#007AFF] text-white rounded-full flex items-center justify-center flex-shrink-0">2</span>
+                    <span className="w-8 h-8 bg-[#3b82f6] text-white rounded-full flex items-center justify-center flex-shrink-0">2</span>
                     <span>Nous vous fournissons un document explicatif pour votre médecin</span>
                   </li>
                   <li className="flex gap-3">
-                    <span className="w-8 h-8 bg-[#007AFF] text-white rounded-full flex items-center justify-center flex-shrink-0">3</span>
+                    <span className="w-8 h-8 bg-[#3b82f6] text-white rounded-full flex items-center justify-center flex-shrink-0">3</span>
                     <span>Nous gérons toutes les démarches administratives</span>
                   </li>
                 </ol>
               </div>
               <Link
                 to="/contact"
-                className="inline-block px-8 py-4 bg-[#007AFF] text-white rounded-full hover:bg-[#0051D5] transition-all shadow-lg"
+                className="inline-block px-8 py-4 bg-[#3b82f6] text-white rounded-full hover:bg-[#2563eb] transition-all shadow-lg"
               >
                 Demander à être accompagné
               </Link>
@@ -245,7 +245,7 @@ export function PourquoiExpAir() {
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1D1D1F] mb-6">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
               Nos engagements
             </h2>
           </motion.div>
@@ -271,14 +271,14 @@ export function PourquoiExpAir() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-[#F5F5F7] rounded-3xl p-8"
+                className="bg-[#f8fafc] rounded-3xl p-8"
               >
-                <h3 className="text-2xl text-[#1D1D1F] mb-6">{engagement.title}</h3>
+                <h3 className="text-2xl text-[#1a2b3c] mb-6">{engagement.title}</h3>
                 <ul className="space-y-3">
                   {engagement.items.map((item) => (
                     <li key={item} className="flex items-center gap-3">
-                      <div className="w-2 h-2 bg-[#34C759] rounded-full"></div>
-                      <span className="text-[#86868B]">{item}</span>
+                      <div className="w-2 h-2 bg-[#10b981] rounded-full"></div>
+                      <span className="text-[#6b7280]">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -289,7 +289,7 @@ export function PourquoiExpAir() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-gradient-to-br from-[#007AFF] to-[#5AC8FA]">
+      <section className="py-24 bg-gradient-to-br from-[#3b82f6] to-[#5AC8FA]">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center text-white">
           <motion.div {...fadeInUp}>
             <h2 className="text-4xl lg:text-5xl mb-6">
@@ -300,7 +300,7 @@ export function PourquoiExpAir() {
             </p>
             <Link
               to="/contact"
-              className="inline-block px-8 py-4 bg-white text-[#007AFF] rounded-full hover:bg-[#F5F5F7] transition-all shadow-lg"
+              className="inline-block px-8 py-4 bg-white text-[#3b82f6] rounded-full hover:bg-[#f8fafc] transition-all shadow-lg"
             >
               Nous contacter
             </Link>

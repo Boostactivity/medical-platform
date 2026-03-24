@@ -1,35 +1,35 @@
 {
   "expo": {
-    "name": "Exp'Air Medical",
-    "slug": "expair-medical",
+    "name": "MedConnect",
+    "slug": "medconnect",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "automatic",
-    "scheme": "expairmedical",
+    "userInterfaceStyle": "light",
+    "scheme": "medconnect",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#1e3a5f"
+      "backgroundColor": "#3b82f6"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.expairmedical.app",
+      "bundleIdentifier": "com.medconnect.app",
       "buildNumber": "1.0.0",
       "infoPlist": {
-        "NSFaceIDUsageDescription": "Cette application utilise Face ID pour sécuriser l'accès à vos données médicales.",
-        "NSCameraUsageDescription": "L'appareil photo est utilisé pour scanner les codes-barres des appareils PPC."
+        "NSFaceIDUsageDescription": "MedConnect utilise Face ID pour securiser l'acces a vos donnees medicales.",
+        "NSCameraUsageDescription": "L'appareil photo est utilise pour scanner les codes-barres des appareils PPC."
       }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#1e3a5f"
+        "backgroundColor": "#3b82f6"
       },
-      "package": "com.expairmedical.app",
+      "package": "com.medconnect.app",
       "versionCode": 1,
       "permissions": [
         "USE_BIOMETRIC",
@@ -47,16 +47,17 @@
       [
         "expo-local-authentication",
         {
-          "faceIDPermission": "Permettre à Exp'Air Medical d'utiliser Face ID."
+          "faceIDPermission": "Permettre a MedConnect d'utiliser Face ID."
         }
       ],
       [
         "expo-notifications",
         {
           "icon": "./assets/notification-icon.png",
-          "color": "#1e3a5f"
+          "color": "#3b82f6"
         }
-      ]
+      ],
+      "expo-linear-gradient"
     ],
     "experiments": {
       "typedRoutes": true
@@ -66,7 +67,7 @@
         "origin": false
       },
       "eas": {
-        "projectId": "expair-medical-app"
+        "projectId": "medconnect-app"
       }
     }
   }

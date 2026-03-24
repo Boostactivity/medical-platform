@@ -1,139 +1,76 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, Alert, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
-/**
- * Écran de Connexion
- * 
- * Permet à l'utilisateur de se connecter avec :
- * - Email + mot de passe
- * - "Se souvenir de moi"
- * - "Mot de passe oublié"
- * - Pro Santé Connect (OAuth)
- * - Lien vers inscription
- */
+const BLUE = '#3b82f6';
+const VIOLET = '#8b5cf6';
 
 export default function LoginPage() {
-  // ============================================
-  // STATE
-  // ============================================
-
   const router = useRouter();
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  // ============================================
-  // VALIDATION
-  // ============================================
 
   function validateForm(): boolean {
     if (!email.trim()) {
       Alert.alert('Email requis', 'Veuillez saisir votre adresse email.');
       return false;
     }
-    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       Alert.alert('Email invalide', 'Veuillez saisir une adresse email valide.');
       return false;
     }
-    
     if (!password) {
       Alert.alert('Mot de passe requis', 'Veuillez saisir votre mot de passe.');
       return false;
     }
-    
     if (password.length < 6) {
-      Alert.alert('Mot de passe trop court', 'Le mot de passe doit contenir au moins 6 caractères.');
+      Alert.alert('Mot de passe trop court', 'Le mot de passe doit contenir au moins 6 caracteres.');
       return false;
     }
-    
     return true;
   }
 
-  // ============================================
-  // ACTIONS
-  // ============================================
-
   async function handleLogin() {
-    if (!validateForm()) {
-      return;
-    }
-    
+    if (!validateForm()) return;
     try {
       setLoading(true);
-      
-      // TODO: Implémenter l'authentification Supabase
-      // const { data, error } = await supabase.auth.signInWithPassword({
-      //   email: email.trim().toLowerCase(),
-      //   password,
-      // });
-      
-      // if (error) throw error;
-      
-      // Simulation de délai
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Succès : naviguer vers le dashboard
+      // TODO: Implementer l'authentification Supabase
+      await new Promise((resolve) => setTimeout(resolve, 1200));
       router.replace('/(tabs)');
-      
     } catch (error: any) {
-      console.error('Login error:', error);
-      Alert.alert(
-        'Erreur de connexion',
-        error.message || 'Email ou mot de passe incorrect.',
-        [{ text: 'OK' }]
-      );
+      Alert.alert('Erreur de connexion', error.message || 'Email ou mot de passe incorrect.');
     } finally {
       setLoading(false);
     }
   }
 
   async function handleProSanteConnect() {
-    try {
-      setLoading(true);
-      
-      // TODO: Implémenter Pro Santé Connect OAuth
-      // const { data, error } = await supabase.auth.signInWithOAuth({
-      //   provider: 'pro_sante_connect',
-      //   options: {
-      //     scopes: 'openid profile email',
-      //   },
-      // });
-      
-      Alert.alert(
-        'Pro Santé Connect',
-        'Cette fonctionnalité nécessite une configuration OAuth.\n\nVeuillez configurer Pro Santé Connect dans les paramètres Supabase.',
-        [{ text: 'OK' }]
-      );
-      
-    } catch (error: any) {
-      console.error('PSC OAuth error:', error);
-      Alert.alert('Erreur', error.message || 'Erreur lors de la connexion avec Pro Santé Connect.');
-    } finally {
-      setLoading(false);
-    }
+    Alert.alert(
+      'Pro Sante Connect',
+      'Connexion via Pro Sante Connect. Cette fonctionnalite sera disponible prochainement.',
+      [{ text: 'OK' }]
+    );
   }
-
-  function handleForgotPassword() {
-    router.push('/auth/forgot-password');
-  }
-
-  function handleRegister() {
-    router.push('/auth/register');
-  }
-
-  // ============================================
-  // RENDER
-  // ============================================
 
   return (
-    <SafeAreaView style={styles.container} edges={['top']}>
+    <SafeAreaView style={styles.container} edges={['top', 'bottom']}>
       <KeyboardAvoidingView
         style={styles.keyboardView}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -141,14 +78,15 @@ export default function LoginPage() {
         <ScrollView
           contentContainerStyle={styles.scrollContent}
           keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
         >
-          {/* Logo & Titre */}
-          <View style={styles.header}>
-            <View style={styles.logoContainer}>
-              <Text style={styles.logoIcon}>💤</Text>
+          {/* Logo */}
+          <View style={styles.logoSection}>
+            <View style={styles.logoCircle}>
+              <Ionicons name="medical-outline" size={36} color="#ffffff" />
             </View>
-            <Text style={styles.title}>la plateforme</Text>
-            <Text style={styles.subtitle}>Connexion à votre espace patient</Text>
+            <Text style={styles.appName}>MedConnect</Text>
+            <Text style={styles.tagline}>Votre suivi PPC au quotidien</Text>
           </View>
 
           {/* Formulaire */}
@@ -156,12 +94,12 @@ export default function LoginPage() {
             {/* Email */}
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Email</Text>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputIcon}>✉️</Text>
+              <View style={[styles.inputContainer, email.length > 0 && styles.inputContainerFocused]}>
+                <Ionicons name="mail-outline" size={18} color="#94a3b8" />
                 <TextInput
                   style={styles.input}
                   placeholder="votre.email@exemple.com"
-                  placeholderTextColor="#94a3b8"
+                  placeholderTextColor="#cbd5e1"
                   value={email}
                   onChangeText={setEmail}
                   keyboardType="email-address"
@@ -175,12 +113,12 @@ export default function LoginPage() {
             {/* Mot de passe */}
             <View style={styles.inputGroup}>
               <Text style={styles.label}>Mot de passe</Text>
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputIcon}>🔒</Text>
+              <View style={[styles.inputContainer, password.length > 0 && styles.inputContainerFocused]}>
+                <Ionicons name="lock-closed-outline" size={18} color="#94a3b8" />
                 <TextInput
                   style={styles.input}
-                  placeholder="••••••••"
-                  placeholderTextColor="#94a3b8"
+                  placeholder="Votre mot de passe"
+                  placeholderTextColor="#cbd5e1"
                   value={password}
                   onChangeText={setPassword}
                   secureTextEntry={!showPassword}
@@ -188,78 +126,64 @@ export default function LoginPage() {
                   autoCorrect={false}
                   editable={!loading}
                 />
-                <TouchableOpacity
-                  onPress={() => setShowPassword(!showPassword)}
-                  style={styles.eyeButton}
-                >
-                  <Text style={styles.eyeIcon}>{showPassword ? '👁️' : '👁️‍🗨️'}</Text>
+                <TouchableOpacity onPress={() => setShowPassword(!showPassword)} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+                  <Ionicons
+                    name={showPassword ? 'eye-outline' : 'eye-off-outline'}
+                    size={18}
+                    color="#94a3b8"
+                  />
                 </TouchableOpacity>
               </View>
             </View>
 
-            {/* Options */}
-            <View style={styles.options}>
-              <TouchableOpacity
-                style={styles.rememberMe}
-                onPress={() => setRememberMe(!rememberMe)}
-                disabled={loading}
-              >
-                <View style={[styles.checkbox, rememberMe && styles.checkboxChecked]}>
-                  {rememberMe && <Text style={styles.checkmark}>✓</Text>}
-                </View>
-                <Text style={styles.rememberMeText}>Se souvenir de moi</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={handleForgotPassword} disabled={loading}>
-                <Text style={styles.forgotPassword}>Mot de passe oublié ?</Text>
-              </TouchableOpacity>
-            </View>
+            {/* Mot de passe oublie */}
+            <TouchableOpacity style={styles.forgotRow}>
+              <Text style={styles.forgotText}>Mot de passe oublie ?</Text>
+            </TouchableOpacity>
 
             {/* Bouton Connexion */}
             <TouchableOpacity
-              style={[styles.loginButton, loading && styles.loginButtonDisabled]}
+              style={[styles.loginButton, loading && { opacity: 0.7 }]}
               onPress={handleLogin}
               disabled={loading}
+              activeOpacity={0.85}
             >
               {loading ? (
-                <ActivityIndicator size="small" color="white" />
+                <ActivityIndicator size="small" color="#ffffff" />
               ) : (
                 <Text style={styles.loginButtonText}>Se connecter</Text>
               )}
             </TouchableOpacity>
 
-            {/* Séparateur */}
+            {/* Separateur */}
             <View style={styles.separator}>
               <View style={styles.separatorLine} />
               <Text style={styles.separatorText}>ou</Text>
               <View style={styles.separatorLine} />
             </View>
 
-            {/* Pro Santé Connect */}
+            {/* Pro Sante Connect */}
             <TouchableOpacity
               style={styles.pscButton}
               onPress={handleProSanteConnect}
               disabled={loading}
+              activeOpacity={0.85}
             >
-              <Text style={styles.pscButtonIcon}>🏥</Text>
-              <Text style={styles.pscButtonText}>Connexion Pro Santé Connect</Text>
+              <Ionicons name="shield-checkmark-outline" size={20} color={BLUE} />
+              <Text style={styles.pscButtonText}>Pro Sante Connect</Text>
             </TouchableOpacity>
-
-            {/* Lien inscription */}
-            <View style={styles.registerLink}>
-              <Text style={styles.registerLinkText}>Vous n'avez pas de compte ?</Text>
-              <TouchableOpacity onPress={handleRegister} disabled={loading}>
-                <Text style={styles.registerLinkButton}>S'inscrire</Text>
-              </TouchableOpacity>
-            </View>
           </View>
 
           {/* Footer */}
           <View style={styles.footer}>
             <Text style={styles.footerText}>
-              En vous connectant, vous acceptez nos{'\n'}
-              <Text style={styles.footerLink}>Conditions d'utilisation</Text> et notre{' '}
-              <Text style={styles.footerLink}>Politique de confidentialité</Text>
+              Pas encore de compte ?{' '}
+              <Text style={styles.footerLink} onPress={() => router.push('/auth/register')}>
+                S'inscrire
+              </Text>
+            </Text>
+            <Text style={styles.legalText}>
+              En vous connectant, vous acceptez nos Conditions d'utilisation et notre Politique de confidentialite.
             </Text>
           </View>
         </ScrollView>
@@ -275,42 +199,46 @@ export default function LoginPage() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#ffffff',
   },
   keyboardView: {
     flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
-    paddingHorizontal: 20,
-    paddingVertical: 40,
+    paddingHorizontal: 24,
+    paddingTop: 40,
+    paddingBottom: 32,
   },
-  header: {
+  logoSection: {
     alignItems: 'center',
     marginBottom: 40,
   },
-  logoContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#5eb3d6',
+  logoCircle: {
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    backgroundColor: BLUE,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
+    shadowColor: BLUE,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.25,
+    shadowRadius: 12,
+    elevation: 6,
   },
-  logoIcon: {
-    fontSize: 40,
-  },
-  title: {
+  appName: {
     fontSize: 28,
     fontWeight: '700',
-    color: '#1e3a5f',
-    marginBottom: 8,
+    color: '#1e293b',
+    letterSpacing: -0.5,
   },
-  subtitle: {
-    fontSize: 16,
-    color: '#64748b',
-    textAlign: 'center',
+  tagline: {
+    fontSize: 15,
+    color: '#94a3b8',
+    fontWeight: '400',
+    marginTop: 6,
   },
   form: {
     marginBottom: 32,
@@ -321,95 +249,55 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1e3a5f',
+    color: '#1e293b',
     marginBottom: 8,
+    letterSpacing: -0.2,
   },
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'white',
-    borderRadius: 12,
-    borderWidth: 1,
+    backgroundColor: '#f8fafc',
+    borderRadius: 14,
+    borderWidth: 1.5,
     borderColor: '#e2e8f0',
     paddingHorizontal: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
+    gap: 10,
   },
-  inputIcon: {
-    fontSize: 20,
-    marginRight: 12,
+  inputContainerFocused: {
+    borderColor: BLUE + '60',
+    backgroundColor: '#ffffff',
   },
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#1e3a5f',
+    color: '#1e293b',
     paddingVertical: 14,
+    fontWeight: '400',
   },
-  eyeButton: {
-    padding: 4,
-  },
-  eyeIcon: {
-    fontSize: 20,
-  },
-  options: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+  forgotRow: {
+    alignItems: 'flex-end',
     marginBottom: 24,
   },
-  rememberMe: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 4,
-    borderWidth: 2,
-    borderColor: '#cbd5e1',
-    marginRight: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  checkboxChecked: {
-    backgroundColor: '#5eb3d6',
-    borderColor: '#5eb3d6',
-  },
-  checkmark: {
-    fontSize: 12,
-    color: 'white',
-    fontWeight: '700',
-  },
-  rememberMeText: {
-    fontSize: 14,
-    color: '#64748b',
-  },
-  forgotPassword: {
+  forgotText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#5eb3d6',
+    color: BLUE,
   },
   loginButton: {
-    backgroundColor: '#5eb3d6',
-    borderRadius: 12,
+    backgroundColor: BLUE,
+    borderRadius: 14,
     paddingVertical: 16,
     alignItems: 'center',
-    shadowColor: '#5eb3d6',
+    shadowColor: BLUE,
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.25,
     shadowRadius: 8,
     elevation: 4,
-  },
-  loginButtonDisabled: {
-    opacity: 0.6,
   },
   loginButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: 'white',
+    color: '#ffffff',
   },
   separator: {
     flexDirection: 'row',
@@ -422,62 +310,45 @@ const styles = StyleSheet.create({
     backgroundColor: '#e2e8f0',
   },
   separatorText: {
-    fontSize: 14,
+    fontSize: 13,
     color: '#94a3b8',
     marginHorizontal: 16,
+    fontWeight: '500',
   },
   pscButton: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'white',
-    borderRadius: 12,
+    backgroundColor: '#ffffff',
+    borderRadius: 14,
     paddingVertical: 14,
-    borderWidth: 2,
-    borderColor: '#5eb3d6',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  pscButtonIcon: {
-    fontSize: 20,
-    marginRight: 8,
+    borderWidth: 1.5,
+    borderColor: BLUE,
+    gap: 8,
   },
   pscButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#5eb3d6',
-  },
-  registerLink: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 24,
-    gap: 4,
-  },
-  registerLinkText: {
-    fontSize: 14,
-    color: '#64748b',
-  },
-  registerLinkButton: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#5eb3d6',
+    color: BLUE,
   },
   footer: {
     marginTop: 'auto',
-    paddingTop: 24,
+    alignItems: 'center',
+    gap: 16,
   },
   footerText: {
-    fontSize: 12,
-    color: '#94a3b8',
-    textAlign: 'center',
-    lineHeight: 18,
+    fontSize: 14,
+    color: '#64748b',
+    fontWeight: '400',
   },
   footerLink: {
-    color: '#5eb3d6',
-    fontWeight: '600',
+    color: BLUE,
+    fontWeight: '700',
+  },
+  legalText: {
+    fontSize: 11,
+    color: '#cbd5e1',
+    textAlign: 'center',
+    lineHeight: 16,
   },
 });

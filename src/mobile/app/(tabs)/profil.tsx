@@ -1,429 +1,264 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Switch, ActivityIndicator } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Switch,
+  Alert,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDatabase } from '@nozbe/watermelondb/hooks';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { Patient } from '../../database/models/Patient';
-import { Doctor } from '../../database/models/Doctor';
-import { Device } from '../../database/models/Device';
-import { SyncService } from '../../database/sync';
 
-/**
- * Écran Profil Utilisateur
- * 
- * Affiche et permet de modifier :
- * - Informations personnelles
- * - Médecin traitant
- * - Appareil PPC
- * - Paramètres de l'app
- * - Synchronisation
- * - Déconnexion
- */
+const BLUE = '#3b82f6';
+const VIOLET = '#8b5cf6';
+
+// ============================================
+// DONNEES MOCK
+// ============================================
+
+const MOCK_PATIENT = {
+  name: 'Marie Dupont',
+  email: 'marie.dupont@email.com',
+  phone: '06 12 34 56 78',
+  initials: 'MD',
+};
+
+const MOCK_DOCTOR = {
+  name: 'Dr. Laurent Martin',
+  specialty: 'Pneumologue',
+  rpps: '10100000001',
+};
+
+const MOCK_PROVIDER = {
+  name: 'Oxynov Sante',
+  phone: '01 23 45 67 89',
+};
+
+const MOCK_DEVICE = {
+  machine: 'ResMed AirSense 11',
+  mask: 'AirFit F20 - Taille M',
+  installDate: '15 janvier 2026',
+  serialNumber: 'RS11-2026-XXXXX',
+};
+
+const MOCK_MILESTONES = [
+  { label: 'J7', date: '22 Jan 2026', reached: true, icon: 'checkmark-circle' as const },
+  { label: 'J30', date: '15 Fev 2026', reached: true, icon: 'checkmark-circle' as const },
+  { label: 'J90', date: null, reached: false, icon: 'time-outline' as const, target: '15 Avr 2026' },
+];
+
+// ============================================
+// ECRAN PROFIL
+// ============================================
 
 export default function ProfilPage() {
-  // ============================================
-  // STATE
-  // ============================================
-
-  const database = useDatabase();
   const router = useRouter();
-  
-  const [loading, setLoading] = useState(true);
-  const [patient, setPatient] = useState<Patient | null>(null);
-  const [doctor, setDoctor] = useState<Doctor | null>(null);
-  const [device, setDevice] = useState<Device | null>(null);
-  const [user, setUser] = useState<any>(null);
-  
-  // Settings
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
-  const [biometryEnabled, setBiometryEnabled] = useState(false);
   const [darkModeEnabled, setDarkModeEnabled] = useState(false);
-  
-  // Sync
-  const [syncing, setSyncing] = useState(false);
-  const [lastSync, setLastSync] = useState<Date | null>(null);
-
-  // ============================================
-  // CHARGEMENT DES DONNÉES
-  // ============================================
-
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  async function loadData() {
-    try {
-      setLoading(true);
-      
-      // TODO: Récupérer l'ID du patient connecté
-      const currentPatientId = 'PATIENT_ID_HERE';
-      
-      // Charger le patient
-      const patientData = await database.get<Patient>('patients').find(currentPatientId);
-      setPatient(patientData);
-      
-      // Charger l'utilisateur
-      const userData = await patientData.user.fetch();
-      setUser(userData);
-      
-      // Charger le médecin si assigné
-      if (patientData.assignedDoctorId) {
-        const doctorData = await database.get<Doctor>('doctors')
-          .query()
-          .fetch()
-          .then(doctors => doctors.find(d => d.userId === patientData.assignedDoctorId));
-        
-        if (doctorData) {
-          setDoctor(doctorData);
-        }
-      }
-      
-      // Charger l'appareil actif
-      const deviceData = await patientData.getCurrentDevice();
-      setDevice(deviceData);
-      
-      // Charger l'état de la dernière sync
-      // TODO: Implémenter la récupération depuis le SyncService
-      // const syncStatus = await SyncService.getLastSyncDate();
-      // setLastSync(syncStatus);
-      
-    } catch (error) {
-      console.error('Error loading profil:', error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  // ============================================
-  // ACTIONS
-  // ============================================
-
-  async function handleSync() {
-    try {
-      setSyncing(true);
-      
-      // TODO: Implémenter la synchronisation
-      // const syncService = new SyncService(database);
-      // await syncService.sync();
-      
-      setLastSync(new Date());
-      
-      Alert.alert(
-        'Synchronisation réussie',
-        'Vos données ont été synchronisées avec le serveur.',
-        [{ text: 'OK' }]
-      );
-    } catch (error) {
-      console.error('Sync error:', error);
-      Alert.alert(
-        'Erreur de synchronisation',
-        'La synchronisation a échoué. Vérifiez votre connexion internet.',
-        [{ text: 'OK' }]
-      );
-    } finally {
-      setSyncing(false);
-    }
-  }
-
-  function handleEditProfile() {
-    // TODO: Naviguer vers écran d'édition
-    Alert.alert('Édition du profil', 'Fonctionnalité en cours de développement');
-  }
-
-  function handleChangePassword() {
-    Alert.alert('Changement de mot de passe', 'Fonctionnalité en cours de développement');
-  }
+  const [language, setLanguage] = useState('Francais');
 
   function handleLogout() {
     Alert.alert(
-      'Déconnexion',
-      'Êtes-vous sûr de vouloir vous déconnecter ?',
+      'Deconnexion',
+      'Etes-vous sur de vouloir vous deconnecter ?',
       [
         { text: 'Annuler', style: 'cancel' },
         {
-          text: 'Déconnexion',
+          text: 'Deconnexion',
           style: 'destructive',
-          onPress: () => {
-            // TODO: Implémenter la déconnexion
-            router.replace('/auth/login');
-          },
+          onPress: () => router.replace('/auth/login'),
         },
       ]
-    );
-  }
-
-  function handleDeleteAccount() {
-    Alert.alert(
-      'Supprimer le compte',
-      'Cette action est irréversible. Toutes vos données seront supprimées.',
-      [
-        { text: 'Annuler', style: 'cancel' },
-        {
-          text: 'Supprimer',
-          style: 'destructive',
-          onPress: () => {
-            // TODO: Implémenter la suppression du compte
-            Alert.alert('Suppression', 'Fonctionnalité en cours de développement');
-          },
-        },
-      ]
-    );
-  }
-
-  // ============================================
-  // RENDER
-  // ============================================
-
-  if (loading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#5eb3d6" />
-          <Text style={styles.loadingText}>Chargement du profil...</Text>
-        </View>
-      </SafeAreaView>
     );
   }
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.avatarContainer}>
-            <View style={styles.avatar}>
-              <Text style={styles.avatarText}>
-                {user?.name?.charAt(0)?.toUpperCase() || 'P'}
-              </Text>
-            </View>
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Header avec avatar */}
+        <View style={styles.profileHeader}>
+          <View style={styles.avatar}>
+            <Text style={styles.avatarText}>{MOCK_PATIENT.initials}</Text>
           </View>
-          <Text style={styles.userName}>{user?.name || 'Patient'}</Text>
-          <Text style={styles.userEmail}>{user?.email || ''}</Text>
+          <Text style={styles.userName}>{MOCK_PATIENT.name}</Text>
+          <Text style={styles.userEmail}>{MOCK_PATIENT.email}</Text>
         </View>
 
-        {/* Informations personnelles */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Informations personnelles</Text>
-          
-          <TouchableOpacity style={styles.infoCard} onPress={handleEditProfile}>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Nom complet</Text>
-              <Text style={styles.infoValue}>{user?.name || '-'}</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Email</Text>
-              <Text style={styles.infoValue}>{user?.email || '-'}</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Téléphone</Text>
-              <Text style={styles.infoValue}>{user?.phone || 'Non renseigné'}</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Date de naissance</Text>
-              <Text style={styles.infoValue}>
-                {patient?.birthDate ? new Date(patient.birthDate).toLocaleDateString('fr-FR') : 'Non renseignée'}
-              </Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Âge</Text>
-              <Text style={styles.infoValue}>
-                {patient?.age ? `${patient.age} ans` : '-'}
-              </Text>
-            </View>
-            
-            <View style={styles.editButton}>
-              <Text style={styles.editButtonText}>Modifier ›</Text>
-            </View>
-          </TouchableOpacity>
+        {/* Infos patient */}
+        <View style={styles.card}>
+          <View style={styles.cardTitleRow}>
+            <Ionicons name="person-outline" size={18} color={BLUE} />
+            <Text style={styles.cardTitle}>Informations patient</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Nom</Text>
+            <Text style={styles.infoValue}>{MOCK_PATIENT.name}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Email</Text>
+            <Text style={styles.infoValue}>{MOCK_PATIENT.email}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Telephone</Text>
+            <Text style={styles.infoValue}>{MOCK_PATIENT.phone}</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>Medecin</Text>
+            <Text style={styles.infoValue}>{MOCK_DOCTOR.name}</Text>
+          </View>
+          <View style={[styles.infoRow, { borderBottomWidth: 0 }]}>
+            <Text style={styles.infoLabel}>Prestataire</Text>
+            <Text style={styles.infoValue}>{MOCK_PROVIDER.name}</Text>
+          </View>
         </View>
 
-        {/* Médecin traitant */}
-        {doctor && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Médecin traitant</Text>
-            
-            <View style={styles.doctorCard}>
-              <View style={styles.doctorIcon}>
-                <Text style={styles.doctorIconText}>👨‍⚕️</Text>
-              </View>
-              <View style={styles.doctorInfo}>
-                <Text style={styles.doctorName}>Dr. {doctor.user?.name || 'Médecin'}</Text>
-                <Text style={styles.doctorSpecialty}>{doctor.formattedSpecialty}</Text>
-                <Text style={styles.doctorLicense}>RPPS: {doctor.formattedLicenseNumber}</Text>
-              </View>
+        {/* Mon materiel */}
+        <View style={styles.card}>
+          <View style={styles.cardTitleRow}>
+            <Ionicons name="hardware-chip-outline" size={18} color={VIOLET} />
+            <Text style={styles.cardTitle}>Mon materiel</Text>
+          </View>
+          <View style={styles.deviceRow}>
+            <View style={styles.deviceIconContainer}>
+              <Ionicons name="fitness-outline" size={20} color={BLUE} />
+            </View>
+            <View style={styles.deviceInfo}>
+              <Text style={styles.deviceLabel}>Machine PPC</Text>
+              <Text style={styles.deviceValue}>{MOCK_DEVICE.machine}</Text>
             </View>
           </View>
-        )}
+          <View style={styles.deviceRow}>
+            <View style={styles.deviceIconContainer}>
+              <Ionicons name="glasses-outline" size={20} color={VIOLET} />
+            </View>
+            <View style={styles.deviceInfo}>
+              <Text style={styles.deviceLabel}>Masque</Text>
+              <Text style={styles.deviceValue}>{MOCK_DEVICE.mask}</Text>
+            </View>
+          </View>
+          <View style={styles.deviceRow}>
+            <View style={styles.deviceIconContainer}>
+              <Ionicons name="calendar-outline" size={20} color="#06b6d4" />
+            </View>
+            <View style={styles.deviceInfo}>
+              <Text style={styles.deviceLabel}>Date d'installation</Text>
+              <Text style={styles.deviceValue}>{MOCK_DEVICE.installDate}</Text>
+            </View>
+          </View>
+          <View style={[styles.deviceRow, { borderBottomWidth: 0 }]}>
+            <View style={styles.deviceIconContainer}>
+              <Ionicons name="barcode-outline" size={20} color="#64748b" />
+            </View>
+            <View style={styles.deviceInfo}>
+              <Text style={styles.deviceLabel}>Numero de serie</Text>
+              <Text style={styles.deviceValue}>{MOCK_DEVICE.serialNumber}</Text>
+            </View>
+          </View>
+        </View>
 
-        {/* Appareil PPC */}
-        {device && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Mon appareil</Text>
-            
-            <View style={styles.deviceCard}>
-              <View style={styles.deviceHeader}>
-                <Text style={styles.deviceIcon}>{device.manufacturerLogo}</Text>
-                <View style={styles.deviceInfo}>
-                  <Text style={styles.deviceName}>{device.fullName}</Text>
-                  <Text style={styles.deviceSerial}>S/N: {device.formattedSerialNumber}</Text>
-                  <Text style={styles.deviceAge}>
-                    {device.ageFormatted || 'Âge inconnu'}
-                  </Text>
+        {/* Mes jalons */}
+        <View style={styles.card}>
+          <View style={styles.cardTitleRow}>
+            <Ionicons name="flag-outline" size={18} color={BLUE} />
+            <Text style={styles.cardTitle}>Mes jalons</Text>
+          </View>
+          <View style={styles.milestonesRow}>
+            {MOCK_MILESTONES.map((ms, i) => (
+              <View key={i} style={styles.milestoneItem}>
+                <View
+                  style={[
+                    styles.milestoneCircle,
+                    { backgroundColor: ms.reached ? BLUE : '#f1f5f9', borderColor: ms.reached ? BLUE : '#e2e8f0' },
+                  ]}
+                >
+                  <Ionicons
+                    name={ms.icon}
+                    size={20}
+                    color={ms.reached ? '#ffffff' : '#cbd5e1'}
+                  />
                 </View>
+                <Text style={[styles.milestoneLabel, ms.reached && { color: BLUE, fontWeight: '700' }]}>
+                  {ms.label}
+                </Text>
+                <Text style={styles.milestoneDate}>
+                  {ms.reached ? ms.date : ms.target}
+                </Text>
+                {!ms.reached && (
+                  <View style={styles.milestonePending}>
+                    <Text style={styles.milestonePendingText}>En cours</Text>
+                  </View>
+                )}
               </View>
-              
-              {device.needsMaintenance && (
-                <View style={styles.deviceAlert}>
-                  <Text style={styles.deviceAlertIcon}>⚠️</Text>
-                  <Text style={styles.deviceAlertText}>
-                    Maintenance : {device.maintenanceStatus}
-                  </Text>
-                </View>
-              )}
-            </View>
+            ))}
           </View>
-        )}
-
-        {/* Traitement */}
-        {patient && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Traitement</Text>
-            
-            <View style={styles.treatmentCard}>
-              <View style={styles.treatmentRow}>
-                <Text style={styles.treatmentLabel}>Date de diagnostic</Text>
-                <Text style={styles.treatmentValue}>
-                  {patient.diagnosisDate 
-                    ? new Date(patient.diagnosisDate).toLocaleDateString('fr-FR')
-                    : 'Non renseignée'}
-                </Text>
-              </View>
-              <View style={styles.treatmentRow}>
-                <Text style={styles.treatmentLabel}>Début du traitement</Text>
-                <Text style={styles.treatmentValue}>
-                  {patient.treatmentStartDate 
-                    ? new Date(patient.treatmentStartDate).toLocaleDateString('fr-FR')
-                    : 'Non renseignée'}
-                </Text>
-              </View>
-              <View style={styles.treatmentRow}>
-                <Text style={styles.treatmentLabel}>Durée du traitement</Text>
-                <Text style={styles.treatmentValue}>
-                  {patient.treatmentDurationDays 
-                    ? `${patient.treatmentDurationDays} jours`
-                    : '-'}
-                </Text>
-              </View>
-            </View>
-          </View>
-        )}
-
-        {/* Paramètres de l'application */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Paramètres</Text>
-          
-          <View style={styles.settingsCard}>
-            <View style={styles.settingRow}>
-              <View style={styles.settingInfo}>
-                <Text style={styles.settingLabel}>Notifications</Text>
-                <Text style={styles.settingDescription}>
-                  Recevoir des notifications pour les alertes
-                </Text>
-              </View>
-              <Switch
-                value={notificationsEnabled}
-                onValueChange={setNotificationsEnabled}
-                trackColor={{ false: '#e2e8f0', true: '#5eb3d6' }}
-                thumbColor="white"
-              />
-            </View>
-            
-            <View style={styles.settingRow}>
-              <View style={styles.settingInfo}>
-                <Text style={styles.settingLabel}>Authentification biométrique</Text>
-                <Text style={styles.settingDescription}>
-                  Face ID / Touch ID pour déverrouiller l'app
-                </Text>
-              </View>
-              <Switch
-                value={biometryEnabled}
-                onValueChange={setBiometryEnabled}
-                trackColor={{ false: '#e2e8f0', true: '#5eb3d6' }}
-                thumbColor="white"
-              />
-            </View>
-            
-            <View style={styles.settingRow}>
-              <View style={styles.settingInfo}>
-                <Text style={styles.settingLabel}>Mode sombre</Text>
-                <Text style={styles.settingDescription}>
-                  Thème sombre pour l'application
-                </Text>
-              </View>
-              <Switch
-                value={darkModeEnabled}
-                onValueChange={setDarkModeEnabled}
-                trackColor={{ false: '#e2e8f0', true: '#5eb3d6' }}
-                thumbColor="white"
-              />
-            </View>
+          {/* Ligne de progression */}
+          <View style={styles.progressLineContainer}>
+            <View style={styles.progressLineBg} />
+            <View style={[styles.progressLineFill, { width: '66%' }]} />
           </View>
         </View>
 
-        {/* Synchronisation */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Synchronisation</Text>
-          
-          <View style={styles.syncCard}>
-            <View style={styles.syncInfo}>
-              <Text style={styles.syncLabel}>Dernière synchronisation</Text>
-              <Text style={styles.syncValue}>
-                {lastSync 
-                  ? lastSync.toLocaleString('fr-FR')
-                  : 'Jamais synchronisé'}
-              </Text>
+        {/* Parametres */}
+        <View style={styles.card}>
+          <View style={styles.cardTitleRow}>
+            <Ionicons name="settings-outline" size={18} color="#64748b" />
+            <Text style={styles.cardTitle}>Parametres</Text>
+          </View>
+
+          <View style={styles.settingRow}>
+            <View style={styles.settingInfo}>
+              <Ionicons name="notifications-outline" size={18} color={BLUE} />
+              <Text style={styles.settingLabel}>Notifications</Text>
             </View>
-            
-            <TouchableOpacity
-              style={[styles.syncButton, syncing && styles.syncButtonDisabled]}
-              onPress={handleSync}
-              disabled={syncing}
-            >
-              {syncing ? (
-                <ActivityIndicator size="small" color="white" />
-              ) : (
-                <Text style={styles.syncButtonText}>🔄 Synchroniser maintenant</Text>
-              )}
+            <Switch
+              value={notificationsEnabled}
+              onValueChange={setNotificationsEnabled}
+              trackColor={{ false: '#e2e8f0', true: BLUE + '40' }}
+              thumbColor={notificationsEnabled ? BLUE : '#f4f4f5'}
+            />
+          </View>
+
+          <View style={styles.settingRow}>
+            <View style={styles.settingInfo}>
+              <Ionicons name="globe-outline" size={18} color={VIOLET} />
+              <Text style={styles.settingLabel}>Langue</Text>
+            </View>
+            <TouchableOpacity style={styles.settingValueButton}>
+              <Text style={styles.settingValueText}>{language}</Text>
+              <Ionicons name="chevron-forward" size={14} color="#94a3b8" />
             </TouchableOpacity>
           </View>
+
+          <View style={[styles.settingRow, { borderBottomWidth: 0 }]}>
+            <View style={styles.settingInfo}>
+              <Ionicons name="moon-outline" size={18} color="#64748b" />
+              <Text style={styles.settingLabel}>Mode sombre</Text>
+            </View>
+            <Switch
+              value={darkModeEnabled}
+              onValueChange={setDarkModeEnabled}
+              trackColor={{ false: '#e2e8f0', true: VIOLET + '40' }}
+              thumbColor={darkModeEnabled ? VIOLET : '#f4f4f5'}
+            />
+          </View>
         </View>
 
-        {/* Actions du compte */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Compte</Text>
-          
-          <TouchableOpacity style={styles.actionButton} onPress={handleChangePassword}>
-            <Text style={styles.actionButtonText}>🔒 Changer le mot de passe</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={styles.actionButton} onPress={handleLogout}>
-            <Text style={styles.actionButtonText}>🚪 Déconnexion</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={[styles.actionButton, styles.actionButtonDanger]} 
-            onPress={handleDeleteAccount}
-          >
-            <Text style={[styles.actionButtonText, styles.actionButtonTextDanger]}>
-              🗑️ Supprimer mon compte
-            </Text>
-          </TouchableOpacity>
-        </View>
+        {/* Deconnexion */}
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Ionicons name="log-out-outline" size={20} color="#ef4444" />
+          <Text style={styles.logoutText}>Deconnexion</Text>
+        </TouchableOpacity>
 
-        {/* Version */}
+        {/* Footer */}
         <View style={styles.footer}>
-          <Text style={styles.footerText}>la plateforme v1.0.0</Text>
-          <Text style={styles.footerText}>© 2024 la plateforme</Text>
+          <Text style={styles.footerText}>MedConnect v1.0.0</Text>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -439,226 +274,73 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8fafc',
   },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: '#64748b',
-  },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
+    padding: 20,
     paddingBottom: 40,
   },
-  header: {
+  profileHeader: {
     alignItems: 'center',
-    paddingVertical: 32,
-    backgroundColor: 'white',
-    borderBottomWidth: 1,
-    borderBottomColor: '#e2e8f0',
-  },
-  avatarContainer: {
-    marginBottom: 16,
+    paddingVertical: 24,
+    marginBottom: 8,
   },
   avatar: {
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#5eb3d6',
+    backgroundColor: BLUE,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 14,
+    shadowColor: BLUE,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   avatarText: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: '700',
-    color: 'white',
+    color: '#ffffff',
   },
   userName: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: '700',
-    color: '#1e3a5f',
-    marginBottom: 4,
+    color: '#1e293b',
+    letterSpacing: -0.3,
   },
   userEmail: {
     fontSize: 14,
-    color: '#64748b',
+    color: '#94a3b8',
+    fontWeight: '400',
+    marginTop: 4,
   },
-  section: {
-    paddingHorizontal: 20,
-    paddingTop: 24,
-  },
-  sectionTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1e3a5f',
-    marginBottom: 12,
-  },
-  infoCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
+  card: {
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  cardTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 16,
+  },
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1e293b',
+    letterSpacing: -0.3,
   },
   infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f1f5f9',
-  },
-  infoLabel: {
-    fontSize: 14,
-    color: '#64748b',
-  },
-  infoValue: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1e3a5f',
-  },
-  editButton: {
-    paddingTop: 12,
-    alignItems: 'flex-end',
-  },
-  editButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#5eb3d6',
-  },
-  doctorCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  doctorIcon: {
-    marginRight: 16,
-  },
-  doctorIconText: {
-    fontSize: 48,
-  },
-  doctorInfo: {
-    flex: 1,
-  },
-  doctorName: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#1e3a5f',
-    marginBottom: 4,
-  },
-  doctorSpecialty: {
-    fontSize: 14,
-    color: '#64748b',
-    marginBottom: 2,
-  },
-  doctorLicense: {
-    fontSize: 12,
-    color: '#94a3b8',
-  },
-  deviceCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  deviceHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  deviceIcon: {
-    fontSize: 40,
-    marginRight: 16,
-  },
-  deviceInfo: {
-    flex: 1,
-  },
-  deviceName: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#1e3a5f',
-    marginBottom: 4,
-  },
-  deviceSerial: {
-    fontSize: 13,
-    color: '#64748b',
-    marginBottom: 2,
-  },
-  deviceAge: {
-    fontSize: 12,
-    color: '#94a3b8',
-  },
-  deviceAlert: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 12,
-    padding: 12,
-    backgroundColor: '#fef3c7',
-    borderRadius: 8,
-  },
-  deviceAlertIcon: {
-    fontSize: 20,
-    marginRight: 8,
-  },
-  deviceAlertText: {
-    fontSize: 13,
-    color: '#92400e',
-    flex: 1,
-  },
-  treatmentCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  treatmentRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f1f5f9',
-  },
-  treatmentLabel: {
-    fontSize: 14,
-    color: '#64748b',
-  },
-  treatmentValue: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1e3a5f',
-  },
-  settingsCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  settingRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -666,86 +348,158 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#f1f5f9',
   },
-  settingInfo: {
-    flex: 1,
-    marginRight: 16,
+  infoLabel: {
+    fontSize: 14,
+    color: '#94a3b8',
+    fontWeight: '400',
   },
-  settingLabel: {
+  infoValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1e3a5f',
-    marginBottom: 2,
+    color: '#1e293b',
   },
-  settingDescription: {
-    fontSize: 12,
-    color: '#64748b',
+  deviceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f1f5f9',
+    gap: 12,
   },
-  syncCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  syncInfo: {
-    marginBottom: 16,
-  },
-  syncLabel: {
-    fontSize: 13,
-    color: '#64748b',
-    marginBottom: 4,
-  },
-  syncValue: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1e3a5f',
-  },
-  syncButton: {
-    backgroundColor: '#5eb3d6',
-    borderRadius: 12,
-    padding: 14,
+  deviceIconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: '#f8fafc',
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  syncButtonDisabled: {
-    opacity: 0.6,
+  deviceInfo: {
+    flex: 1,
   },
-  syncButtonText: {
-    fontSize: 15,
+  deviceLabel: {
+    fontSize: 12,
+    color: '#94a3b8',
+    fontWeight: '400',
+  },
+  deviceValue: {
+    fontSize: 14,
     fontWeight: '600',
-    color: 'white',
+    color: '#1e293b',
+    marginTop: 2,
   },
-  actionButton: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
+  milestonesRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 20,
   },
-  actionButtonDanger: {
-    backgroundColor: '#fef2f2',
+  milestoneItem: {
+    alignItems: 'center',
+    gap: 6,
   },
-  actionButtonText: {
-    fontSize: 15,
+  milestoneCircle: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    borderWidth: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  milestoneLabel: {
+    fontSize: 14,
     fontWeight: '600',
-    color: '#1e3a5f',
+    color: '#64748b',
   },
-  actionButtonTextDanger: {
-    color: '#dc2626',
+  milestoneDate: {
+    fontSize: 11,
+    color: '#94a3b8',
+    fontWeight: '400',
+  },
+  milestonePending: {
+    backgroundColor: '#fef3c7',
+    borderRadius: 8,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+  },
+  milestonePendingText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#ca8a04',
+  },
+  progressLineContainer: {
+    height: 4,
+    borderRadius: 2,
+    position: 'relative',
+  },
+  progressLineBg: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 4,
+    backgroundColor: '#f1f5f9',
+    borderRadius: 2,
+  },
+  progressLineFill: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    height: 4,
+    backgroundColor: BLUE,
+    borderRadius: 2,
+  },
+  settingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#f1f5f9',
+  },
+  settingInfo: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  settingLabel: {
+    fontSize: 15,
+    fontWeight: '500',
+    color: '#1e293b',
+  },
+  settingValueButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  settingValueText: {
+    fontSize: 14,
+    color: '#94a3b8',
+    fontWeight: '500',
+  },
+  logoutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#ffffff',
+    borderRadius: 14,
+    paddingVertical: 16,
+    marginBottom: 16,
+    gap: 8,
+    borderWidth: 1,
+    borderColor: '#fecaca',
+  },
+  logoutText: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#ef4444',
   },
   footer: {
     alignItems: 'center',
-    paddingVertical: 24,
+    paddingVertical: 16,
   },
   footerText: {
     fontSize: 12,
-    color: '#94a3b8',
-    marginBottom: 4,
+    color: '#cbd5e1',
+    fontWeight: '400',
   },
 });

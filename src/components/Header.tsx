@@ -33,7 +33,6 @@ export function Header() {
     },
     { type: 'link' as const, to: '/espace-patient', label: t('nav.patientSpace') },
     { type: 'link' as const, to: '/espace-medecin', label: t('nav.doctorSpace') },
-    { type: 'link' as const, to: '/contact', label: t('nav.contact') },
     {
       type: 'dropdown' as const,
       label: t('nav.about'),
@@ -43,6 +42,7 @@ export function Header() {
         { to: '/faq', label: t('nav.faq') },
       ]
     },
+    { type: 'link' as const, to: '/contact', label: t('nav.contact') },
   ];
 
   const navLinks = [
@@ -60,120 +60,113 @@ export function Header() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/80 backdrop-blur-2xl border-b border-[#e2e8f0] shadow-sm'
-          : 'bg-transparent'
+          ? 'bg-white/90 backdrop-blur-xl border-b border-gray-200/60 shadow-sm'
+          : 'bg-white/60 backdrop-blur-xl'
       }`}
     >
-      <div className="max-w-[980px] mx-auto px-6">
-        <div className="flex items-center justify-center h-14 lg:h-16">
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
-            {/* Logo */}
-            <Link
-              to="/"
-              className="text-[21px] font-semibold bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] bg-clip-text text-transparent tracking-tight hover:opacity-70 transition-opacity"
-            >
-              {branding.name}
-            </Link>
-
-            <div className="w-px h-4 bg-[#e2e8f0]" />
-
-            <div className="flex items-center space-x-8">
-              {menuStructure.map((item, index) => {
-                if (item.type === 'dropdown') {
-                  return (
-                    <div
-                      key={index}
-                      className="relative"
-                      onMouseEnter={() => setOpenDropdown(item.label)}
-                      onMouseLeave={() => setOpenDropdown(null)}
-                    >
-                      <button className="text-[12px] text-[#1a2b3c] opacity-70 hover:opacity-100 transition-all flex items-center gap-1">
-                        {item.label}
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </button>
-
-                      <AnimatePresence>
-                        {openDropdown === item.label && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 5 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: 5 }}
-                            transition={{ duration: 0.15 }}
-                            className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white/95 backdrop-blur-2xl rounded-lg shadow-lg border border-[#e2e8f0] py-2 overflow-hidden"
-                          >
-                            {item.items?.map((subItem) => (
-                              <Link
-                                key={subItem.to}
-                                to={subItem.to}
-                                onClick={() => setOpenDropdown(null)}
-                                className={`block w-full text-left px-4 py-2 text-[12px] transition-all ${
-                                  location.pathname === subItem.to
-                                    ? 'text-[#3b82f6] opacity-100 font-medium bg-blue-50'
-                                    : 'text-[#1a2b3c] opacity-70 hover:opacity-100 hover:bg-[#f8fafc]'
-                                }`}
-                              >
-                                {subItem.label}
-                              </Link>
-                            ))}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                } else {
-                  return (
-                    <Link
-                      key={item.to}
-                      to={item.to!}
-                      className={`text-[12px] transition-all ${
-                        location.pathname === item.to
-                          ? 'text-[#3b82f6] opacity-100 font-medium'
-                          : 'text-[#1a2b3c] opacity-70 hover:opacity-100'
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                }
-              })}
-
-              <Link
-                to="/espace-patient"
-                className="text-[12px] bg-gradient-to-r from-[#3b82f6] to-[#60a5fa] text-white px-4 py-1.5 rounded-full hover:shadow-md hover:shadow-blue-500/30 transition-all"
-              >
-                {t('nav.login')}
-              </Link>
-
-              <LanguageSwitcher />
-
-              <NotificationBell />
-            </div>
-          </div>
-
-          {/* Mobile Logo */}
+      <div className="max-w-6xl mx-auto px-6">
+        <div className="flex items-center justify-between h-12">
+          {/* Logo - Left */}
           <Link
             to="/"
-            className="lg:hidden text-[21px] font-semibold bg-gradient-to-r from-[#3b82f6] to-[#8b5cf6] bg-clip-text text-transparent tracking-tight hover:opacity-70 transition-opacity"
+            className="flex-shrink-0 text-lg font-semibold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent tracking-tight hover:opacity-70 transition-opacity"
           >
             {branding.name}
           </Link>
 
-          {/* Mobile Menu Button */}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2 -mr-2 ml-auto"
-          >
-            <div className="w-4 h-3 flex flex-col justify-between">
-              <span className={`w-full h-0.5 bg-[#1a2b3c] transition-all ${mobileMenuOpen ? 'rotate-45 translate-y-1' : ''}`} />
-              <span className={`w-full h-0.5 bg-[#1a2b3c] transition-all ${mobileMenuOpen ? 'opacity-0' : ''}`} />
-              <span className={`w-full h-0.5 bg-[#1a2b3c] transition-all ${mobileMenuOpen ? '-rotate-45 -translate-y-1' : ''}`} />
-            </div>
-          </button>
+          {/* Desktop Navigation - Center */}
+          <div className="hidden lg:flex items-center gap-8">
+            {menuStructure.map((item, index) => {
+              if (item.type === 'dropdown') {
+                return (
+                  <div
+                    key={index}
+                    className="relative"
+                    onMouseEnter={() => setOpenDropdown(item.label)}
+                    onMouseLeave={() => setOpenDropdown(null)}
+                  >
+                    <button className="text-sm font-medium text-[#1a2b3c]/70 hover:text-[#1a2b3c] transition-colors flex items-center gap-1 whitespace-nowrap">
+                      {item.label}
+                      <svg className="w-3 h-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+
+                    <AnimatePresence>
+                      {openDropdown === item.label && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 4 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 4 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-52 bg-white/95 backdrop-blur-xl rounded-xl shadow-lg border border-gray-100 py-1.5 overflow-hidden"
+                        >
+                          {item.items?.map((subItem) => (
+                            <Link
+                              key={subItem.to}
+                              to={subItem.to}
+                              onClick={() => setOpenDropdown(null)}
+                              className={`block px-4 py-2 text-sm transition-colors ${
+                                location.pathname === subItem.to
+                                  ? 'text-blue-600 bg-blue-50/50 font-medium'
+                                  : 'text-[#1a2b3c]/70 hover:text-[#1a2b3c] hover:bg-gray-50'
+                              }`}
+                            >
+                              {subItem.label}
+                            </Link>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              } else {
+                return (
+                  <Link
+                    key={item.to}
+                    to={item.to!}
+                    className={`text-sm font-medium transition-colors whitespace-nowrap ${
+                      location.pathname === item.to
+                        ? 'text-blue-600'
+                        : 'text-[#1a2b3c]/70 hover:text-[#1a2b3c]'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                );
+              }
+            })}
+          </div>
+
+          {/* Right actions */}
+          <div className="hidden lg:flex items-center gap-3">
+            <LanguageSwitcher />
+            <NotificationBell />
+            <Link
+              to="/espace-patient"
+              className="text-sm font-medium bg-gradient-to-r from-blue-600 to-violet-600 text-white px-5 py-1.5 rounded-full hover:shadow-md hover:shadow-blue-500/25 transition-all"
+            >
+              {t('nav.login')}
+            </Link>
+          </div>
+
+          {/* Mobile: Logo + Hamburger */}
+          <div className="flex items-center gap-3 lg:hidden">
+            <LanguageSwitcher />
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 -mr-2"
+              aria-label="Toggle menu"
+            >
+              <div className="w-5 h-3.5 flex flex-col justify-between">
+                <span className={`w-full h-0.5 bg-[#1a2b3c] transition-all origin-left ${mobileMenuOpen ? 'rotate-45' : ''}`} />
+                <span className={`w-full h-0.5 bg-[#1a2b3c] transition-all ${mobileMenuOpen ? 'opacity-0' : ''}`} />
+                <span className={`w-full h-0.5 bg-[#1a2b3c] transition-all origin-left ${mobileMenuOpen ? '-rotate-45' : ''}`} />
+              </div>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -184,42 +177,32 @@ export function Header() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden bg-white/95 backdrop-blur-2xl border-b border-[#e2e8f0]"
+            transition={{ duration: 0.25 }}
+            className="lg:hidden bg-white/95 backdrop-blur-xl border-b border-gray-200/60"
           >
-            <div className="max-w-[980px] mx-auto px-6 py-4 space-y-1">
+            <div className="max-w-6xl mx-auto px-6 py-4 space-y-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block w-full text-left py-3 text-[17px] transition-opacity ${
+                  className={`block py-2.5 text-base transition-colors ${
                     location.pathname === link.to
-                      ? 'text-[#3b82f6] opacity-100 font-medium'
-                      : 'text-[#1a2b3c] opacity-70'
+                      ? 'text-blue-600 font-medium'
+                      : 'text-[#1a2b3c]/70'
                   }`}
                 >
                   {link.label}
                 </Link>
               ))}
-              <div className="pt-3 border-t border-[#e2e8f0] flex items-center justify-between">
-                <div>
-                  <Link
-                    to="/espace-patient"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block w-full text-left py-3 text-[17px] text-[#3b82f6] font-medium"
-                  >
-                    {t('nav.patientSpace')}
-                  </Link>
-                  <Link
-                    to="/espace-medecin"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block w-full text-left py-3 text-[17px] text-[#7c3aed] font-medium"
-                  >
-                    {t('nav.doctorSpace')}
-                  </Link>
-                </div>
-                <LanguageSwitcher />
+              <div className="pt-3 border-t border-gray-100 flex items-center gap-4">
+                <Link
+                  to="/espace-patient"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-sm font-medium bg-gradient-to-r from-blue-600 to-violet-600 text-white px-5 py-2 rounded-full"
+                >
+                  {t('nav.login')}
+                </Link>
               </div>
             </div>
           </motion.div>

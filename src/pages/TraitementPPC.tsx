@@ -46,7 +46,7 @@ export function TraitementPPC() {
   return (
     <div className="bg-white">
       {/* Hero */}
-      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#F5F5F7] via-white to-[#F5F5F7] overflow-hidden">
+      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#5AC8FA] rounded-full blur-3xl"></div>
         </div>
@@ -58,14 +58,14 @@ export function TraitementPPC() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 bg-[#007AFF]/10 px-4 py-2 rounded-full mb-6">
-              <Wind className="w-5 h-5 text-[#007AFF]" />
-              <span className="text-[#007AFF]">Traitement par PPC</span>
+            <div className="inline-flex items-center gap-2 bg-[#3b82f6]/10 px-4 py-2 rounded-full mb-6">
+              <Wind className="w-5 h-5 text-[#3b82f6]" />
+              <span className="text-[#3b82f6]">Traitement par PPC</span>
             </div>
-            <h1 className="text-5xl lg:text-6xl text-[#1D1D1F] mb-6">
+            <h1 className="text-5xl lg:text-6xl text-[#1a2b3c] mb-6">
               La Pression Positive Continue (PPC)
             </h1>
-            <p className="text-xl text-[#86868B]">
+            <p className="text-xl text-[#6b7280]">
               Le traitement de référence pour l'apnée du sommeil modérée à sévère. 
               Efficace, non invasif et pris en charge par la Sécurité sociale.
             </p>
@@ -78,35 +78,35 @@ export function TraitementPPC() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div {...fadeInUp}>
-              <h2 className="text-4xl text-[#1D1D1F] mb-6">
+              <h2 className="text-4xl text-[#1a2b3c] mb-6">
                 Comment fonctionne la PPC ?
               </h2>
-              <p className="text-lg text-[#86868B] mb-4">
+              <p className="text-lg text-[#6b7280] mb-4">
                 La Pression Positive Continue (PPC ou CPAP en anglais) est une machine qui envoie 
                 un flux d'air sous pression via un masque, maintenant vos voies aériennes ouvertes pendant votre sommeil.
               </p>
-              <p className="text-lg text-[#86868B] mb-4">
+              <p className="text-lg text-[#6b7280] mb-4">
                 Grâce à cette pression constante ou auto-ajustée, les pauses respiratoires sont évitées, 
                 votre sommeil n'est plus fragmenté et votre organisme bénéficie d'un repos réparateur.
               </p>
-              <div className="bg-[#F5F5F7] rounded-2xl p-6 mb-6">
-                <h4 className="text-[#1D1D1F] mb-3">Points clés</h4>
-                <ul className="space-y-2 text-[#86868B]">
+              <div className="bg-[#f8fafc] rounded-2xl p-6 mb-6">
+                <h4 className="text-[#1a2b3c] mb-3">Points clés</h4>
+                <ul className="space-y-2 text-[#6b7280]">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-[#34C759] flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="w-5 h-5 text-[#10b981] flex-shrink-0 mt-0.5" />
                     <span>Ce n'est pas un respirateur de réanimation</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-[#34C759] flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="w-5 h-5 text-[#10b981] flex-shrink-0 mt-0.5" />
                     <span>Vous respirez normalement, l'air est simplement sous pression</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="w-5 h-5 text-[#34C759] flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="w-5 h-5 text-[#10b981] flex-shrink-0 mt-0.5" />
                     <span>Utilisation chaque nuit pour une efficacité maximale</span>
                   </li>
                 </ul>
               </div>
-              <p className="text-[#86868B]">
+              <p className="text-[#6b7280]">
                 Les appareils modernes sont silencieux, compacts et connectés pour un suivi optimal.
               </p>
             </motion.div>
@@ -125,13 +125,13 @@ export function TraitementPPC() {
       </section>
 
       {/* Benefits */}
-      <section className="py-24 bg-gradient-to-br from-[#F5F5F7] via-white to-[#F5F5F7]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1D1D1F] mb-6">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
               Les bénéfices du traitement
             </h2>
-            <p className="text-xl text-[#86868B] max-w-3xl mx-auto">
+            <p className="text-xl text-[#6b7280] max-w-3xl mx-auto">
               De nombreux patients constatent une amélioration dès les premières nuits
             </p>
           </motion.div>
@@ -146,13 +146,13 @@ export function TraitementPPC() {
                 transition={{ duration: 0.5, delay: index * 0.05 }}
                 className="bg-white rounded-2xl p-6 shadow-lg"
               >
-                <CheckCircle className="w-8 h-8 text-[#34C759] mb-3" />
-                <p className="text-[#1D1D1F]">{benefit}</p>
+                <CheckCircle className="w-8 h-8 text-[#10b981] mb-3" />
+                <p className="text-[#1a2b3c]">{benefit}</p>
               </motion.div>
             ))}
           </div>
 
-          <motion.div {...fadeInUp} className="bg-gradient-to-br from-[#007AFF] to-[#5AC8FA] rounded-3xl p-12 text-white text-center">
+          <motion.div {...fadeInUp} className="bg-gradient-to-br from-[#3b82f6] to-[#5AC8FA] rounded-3xl p-12 text-white text-center">
             <Moon className="w-16 h-16 mx-auto mb-6" />
             <h3 className="text-3xl mb-4">Un traitement pour la vie</h3>
             <p className="text-xl max-w-2xl mx-auto">
@@ -167,10 +167,10 @@ export function TraitementPPC() {
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1D1D1F] mb-6">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
               Le rôle d'la plateforme
             </h2>
-            <p className="text-xl text-[#86868B] max-w-3xl mx-auto">
+            <p className="text-xl text-[#6b7280] max-w-3xl mx-auto">
               Notre mission : vous aider à réussir votre traitement, pas seulement installer un appareil
             </p>
           </motion.div>
@@ -183,22 +183,22 @@ export function TraitementPPC() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-[#F5F5F7] rounded-3xl p-8"
+                className="bg-[#f8fafc] rounded-3xl p-8"
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-[#007AFF] to-[#5AC8FA] rounded-2xl flex items-center justify-center text-white mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#3b82f6] to-[#5AC8FA] rounded-2xl flex items-center justify-center text-white mb-6">
                   {service.icon}
                 </div>
-                <h3 className="text-2xl text-[#1D1D1F] mb-3">{service.title}</h3>
-                <p className="text-[#86868B]">{service.description}</p>
+                <h3 className="text-2xl text-[#1a2b3c] mb-3">{service.title}</h3>
+                <p className="text-[#6b7280]">{service.description}</p>
               </motion.div>
             ))}
           </div>
 
-          <motion.div {...fadeInUp} className="bg-[#F5F5F7] rounded-3xl p-12">
+          <motion.div {...fadeInUp} className="bg-[#f8fafc] rounded-3xl p-12">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <h3 className="text-3xl text-[#1D1D1F] mb-4">Accompagnement renforcé</h3>
-                <p className="text-lg text-[#86868B] mb-6">
+                <h3 className="text-3xl text-[#1a2b3c] mb-4">Accompagnement renforcé</h3>
+                <p className="text-lg text-[#6b7280] mb-6">
                   Contrairement au modèle traditionnel "je pose et je pars", nous assurons un suivi actif :
                 </p>
                 <ul className="space-y-3">
@@ -210,8 +210,8 @@ export function TraitementPPC() {
                     'Rapports détaillés pour votre médecin',
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-[#007AFF] flex-shrink-0 mt-0.5" />
-                      <span className="text-[#1D1D1F]">{item}</span>
+                      <CheckCircle className="w-5 h-5 text-[#3b82f6] flex-shrink-0 mt-0.5" />
+                      <span className="text-[#1a2b3c]">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -229,34 +229,34 @@ export function TraitementPPC() {
       </section>
 
       {/* Reimbursement */}
-      <section className="py-24 bg-gradient-to-br from-[#F5F5F7] via-white to-[#F5F5F7]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <motion.div {...fadeInUp} className="text-center mb-12">
-              <h2 className="text-4xl lg:text-5xl text-[#1D1D1F] mb-6">
+              <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
                 Prise en charge financière
               </h2>
             </motion.div>
 
             <motion.div {...fadeInUp} className="bg-white rounded-3xl p-12 shadow-xl">
-              <h3 className="text-2xl text-[#1D1D1F] mb-6">Comment ça fonctionne en France</h3>
-              <div className="space-y-6 text-[#86868B]">
+              <h3 className="text-2xl text-[#1a2b3c] mb-6">Comment ça fonctionne en France</h3>
+              <div className="space-y-6 text-[#6b7280]">
                 <div>
-                  <h4 className="text-[#1D1D1F] mb-2">Location mensuelle</h4>
+                  <h4 className="text-[#1a2b3c] mb-2">Location mensuelle</h4>
                   <p>
                     L'appareil PPC n'est pas acheté mais loué. la plateforme est rémunéré par la Sécurité sociale 
                     via un forfait de location qui couvre l'appareil, les accessoires et le suivi.
                   </p>
                 </div>
                 <div>
-                  <h4 className="text-[#1D1D1F] mb-2">Prise en charge à 100%</h4>
+                  <h4 className="text-[#1a2b3c] mb-2">Prise en charge à 100%</h4>
                   <p>
                     La Sécurité sociale prend en charge 60% et votre mutuelle complète généralement 
                     les 40% restants. Dans la grande majorité des cas, vous n'avez rien à payer.
                   </p>
                 </div>
                 <div>
-                  <h4 className="text-[#1D1D1F] mb-2">Observance requise</h4>
+                  <h4 className="text-[#1a2b3c] mb-2">Observance requise</h4>
                   <p>
                     La Sécurité sociale exige une utilisation minimale (généralement plus de 3h par nuit sur 
                     au moins 20 jours par mois) pour maintenir le remboursement. C'est pourquoi notre 
@@ -273,24 +273,24 @@ export function TraitementPPC() {
       <section className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <motion.div {...fadeInUp}>
-            <h2 className="text-4xl lg:text-5xl text-[#1D1D1F] mb-6">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
               Prêt à choisir la plateforme ?
             </h2>
-            <p className="text-xl text-[#86868B] mb-8">
+            <p className="text-xl text-[#6b7280] mb-8">
               Que vous soyez déjà appareillé ou sur le point de l'être, 
               contactez-nous pour découvrir la différence la plateforme.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/contact"
-                className="px-8 py-4 bg-[#007AFF] text-white rounded-full hover:bg-[#0051D5] transition-all shadow-lg inline-flex items-center justify-center group"
+                className="px-8 py-4 bg-[#3b82f6] text-white rounded-full hover:bg-[#2563eb] transition-all shadow-lg inline-flex items-center justify-center group"
               >
                 Être rappelé
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 to="/pourquoi-expair"
-                className="px-8 py-4 bg-white border-2 border-[#007AFF] text-[#007AFF] rounded-full hover:bg-[#F5F5F7] transition-all inline-flex items-center justify-center"
+                className="px-8 py-4 bg-white border-2 border-[#3b82f6] text-[#3b82f6] rounded-full hover:bg-[#f8fafc] transition-all inline-flex items-center justify-center"
               >
                 Pourquoi la plateforme
               </Link>

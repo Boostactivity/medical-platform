@@ -39,7 +39,7 @@ export function FAQ() {
       {/* Hero */}
       <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#F5F5F7] via-white to-[#F5F5F7] overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 right-10 w-96 h-96 bg-[#007AFF] rounded-full blur-3xl"></div>
+          <div className="absolute top-20 right-10 w-96 h-96 bg-blue-600 rounded-full blur-3xl"></div>
         </div>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
@@ -49,11 +49,11 @@ export function FAQ() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <HelpCircle className="w-16 h-16 text-[#007AFF] mx-auto mb-6" />
-            <h1 className="text-5xl lg:text-6xl text-[#1D1D1F] mb-6">
+            <HelpCircle className="w-16 h-16 text-blue-600 mx-auto mb-6" />
+            <h1 className="text-4xl lg:text-5xl font-light text-[#1a2b3c] mb-6 tracking-tight">
               {t('faq.title')}
             </h1>
-            <p className="text-xl text-[#86868B]">
+            <p className="text-xl text-gray-500">
               {t('faq.subtitle')}
             </p>
           </motion.div>
@@ -64,8 +64,8 @@ export function FAQ() {
       <section className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="mb-12">
-            <h2 className="text-4xl text-[#1D1D1F] mb-3">{t('faq.patientsTitle')}</h2>
-            <p className="text-lg text-[#86868B]">
+            <h2 className="text-4xl text-[#1a2b3c] mb-3">{t('faq.patientsTitle')}</h2>
+            <p className="text-lg text-gray-500">
               {t('faq.patientsSubtitle')}
             </p>
           </motion.div>
@@ -78,21 +78,21 @@ export function FAQ() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
-                className="bg-[#F5F5F7] rounded-2xl overflow-hidden"
+                className="bg-[#f8fafc] rounded-2xl overflow-hidden"
               >
                 <button
                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-[#EBEBED] transition-colors"
+                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-100 transition-colors"
                 >
-                  <span className="text-lg text-[#1D1D1F] pr-4">{faq.question}</span>
+                  <span className="text-lg text-[#1a2b3c] pr-4">{faq.question}</span>
                   <ChevronDown
-                    className={`w-6 h-6 text-[#007AFF] flex-shrink-0 transition-transform ${
+                    className={`w-6 h-6 text-blue-600 flex-shrink-0 transition-transform ${
                       openIndex === index ? 'rotate-180' : ''
                     }`}
                   />
                 </button>
                 {openIndex === index && (
-                  <div className="px-6 pb-5 text-[#86868B]">
+                  <div className="px-6 pb-5 text-gray-500">
                     {faq.answer}
                   </div>
                 )}
@@ -106,8 +106,8 @@ export function FAQ() {
       <section className="py-24 bg-gradient-to-br from-[#F5F5F7] via-white to-[#F5F5F7]">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="mb-12">
-            <h2 className="text-4xl text-[#1D1D1F] mb-3">{t('faq.doctorsTitle')}</h2>
-            <p className="text-lg text-[#86868B]">
+            <h2 className="text-4xl text-[#1a2b3c] mb-3">{t('faq.doctorsTitle')}</h2>
+            <p className="text-lg text-gray-500">
               {t('faq.doctorsSubtitle')}
             </p>
           </motion.div>
@@ -124,17 +124,17 @@ export function FAQ() {
               >
                 <button
                   onClick={() => setOpenIndex(openIndex === index + 100 ? null : index + 100)}
-                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-[#F5F5F7] transition-colors"
+                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-[#f8fafc] transition-colors"
                 >
-                  <span className="text-lg text-[#1D1D1F] pr-4">{faq.question}</span>
+                  <span className="text-lg text-[#1a2b3c] pr-4">{faq.question}</span>
                   <ChevronDown
-                    className={`w-6 h-6 text-[#34C759] flex-shrink-0 transition-transform ${
+                    className={`w-6 h-6 text-emerald-500 flex-shrink-0 transition-transform ${
                       openIndex === index + 100 ? 'rotate-180' : ''
                     }`}
                   />
                 </button>
                 {openIndex === index + 100 && (
-                  <div className="px-6 pb-5 text-[#86868B]">
+                  <div className="px-6 pb-5 text-gray-500">
                     {faq.answer}
                   </div>
                 )}
@@ -148,15 +148,15 @@ export function FAQ() {
       <section className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <motion.div {...fadeInUp}>
-            <h2 className="text-4xl lg:text-5xl text-[#1D1D1F] mb-6">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
               {t('faq.ctaTitle')}
             </h2>
-            <p className="text-xl text-[#86868B] mb-8">
+            <p className="text-xl text-gray-500 mb-8">
               {t('faq.ctaSubtitle')}
             </p>
             <Link
               to="/contact"
-              className="inline-block px-8 py-4 bg-[#007AFF] text-white rounded-full hover:bg-[#0051D5] transition-all shadow-lg"
+              className="inline-block px-8 py-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white text-sm font-medium rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all"
             >
               {t('faq.ctaButton')}
             </Link>

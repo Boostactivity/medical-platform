@@ -27,9 +27,9 @@ export function QuiSommesNous() {
   return (
     <div className="bg-white">
       {/* Hero */}
-      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#F5F5F7] via-white to-[#F5F5F7] overflow-hidden">
+      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] overflow-hidden">
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-20 left-10 w-96 h-96 bg-[#007AFF] rounded-full blur-3xl"></div>
+          <div className="absolute top-20 left-10 w-96 h-96 bg-[#3b82f6] rounded-full blur-3xl"></div>
         </div>
         
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
@@ -39,13 +39,13 @@ export function QuiSommesNous() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="w-20 h-20 bg-gradient-to-br from-[#007AFF] to-[#5AC8FA] rounded-3xl flex items-center justify-center text-white mx-auto mb-8 shadow-2xl">
+            <div className="w-20 h-20 bg-gradient-to-br from-[#3b82f6] to-[#5AC8FA] rounded-3xl flex items-center justify-center text-white mx-auto mb-8 shadow-2xl">
               <span className="text-3xl">E</span>
             </div>
-            <h1 className="text-5xl lg:text-6xl text-[#1D1D1F] mb-6">
+            <h1 className="text-5xl lg:text-6xl text-[#1a2b3c] mb-6">
               Qui sommes-nous ?
             </h1>
-            <p className="text-xl text-[#86868B]">
+            <p className="text-xl text-[#6b7280]">
               la plateforme est une entreprise française spécialisée dans l'appareillage respiratoire 
               à domicile pour le traitement de l'apnée du sommeil.
             </p>
@@ -58,19 +58,19 @@ export function QuiSommesNous() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div {...fadeInUp}>
-              <h2 className="text-4xl text-[#1D1D1F] mb-6">Notre mission</h2>
-              <p className="text-xl text-[#86868B] mb-6">
+              <h2 className="text-4xl text-[#1a2b3c] mb-6">Notre mission</h2>
+              <p className="text-xl text-[#6b7280] mb-6">
                 la plateforme naît d'un constat simple : le système actuel de l'appareillage médical 
                 en France est trop opaque, trop peu centré sur le patient, et basé sur des habitudes 
                 de renvoi entre médecins et prestataires historiques.
               </p>
-              <p className="text-xl text-[#86868B] mb-6">
+              <p className="text-xl text-[#6b7280] mb-6">
                 Notre mission est de rendre le système lisible, humain et moderne. Nous voulons remettre 
                 le choix et l'information dans les mains du patient, tout en garantissant un niveau 
                 d'expertise médicale et d'accompagnement inégalé.
               </p>
-              <div className="bg-[#007AFF]/10 border-2 border-[#007AFF]/30 rounded-2xl p-6">
-                <p className="text-lg text-[#1D1D1F]">
+              <div className="bg-[#3b82f6]/10 border-2 border-[#3b82f6]/30 rounded-2xl p-6">
+                <p className="text-lg text-[#1a2b3c]">
                   <strong>Notre ambition :</strong> devenir LA référence moderne en France pour 
                   l'appareillage PPC et l'accompagnement des patients souffrant d'apnée du sommeil.
                 </p>
@@ -91,11 +91,11 @@ export function QuiSommesNous() {
       </section>
 
       {/* Values */}
-      <section className="py-24 bg-gradient-to-br from-[#F5F5F7] via-white to-[#F5F5F7]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1D1D1F] mb-6">Nos valeurs</h2>
-            <p className="text-xl text-[#86868B] max-w-3xl mx-auto">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">Nos valeurs</h2>
+            <p className="text-xl text-[#6b7280] max-w-3xl mx-auto">
               Les principes qui guident chacune de nos actions au quotidien
             </p>
           </motion.div>
@@ -110,11 +110,11 @@ export function QuiSommesNous() {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="bg-white rounded-3xl p-8 shadow-xl text-center"
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-[#007AFF] to-[#5AC8FA] rounded-2xl flex items-center justify-center text-white mx-auto mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#3b82f6] to-[#5AC8FA] rounded-2xl flex items-center justify-center text-white mx-auto mb-6">
                   {value.icon}
                 </div>
-                <h3 className="text-xl text-[#1D1D1F] mb-3">{value.title}</h3>
-                <p className="text-[#86868B]">{value.description}</p>
+                <h3 className="text-xl text-[#1a2b3c] mb-3">{value.title}</h3>
+                <p className="text-[#6b7280]">{value.description}</p>
               </motion.div>
             ))}
           </div>
@@ -125,8 +125,8 @@ export function QuiSommesNous() {
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1D1D1F] mb-6">Notre équipe</h2>
-            <p className="text-xl text-[#86868B] max-w-3xl mx-auto">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">Notre équipe</h2>
+            <p className="text-xl text-[#6b7280] max-w-3xl mx-auto">
               Des professionnels de santé experts et dédiés à votre réussite
             </p>
           </motion.div>
@@ -139,11 +139,11 @@ export function QuiSommesNous() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-[#F5F5F7] rounded-3xl p-8"
+                className="bg-[#f8fafc] rounded-3xl p-8"
               >
-                <Users className="w-12 h-12 text-[#007AFF] mb-4" />
-                <h3 className="text-2xl text-[#1D1D1F] mb-3">{member.role}</h3>
-                <p className="text-lg text-[#86868B]">{member.description}</p>
+                <Users className="w-12 h-12 text-[#3b82f6] mb-4" />
+                <h3 className="text-2xl text-[#1a2b3c] mb-3">{member.role}</h3>
+                <p className="text-lg text-[#6b7280]">{member.description}</p>
               </motion.div>
             ))}
           </div>
@@ -151,10 +151,10 @@ export function QuiSommesNous() {
       </section>
 
       {/* Certifications */}
-      <section className="py-24 bg-gradient-to-br from-[#F5F5F7] via-white to-[#F5F5F7]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1D1D1F] mb-6">Agréments et certifications</h2>
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">Agréments et certifications</h2>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
@@ -174,8 +174,8 @@ export function QuiSommesNous() {
                 <div className="w-20 h-20 bg-gradient-to-br from-[#34C759] to-[#30D158] rounded-2xl flex items-center justify-center text-white mx-auto mb-6">
                   {cert.icon}
                 </div>
-                <h3 className="text-xl text-[#1D1D1F] mb-3">{cert.title}</h3>
-                <p className="text-[#86868B]">{cert.desc}</p>
+                <h3 className="text-xl text-[#1a2b3c] mb-3">{cert.title}</h3>
+                <p className="text-[#6b7280]">{cert.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -186,15 +186,15 @@ export function QuiSommesNous() {
       <section className="py-24 bg-white">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <motion.div {...fadeInUp}>
-            <h2 className="text-4xl lg:text-5xl text-[#1D1D1F] mb-6">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
               Rejoignez la plateforme
             </h2>
-            <p className="text-xl text-[#86868B] mb-8">
+            <p className="text-xl text-[#6b7280] mb-8">
               Patients ou médecins, découvrez une nouvelle façon de vivre le traitement de l'apnée du sommeil.
             </p>
             <Link
               to="/contact"
-              className="inline-block px-8 py-4 bg-[#007AFF] text-white rounded-full hover:bg-[#0051D5] transition-all shadow-lg"
+              className="inline-block px-8 py-4 bg-[#3b82f6] text-white rounded-full hover:bg-[#2563eb] transition-all shadow-lg"
             >
               Nous contacter
             </Link>

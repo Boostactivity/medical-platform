@@ -1,315 +1,198 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, RefreshControl, ActivityIndicator } from 'react-native';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDatabase } from '@nozbe/watermelondb/hooks';
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { Alert } from '../../database/models/Alert';
-import { Patient } from '../../database/models/Patient';
 
-/**
- * Écran Liste des Alertes
- * 
- * Affiche toutes les alertes du patient avec :
- * - Filtres par sévérité, type, statut
- * - Actions : marquer comme lu, acquitter, résoudre
- * - Badge de compteur non lues
- * - Navigation vers détail patient
- * - Pull to refresh
- */
+const BLUE = '#3b82f6';
+const VIOLET = '#8b5cf6';
+
+// ============================================
+// DONNEES MOCK
+// ============================================
+
+type AlertPriority = 'critical' | 'warning' | 'info';
+
+interface AlertItem {
+  id: string;
+  title: string;
+  message: string;
+  priority: AlertPriority;
+  type: 'mask' | 'filter' | 'observance' | 'maintenance' | 'medical';
+  date: string;
+  read: boolean;
+  actions: { label: string; type: 'primary' | 'secondary' | 'link' }[];
+}
+
+const MOCK_ALERTS: AlertItem[] = [
+  {
+    id: '1',
+    title: 'Masque a changer',
+    message: 'Votre masque AirFit F20 a atteint 6 mois d utilisation. Il est recommande de le remplacer.',
+    priority: 'critical',
+    type: 'mask',
+    date: 'Aujourd hui',
+    read: false,
+    actions: [
+      { label: 'Commander', type: 'primary' },
+      { label: 'Reporter', type: 'secondary' },
+    ],
+  },
+  {
+    id: '2',
+    title: 'Filtre a remplacer',
+    message: 'Le filtre de votre machine doit etre change. Cela garantit une bonne qualite d air.',
+    priority: 'warning',
+    type: 'filter',
+    date: 'Hier',
+    read: false,
+    actions: [
+      { label: 'Commander un filtre', type: 'primary' },
+      { label: 'Ignorer', type: 'link' },
+    ],
+  },
+  {
+    id: '3',
+    title: 'Non-observance detectee',
+    message: 'Vous n avez pas atteint les 4h de port minimum ces 3 dernieres nuits. N hesitez pas a nous contacter si vous rencontrez des difficultes.',
+    priority: 'critical',
+    type: 'observance',
+    date: 'Il y a 2 jours',
+    read: true,
+    actions: [
+      { label: 'Contacter mon prestataire', type: 'primary' },
+      { label: 'J ai un probleme', type: 'secondary' },
+    ],
+  },
+  {
+    id: '4',
+    title: 'Rendez-vous de suivi',
+    message: 'Votre prochain rendez-vous avec le Dr. Martin est prevu le 28 mars a 14h00.',
+    priority: 'info',
+    type: 'medical',
+    date: 'Il y a 3 jours',
+    read: true,
+    actions: [
+      { label: 'Voir les details', type: 'link' },
+    ],
+  },
+  {
+    id: '5',
+    title: 'Maintenance preventive',
+    message: 'Un technicien passera verifier votre equipement dans les prochaines semaines.',
+    priority: 'info',
+    type: 'maintenance',
+    date: 'Il y a 5 jours',
+    read: true,
+    actions: [
+      { label: 'Confirmer le creneau', type: 'primary' },
+      { label: 'Reporter', type: 'secondary' },
+    ],
+  },
+];
+
+function getPriorityConfig(priority: AlertPriority) {
+  switch (priority) {
+    case 'critical':
+      return { color: '#ef4444', bg: '#fef2f2', icon: 'alert-circle' as const, label: 'Urgent' };
+    case 'warning':
+      return { color: '#f97316', bg: '#fff7ed', icon: 'warning' as const, label: 'Attention' };
+    case 'info':
+      return { color: BLUE, bg: '#eff6ff', icon: 'information-circle' as const, label: 'Info' };
+  }
+}
+
+function getTypeIcon(type: string): keyof typeof Ionicons.glyphMap {
+  switch (type) {
+    case 'mask': return 'glasses-outline';
+    case 'filter': return 'funnel-outline';
+    case 'observance': return 'time-outline';
+    case 'maintenance': return 'build-outline';
+    case 'medical': return 'medkit-outline';
+    default: return 'notifications-outline';
+  }
+}
+
+// ============================================
+// ECRAN ALERTES
+// ============================================
 
 export default function AlertsPage() {
-  // ============================================
-  // STATE
-  // ============================================
-
-  const database = useDatabase();
   const router = useRouter();
-  
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
-  const [alerts, setAlerts] = useState<Alert[]>([]);
-  const [filteredAlerts, setFilteredAlerts] = useState<Alert[]>([]);
-  const [patient, setPatient] = useState<Patient | null>(null);
-  
-  // Filtres
-  const [selectedSeverity, setSelectedSeverity] = useState<'all' | 'critical' | 'high' | 'medium' | 'low'>('all');
-  const [selectedType, setSelectedType] = useState<'all' | 'observance' | 'technical' | 'medical' | 'maintenance'>('all');
-  const [selectedStatus, setSelectedStatus] = useState<'all' | 'active' | 'resolved'>('active');
-  
-  // Statistiques
-  const [stats, setStats] = useState({
-    total: 0,
-    unread: 0,
-    critical: 0,
-    needsAction: 0,
-  });
+  const [alerts, setAlerts] = useState(MOCK_ALERTS);
+  const [filter, setFilter] = useState<'all' | AlertPriority>('all');
 
-  // ============================================
-  // CHARGEMENT DES DONNÉES
-  // ============================================
+  const filteredAlerts = filter === 'all' ? alerts : alerts.filter((a) => a.priority === filter);
+  const unreadCount = alerts.filter((a) => !a.read).length;
 
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  useEffect(() => {
-    filterAlerts();
-  }, [alerts, selectedSeverity, selectedType, selectedStatus]);
-
-  async function loadData() {
-    try {
-      setLoading(true);
-      
-      // TODO: Récupérer l'ID du patient connecté
-      const currentPatientId = 'PATIENT_ID_HERE';
-      
-      // Charger le patient
-      const patientData = await database.get<Patient>('patients').find(currentPatientId);
-      setPatient(patientData);
-      
-      // Charger toutes les alertes du patient
-      const alertsCollection = database.get<Alert>('alerts');
-      const alertsData = await alertsCollection
-        .query()
-        // @ts-ignore
-        .where('patient_id', currentPatientId)
-        .fetch();
-      
-      // Trier par priorité puis par date
-      const sortedAlerts = alertsData.sort((a, b) => {
-        // Priorité d'abord
-        if (a.displayPriority !== b.displayPriority) {
-          return a.displayPriority - b.displayPriority;
-        }
-        // Puis par date (plus récent en premier)
-        return b.createdAt.getTime() - a.createdAt.getTime();
-      });
-      
-      setAlerts(sortedAlerts);
-      calculateStats(sortedAlerts);
-      
-    } catch (error) {
-      console.error('Error loading alerts:', error);
-    } finally {
-      setLoading(false);
-    }
+  function handleAction(alert: AlertItem, action: AlertItem['actions'][0]) {
+    Alert.alert(action.label, `Action "${action.label}" pour : ${alert.title}`);
   }
 
-  async function onRefresh() {
-    setRefreshing(true);
-    await loadData();
-    setRefreshing(false);
+  function handleDismiss(alertId: string) {
+    setAlerts(alerts.map((a) => (a.id === alertId ? { ...a, read: true } : a)));
   }
 
-  // ============================================
-  // FILTRAGE
-  // ============================================
-
-  function filterAlerts() {
-    let filtered = [...alerts];
-    
-    // Filtre par sévérité
-    if (selectedSeverity !== 'all') {
-      filtered = filtered.filter(alert => alert.severity === selectedSeverity);
-    }
-    
-    // Filtre par type
-    if (selectedType !== 'all') {
-      filtered = filtered.filter(alert => alert.type === selectedType);
-    }
-    
-    // Filtre par statut
-    if (selectedStatus === 'active') {
-      filtered = filtered.filter(alert => !alert.isResolved);
-    } else if (selectedStatus === 'resolved') {
-      filtered = filtered.filter(alert => alert.isResolved);
-    }
-    
-    setFilteredAlerts(filtered);
-  }
-
-  function calculateStats(data: Alert[]) {
-    setStats({
-      total: data.length,
-      unread: data.filter(a => !a.isRead).length,
-      critical: data.filter(a => a.severity === 'critical' && !a.isResolved).length,
-      needsAction: data.filter(a => a.needsAction).length,
-    });
-  }
-
-  // ============================================
-  // ACTIONS
-  // ============================================
-
-  async function handleMarkAsRead(alert: Alert) {
-    try {
-      await alert.markAsRead();
-      await loadData(); // Recharger pour mettre à jour
-    } catch (error) {
-      console.error('Error marking alert as read:', error);
-    }
-  }
-
-  async function handleAcknowledge(alert: Alert) {
-    try {
-      // TODO: Récupérer l'ID utilisateur connecté
-      const userId = 'USER_ID_HERE';
-      await alert.acknowledge(userId);
-      await loadData();
-    } catch (error) {
-      console.error('Error acknowledging alert:', error);
-    }
-  }
-
-  async function handleResolve(alert: Alert) {
-    try {
-      // TODO: Récupérer l'ID utilisateur connecté
-      const userId = 'USER_ID_HERE';
-      await alert.resolve(userId, 'Résolu depuis l\'application mobile');
-      await loadData();
-    } catch (error) {
-      console.error('Error resolving alert:', error);
-    }
-  }
-
-  async function handleReopen(alert: Alert) {
-    try {
-      await alert.reopen();
-      await loadData();
-    } catch (error) {
-      console.error('Error reopening alert:', error);
-    }
-  }
-
-  // ============================================
-  // RENDER ITEM
-  // ============================================
-
-  function renderAlertItem({ item }: { item: Alert }) {
+  function renderAlert({ item }: { item: AlertItem }) {
+    const config = getPriorityConfig(item.priority);
     return (
-      <View style={styles.alertCard}>
-        {/* Indicateur de statut */}
-        <View style={[styles.statusIndicator, { backgroundColor: item.severityColor }]} />
-        
-        {/* Contenu */}
-        <View style={styles.alertContent}>
+      <View style={[alertStyles.card, !item.read && alertStyles.cardUnread]}>
+        {/* Barre couleur */}
+        <View style={[alertStyles.priorityBar, { backgroundColor: config.color }]} />
+
+        <View style={alertStyles.content}>
           {/* Header */}
-          <View style={styles.alertHeader}>
-            <View style={styles.alertHeaderLeft}>
-              <Text style={styles.alertIcon}>{getTypeIcon(item.type)}</Text>
-              <View style={styles.alertHeaderText}>
-                <Text style={styles.alertTitle}>{item.title}</Text>
-                <Text style={styles.alertTime}>{item.ageFormatted}</Text>
-              </View>
+          <View style={alertStyles.header}>
+            <View style={[alertStyles.typeIcon, { backgroundColor: config.bg }]}>
+              <Ionicons name={getTypeIcon(item.type)} size={18} color={config.color} />
             </View>
-            
-            {!item.isRead && (
-              <View style={styles.unreadBadge}>
-                <Text style={styles.unreadBadgeText}>●</Text>
-              </View>
-            )}
+            <View style={alertStyles.headerText}>
+              <Text style={alertStyles.title}>{item.title}</Text>
+              <Text style={alertStyles.date}>{item.date}</Text>
+            </View>
+            <View style={[alertStyles.priorityBadge, { backgroundColor: config.bg }]}>
+              <Text style={[alertStyles.priorityText, { color: config.color }]}>{config.label}</Text>
+            </View>
           </View>
 
           {/* Message */}
-          <Text style={styles.alertMessage}>{item.message}</Text>
-
-          {/* Badges */}
-          <View style={styles.alertBadges}>
-            <View style={[styles.badge, { backgroundColor: item.severityColor + '20' }]}>
-              <Text style={[styles.badgeText, { color: item.severityColor }]}>
-                {item.severityLabel}
-              </Text>
-            </View>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>{item.typeLabel}</Text>
-            </View>
-            {item.isAcknowledged && (
-              <View style={[styles.badge, styles.badgeSuccess]}>
-                <Text style={[styles.badgeText, { color: '#16a34a' }]}>Acquittée</Text>
-              </View>
-            )}
-            {item.isResolved && (
-              <View style={[styles.badge, styles.badgeResolved]}>
-                <Text style={[styles.badgeText, { color: '#64748b' }]}>Résolue</Text>
-              </View>
-            )}
-          </View>
-
-          {/* Action recommandée */}
-          {!item.isResolved && (
-            <View style={styles.recommendedAction}>
-              <Text style={styles.recommendedActionIcon}>💡</Text>
-              <Text style={styles.recommendedActionText}>
-                {item.getRecommendedAction()}
-              </Text>
-            </View>
-          )}
-
-          {/* Escalade warning */}
-          {item.needsEscalation() && (
-            <View style={styles.escalationWarning}>
-              <Text style={styles.escalationIcon}>⚠️</Text>
-              <Text style={styles.escalationText}>
-                Escalade nécessaire ! Non résolue depuis {item.ageInHours}h
-              </Text>
-            </View>
-          )}
+          <Text style={alertStyles.message}>{item.message}</Text>
 
           {/* Actions */}
-          <View style={styles.alertActions}>
-            {!item.isRead && (
+          <View style={alertStyles.actionsRow}>
+            {item.actions.map((action, i) => (
               <TouchableOpacity
-                style={[styles.actionButton, styles.actionButtonSecondary]}
-                onPress={() => handleMarkAsRead(item)}
+                key={i}
+                style={[
+                  alertStyles.actionButton,
+                  action.type === 'primary' && { backgroundColor: BLUE },
+                  action.type === 'secondary' && { backgroundColor: '#f1f5f9', borderWidth: 1, borderColor: '#e2e8f0' },
+                  action.type === 'link' && { backgroundColor: 'transparent' },
+                ]}
+                onPress={() => handleAction(item, action)}
               >
-                <Text style={styles.actionButtonTextSecondary}>Marquer comme lu</Text>
+                <Text
+                  style={[
+                    alertStyles.actionText,
+                    action.type === 'primary' && { color: '#ffffff' },
+                    action.type === 'secondary' && { color: '#64748b' },
+                    action.type === 'link' && { color: BLUE },
+                  ]}
+                >
+                  {action.label}
+                </Text>
               </TouchableOpacity>
-            )}
-            
-            {!item.isAcknowledged && !item.isResolved && (
-              <TouchableOpacity
-                style={[styles.actionButton, styles.actionButtonSecondary]}
-                onPress={() => handleAcknowledge(item)}
-              >
-                <Text style={styles.actionButtonTextSecondary}>Acquitter</Text>
-              </TouchableOpacity>
-            )}
-            
-            {!item.isResolved && (
-              <TouchableOpacity
-                style={[styles.actionButton, styles.actionButtonPrimary]}
-                onPress={() => handleResolve(item)}
-              >
-                <Text style={styles.actionButtonTextPrimary}>Résoudre</Text>
-              </TouchableOpacity>
-            )}
-            
-            {item.isResolved && (
-              <TouchableOpacity
-                style={[styles.actionButton, styles.actionButtonWarning]}
-                onPress={() => handleReopen(item)}
-              >
-                <Text style={styles.actionButtonTextWarning}>Rouvrir</Text>
-              </TouchableOpacity>
-            )}
+            ))}
           </View>
         </View>
       </View>
-    );
-  }
-
-  // ============================================
-  // RENDER
-  // ============================================
-
-  if (loading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#5eb3d6" />
-          <Text style={styles.loadingText}>Chargement des alertes...</Text>
-        </View>
-      </SafeAreaView>
     );
   }
 
@@ -317,161 +200,52 @@ export default function AlertsPage() {
     <SafeAreaView style={styles.container} edges={['top']}>
       {/* Header */}
       <View style={styles.header}>
-        <View>
+        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
+          <Ionicons name="chevron-back" size={24} color="#1e293b" />
+        </TouchableOpacity>
+        <View style={styles.headerCenter}>
           <Text style={styles.title}>Alertes</Text>
-          {stats.unread > 0 && (
-            <Text style={styles.subtitle}>
-              {stats.unread} non lue{stats.unread > 1 ? 's' : ''}
-            </Text>
-          )}
-        </View>
-        <View style={styles.headerBadges}>
-          {stats.critical > 0 && (
-            <View style={styles.criticalBadge}>
-              <Text style={styles.criticalBadgeText}>{stats.critical} 🚨</Text>
+          {unreadCount > 0 && (
+            <View style={styles.unreadBadge}>
+              <Text style={styles.unreadBadgeText}>{unreadCount}</Text>
             </View>
           )}
         </View>
+        <View style={{ width: 40 }} />
       </View>
 
-      {/* Statistiques */}
-      <View style={styles.statsContainer}>
-        <View style={styles.statBox}>
-          <Text style={styles.statValue}>{stats.total}</Text>
-          <Text style={styles.statLabel}>Total</Text>
-        </View>
-        <View style={styles.statBox}>
-          <Text style={[styles.statValue, { color: '#ef4444' }]}>{stats.critical}</Text>
-          <Text style={styles.statLabel}>Critiques</Text>
-        </View>
-        <View style={styles.statBox}>
-          <Text style={styles.statValue}>{stats.needsAction}</Text>
-          <Text style={styles.statLabel}>À traiter</Text>
-        </View>
-        <View style={styles.statBox}>
-          <Text style={styles.statValue}>{stats.unread}</Text>
-          <Text style={styles.statLabel}>Non lues</Text>
-        </View>
+      {/* Filtres */}
+      <View style={styles.filterRow}>
+        {([
+          { key: 'all' as const, label: 'Toutes' },
+          { key: 'critical' as const, label: 'Urgentes' },
+          { key: 'warning' as const, label: 'Attention' },
+          { key: 'info' as const, label: 'Infos' },
+        ]).map((f) => (
+          <TouchableOpacity
+            key={f.key}
+            style={[styles.filterChip, filter === f.key && styles.filterChipActive]}
+            onPress={() => setFilter(f.key)}
+          >
+            <Text style={[styles.filterChipText, filter === f.key && styles.filterChipTextActive]}>
+              {f.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
 
-      {/* Filtres - Statut */}
-      <View style={styles.filtersSection}>
-        <Text style={styles.filterLabel}>Statut</Text>
-        <View style={styles.filterButtons}>
-          <TouchableOpacity
-            style={[styles.filterButton, selectedStatus === 'all' && styles.filterButtonActive]}
-            onPress={() => setSelectedStatus('all')}
-          >
-            <Text style={[styles.filterButtonText, selectedStatus === 'all' && styles.filterButtonTextActive]}>
-              Toutes
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterButton, selectedStatus === 'active' && styles.filterButtonActive]}
-            onPress={() => setSelectedStatus('active')}
-          >
-            <Text style={[styles.filterButtonText, selectedStatus === 'active' && styles.filterButtonTextActive]}>
-              Actives
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterButton, selectedStatus === 'resolved' && styles.filterButtonActive]}
-            onPress={() => setSelectedStatus('resolved')}
-          >
-            <Text style={[styles.filterButtonText, selectedStatus === 'resolved' && styles.filterButtonTextActive]}>
-              Résolues
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Filtres - Sévérité */}
-      <View style={styles.filtersSection}>
-        <Text style={styles.filterLabel}>Sévérité</Text>
-        <View style={styles.filterButtons}>
-          <TouchableOpacity
-            style={[styles.filterButton, selectedSeverity === 'all' && styles.filterButtonActive]}
-            onPress={() => setSelectedSeverity('all')}
-          >
-            <Text style={[styles.filterButtonText, selectedSeverity === 'all' && styles.filterButtonTextActive]}>
-              Toutes
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterButton, selectedSeverity === 'critical' && styles.filterButtonActive]}
-            onPress={() => setSelectedSeverity('critical')}
-          >
-            <Text style={[styles.filterButtonText, selectedSeverity === 'critical' && styles.filterButtonTextActive]}>
-              Critiques
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterButton, selectedSeverity === 'high' && styles.filterButtonActive]}
-            onPress={() => setSelectedSeverity('high')}
-          >
-            <Text style={[styles.filterButtonText, selectedSeverity === 'high' && styles.filterButtonTextActive]}>
-              Élevées
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Filtres - Type */}
-      <View style={styles.filtersSection}>
-        <Text style={styles.filterLabel}>Type</Text>
-        <View style={styles.filterButtons}>
-          <TouchableOpacity
-            style={[styles.filterButton, selectedType === 'all' && styles.filterButtonActive]}
-            onPress={() => setSelectedType('all')}
-          >
-            <Text style={[styles.filterButtonText, selectedType === 'all' && styles.filterButtonTextActive]}>
-              Tous
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterButton, selectedType === 'observance' && styles.filterButtonActive]}
-            onPress={() => setSelectedType('observance')}
-          >
-            <Text style={[styles.filterButtonText, selectedType === 'observance' && styles.filterButtonTextActive]}>
-              Observance
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.filterButton, selectedType === 'technical' && styles.filterButtonActive]}
-            onPress={() => setSelectedType('technical')}
-          >
-            <Text style={[styles.filterButtonText, selectedType === 'technical' && styles.filterButtonTextActive]}>
-              Technique
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Résultats */}
-      <View style={styles.resultsHeader}>
-        <Text style={styles.resultsText}>
-          {filteredAlerts.length} alerte{filteredAlerts.length > 1 ? 's' : ''}
-        </Text>
-      </View>
-
-      {/* Liste des alertes */}
+      {/* Liste */}
       <FlatList
         data={filteredAlerts}
-        renderItem={renderAlertItem}
+        renderItem={renderAlert}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.listContent}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        showsVerticalScrollIndicator={false}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyIcon}>🎉</Text>
-            <Text style={styles.emptyText}>Aucune alerte</Text>
-            <Text style={styles.emptySubtext}>
-              {selectedStatus === 'resolved' 
-                ? 'Aucune alerte résolue'
-                : 'Tout va bien ! Aucune alerte active.'}
-            </Text>
+            <Ionicons name="checkmark-circle-outline" size={64} color="#cbd5e1" />
+            <Text style={styles.emptyTitle}>Aucune alerte</Text>
+            <Text style={styles.emptySubtext}>Tout est en ordre !</Text>
           </View>
         }
       />
@@ -480,317 +254,183 @@ export default function AlertsPage() {
 }
 
 // ============================================
-// HELPERS
-// ============================================
-
-function getTypeIcon(type: string): string {
-  const icons: { [key: string]: string } = {
-    observance: '⏱️',
-    technical: '🔧',
-    medical: '🏥',
-    maintenance: '⚙️',
-  };
-  return icons[type] || '📌';
-}
-
-// ============================================
 // STYLES
 // ============================================
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f8fafc',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    marginTop: 12,
-    fontSize: 16,
-    color: '#64748b',
-  },
-  header: {
+const alertStyles = StyleSheet.create({
+  card: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '700',
-    color: '#1e3a5f',
-  },
-  subtitle: {
-    fontSize: 14,
-    color: '#64748b',
-    marginTop: 2,
-  },
-  headerBadges: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  criticalBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    backgroundColor: '#fee2e2',
-    borderRadius: 16,
-  },
-  criticalBadgeText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#dc2626',
-  },
-  statsContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    gap: 12,
-  },
-  statBox: {
-    flex: 1,
-    backgroundColor: 'white',
-    borderRadius: 12,
-    padding: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 2,
-  },
-  statValue: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#5eb3d6',
-  },
-  statLabel: {
-    fontSize: 11,
-    color: '#64748b',
-    marginTop: 4,
-  },
-  filtersSection: {
-    paddingHorizontal: 20,
-    paddingVertical: 8,
-  },
-  filterLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1e3a5f',
-    marginBottom: 8,
-  },
-  filterButtons: {
-    flexDirection: 'row',
-    gap: 8,
-    flexWrap: 'wrap',
-  },
-  filterButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
-  },
-  filterButtonActive: {
-    backgroundColor: '#5eb3d6',
-    borderColor: '#5eb3d6',
-  },
-  filterButtonText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#64748b',
-  },
-  filterButtonTextActive: {
-    color: 'white',
-  },
-  resultsHeader: {
-    paddingHorizontal: 20,
-    paddingVertical: 8,
-  },
-  resultsText: {
-    fontSize: 13,
-    color: '#64748b',
-  },
-  listContent: {
-    padding: 20,
-    paddingTop: 8,
-  },
-  alertCard: {
-    flexDirection: 'row',
-    backgroundColor: 'white',
+    backgroundColor: '#ffffff',
     borderRadius: 16,
     marginBottom: 12,
     overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: 0.04,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  cardUnread: {
+    shadowOpacity: 0.08,
     elevation: 3,
   },
-  statusIndicator: {
+  priorityBar: {
     width: 4,
   },
-  alertContent: {
+  content: {
     flex: 1,
     padding: 16,
   },
-  alertHeader: {
+  header: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 12,
+    alignItems: 'center',
+    gap: 10,
+    marginBottom: 10,
   },
-  alertHeaderLeft: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+  typeIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerText: {
     flex: 1,
   },
-  alertIcon: {
-    fontSize: 24,
-    marginRight: 12,
+  title: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#1e293b',
   },
-  alertHeaderText: {
-    flex: 1,
-  },
-  alertTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#1e3a5f',
-    marginBottom: 4,
-  },
-  alertTime: {
+  date: {
     fontSize: 12,
     color: '#94a3b8',
+    fontWeight: '400',
+    marginTop: 1,
   },
-  unreadBadge: {
-    marginLeft: 8,
-  },
-  unreadBadgeText: {
-    fontSize: 16,
-    color: '#5eb3d6',
-  },
-  alertMessage: {
-    fontSize: 14,
-    color: '#64748b',
-    lineHeight: 20,
-    marginBottom: 12,
-  },
-  alertBadges: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-    marginBottom: 12,
-  },
-  badge: {
-    paddingHorizontal: 10,
+  priorityBadge: {
+    paddingHorizontal: 8,
     paddingVertical: 4,
-    borderRadius: 12,
-    backgroundColor: '#f1f5f9',
+    borderRadius: 8,
   },
-  badgeSuccess: {
-    backgroundColor: '#dcfce7',
-  },
-  badgeResolved: {
-    backgroundColor: '#f1f5f9',
-  },
-  badgeText: {
+  priorityText: {
     fontSize: 11,
     fontWeight: '600',
+  },
+  message: {
+    fontSize: 13,
     color: '#64748b',
+    lineHeight: 20,
+    marginBottom: 14,
   },
-  recommendedAction: {
-    flexDirection: 'row',
-    backgroundColor: '#f0f9ff',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
-  },
-  recommendedActionIcon: {
-    fontSize: 16,
-    marginRight: 8,
-  },
-  recommendedActionText: {
-    flex: 1,
-    fontSize: 13,
-    color: '#1e40af',
-    lineHeight: 18,
-  },
-  escalationWarning: {
-    flexDirection: 'row',
-    backgroundColor: '#fef3c7',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
-  },
-  escalationIcon: {
-    fontSize: 16,
-    marginRight: 8,
-  },
-  escalationText: {
-    flex: 1,
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#92400e',
-    lineHeight: 18,
-  },
-  alertActions: {
+  actionsRow: {
     flexDirection: 'row',
     gap: 8,
     flexWrap: 'wrap',
   },
   actionButton: {
     paddingHorizontal: 16,
+    paddingVertical: 9,
+    borderRadius: 10,
+  },
+  actionText: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+});
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f8fafc',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  backButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#ffffff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.04,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  headerCenter: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1e293b',
+    letterSpacing: -0.3,
+  },
+  unreadBadge: {
+    backgroundColor: '#ef4444',
+    borderRadius: 10,
+    minWidth: 20,
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 6,
+  },
+  unreadBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: '#ffffff',
+  },
+  filterRow: {
+    flexDirection: 'row',
+    paddingHorizontal: 20,
+    paddingVertical: 12,
+    gap: 8,
+  },
+  filterChip: {
+    paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
+    backgroundColor: '#ffffff',
     borderWidth: 1,
-  },
-  actionButtonSecondary: {
-    backgroundColor: 'white',
     borderColor: '#e2e8f0',
   },
-  actionButtonPrimary: {
-    backgroundColor: '#5eb3d6',
-    borderColor: '#5eb3d6',
+  filterChipActive: {
+    backgroundColor: BLUE,
+    borderColor: BLUE,
   },
-  actionButtonWarning: {
-    backgroundColor: '#fbbf24',
-    borderColor: '#fbbf24',
-  },
-  actionButtonTextSecondary: {
+  filterChipText: {
     fontSize: 13,
     fontWeight: '600',
     color: '#64748b',
   },
-  actionButtonTextPrimary: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: 'white',
+  filterChipTextActive: {
+    color: '#ffffff',
   },
-  actionButtonTextWarning: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: 'white',
+  listContent: {
+    padding: 20,
+    paddingTop: 4,
   },
   emptyContainer: {
     alignItems: 'center',
     paddingVertical: 60,
+    gap: 8,
   },
-  emptyIcon: {
-    fontSize: 64,
-    marginBottom: 16,
-  },
-  emptyText: {
+  emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#1e3a5f',
-    marginBottom: 8,
+    color: '#1e293b',
   },
   emptySubtext: {
     fontSize: 14,
-    color: '#64748b',
+    color: '#94a3b8',
   },
 });

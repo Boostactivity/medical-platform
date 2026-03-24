@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from '../hooks/useTranslation';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { branding } from '../config/branding';
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -34,20 +36,31 @@ export function Footer() {
   ];
 
   return (
-    <footer className="bg-gradient-to-b from-white to-[#f8fafc] border-t border-[#e2e8f0]">
-      <div className="max-w-[980px] mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+    <footer className="bg-[#f8fafc] border-t border-gray-100">
+      <div className="max-w-6xl mx-auto px-6 py-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+          {/* Brand column */}
+          <div>
+            <Link to="/" className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent tracking-tight">
+              {branding.name}
+            </Link>
+            <p className="text-xs text-gray-400 mt-2 leading-relaxed">{branding.tagline}</p>
+            <div className="mt-4">
+              <LanguageSwitcher />
+            </div>
+          </div>
+
           {sections.map((section) => (
             <div key={section.title}>
-              <h3 className="text-[12px] font-semibold text-[#1a2b3c] mb-4 tracking-tight">
+              <h3 className="text-xs font-medium text-[#1a2b3c] mb-4 uppercase tracking-wider">
                 {section.title}
               </h3>
-              <ul className="space-y-3">
+              <ul className="space-y-2.5">
                 {section.links.map((link) => (
                   <li key={link.label}>
                     <Link
                       to={link.to}
-                      className="text-[12px] text-[#64748b] hover:text-[#3b82f6] transition-colors block"
+                      className="text-xs text-gray-500 hover:text-blue-600 transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -58,21 +71,21 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="pt-6 border-t border-[#e2e8f0]">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-[12px] text-[#64748b]">
-              &copy; {currentYear} {t('footer.copyright')}
+        <div className="pt-6 border-t border-gray-100">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-xs text-gray-400">
+              &copy; {currentYear} {branding.name}. {t('footer.copyright')}
             </p>
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center gap-6">
               <Link
                 to="/mentions-legales"
-                className="text-[12px] text-[#64748b] hover:text-[#3b82f6] transition-colors"
+                className="text-xs text-gray-400 hover:text-blue-600 transition-colors"
               >
                 {t('footer.legal')}
               </Link>
               <Link
                 to="/mentions-legales"
-                className="text-[12px] text-[#64748b] hover:text-[#3b82f6] transition-colors"
+                className="text-xs text-gray-400 hover:text-blue-600 transition-colors"
               >
                 {t('footer.privacy')}
               </Link>

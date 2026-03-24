@@ -101,7 +101,7 @@ export function DashboardPatient() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#F5F5F7] flex items-center justify-center">
+      <div className="min-h-screen bg-[#f8fafc] flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-[#007AFF] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <div className="text-[#007AFF] text-xl">Chargement de vos données...</div>
@@ -224,7 +224,7 @@ export function DashboardPatient() {
   // Show quiz in full page mode
   if (showQuiz) {
     return (
-      <div className="min-h-screen bg-[#F5F5F7] py-12 px-6">
+      <div className="min-h-screen bg-[#f8fafc] py-12 px-6">
         <div className="max-w-2xl mx-auto">
           <button
             onClick={() => setShowQuiz(false)}
@@ -242,36 +242,33 @@ export function DashboardPatient() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F5F5F7]">
+    <div className="min-h-screen bg-[#f8fafc]">
       {/* Daily Rating Popup */}
       <DailyRating />
 
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-4">
+      <header className="bg-white/90 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-10">
+        <div className="max-w-6xl mx-auto px-6 py-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link to="/" className="flex items-center gap-2">
-                <div className="w-10 h-10 bg-gradient-to-br from-[#007AFF] to-[#5AC8FA] rounded-xl flex items-center justify-center">
-                  <span className="text-white font-semibold">E</span>
-                </div>
-                <span className="text-xl text-[#1D1D1F]">la plateforme</span>
+            <div className="flex items-center gap-3">
+              <Link to="/" className="text-lg font-semibold bg-gradient-to-r from-blue-600 to-violet-600 bg-clip-text text-transparent tracking-tight">
+                MedConnect
               </Link>
-              <span className="text-[#86868B]">|</span>
-              <span className="text-[#86868B]">Espace Patient</span>
+              <span className="text-gray-300">|</span>
+              <span className="text-sm text-gray-400">Espace Patient</span>
             </div>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 px-4 py-2 text-[#86868B] hover:text-[#FF3B30] transition-colors"
+              className="flex items-center gap-2 px-4 py-2 text-sm text-gray-400 hover:text-red-500 transition-colors"
             >
-              <LogOut className="w-5 h-5" />
-              Déconnexion
+              <LogOut className="w-4 h-4" />
+              Deconnexion
             </button>
           </div>
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-8">
+      <div className="max-w-6xl mx-auto px-6 py-8">
         {/* Welcome */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -280,10 +277,10 @@ export function DashboardPatient() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl text-[#1D1D1F] mb-2">
+              <h1 className="text-4xl text-[#1a2b3c] mb-2">
                 Bonjour {userData?.user?.name?.split(' ')[0]} 👋
               </h1>
-              <p className="text-xl text-[#86868B]">
+              <p className="text-xl text-gray-500">
                 Voici votre tableau de bord personnel
               </p>
             </div>
@@ -369,8 +366,8 @@ export function DashboardPatient() {
               <div className={`w-12 h-12 bg-gradient-to-br ${stat.color} rounded-xl flex items-center justify-center text-white mb-3`}>
                 {stat.icon}
               </div>
-              <div className="text-2xl text-[#1D1D1F] mb-1">{stat.value}</div>
-              <div className="text-sm text-[#86868B]">{stat.label}</div>
+              <div className="text-2xl text-[#1a2b3c] mb-1">{stat.value}</div>
+              <div className="text-sm text-gray-500">{stat.label}</div>
             </motion.div>
           ))}
         </div>
@@ -487,16 +484,16 @@ export function DashboardPatient() {
             transition={{ delay: 0.5 }}
             className="mt-8 bg-white rounded-3xl p-6 shadow-sm"
           >
-            <h3 className="text-xl text-[#1D1D1F] mb-4">Votre équipe médicale</h3>
+            <h3 className="text-xl text-[#1a2b3c] mb-4">Votre équipe médicale</h3>
             <div className="flex items-center gap-4">
               <div className="w-16 h-16 bg-gradient-to-br from-[#34C759] to-[#30D158] rounded-full flex items-center justify-center text-white text-2xl">
                 {userData.doctor.name.charAt(0)}
               </div>
               <div className="flex-1">
-                <div className="text-lg text-[#1D1D1F]">{userData.doctor.name}</div>
-                <div className="text-sm text-[#86868B]">{userData.doctor.specialty}</div>
+                <div className="text-lg text-[#1a2b3c]">{userData.doctor.name}</div>
+                <div className="text-sm text-gray-500">{userData.doctor.specialty}</div>
               </div>
-              <button className="px-6 py-3 bg-[#007AFF] text-white rounded-full hover:bg-[#0051D5] transition-all">
+              <button className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-[#0051D5] transition-all">
                 Contacter
               </button>
             </div>

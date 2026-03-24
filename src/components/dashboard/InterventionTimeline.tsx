@@ -14,9 +14,11 @@ export interface Intervention {
 interface InterventionTimelineProps {
   interventions: Intervention[];
   onEdit?: (id: string) => void;
+  onStart?: (id: string) => void;
+  onComplete?: (intervention: Intervention) => void;
 }
 
-export function InterventionTimeline({ interventions, onEdit }: InterventionTimelineProps) {
+export function InterventionTimeline({ interventions, onEdit, onStart, onComplete }: InterventionTimelineProps) {
   const getTypeConfig = (type: string) => {
     const configs = {
       installation: {
@@ -158,14 +160,32 @@ export function InterventionTimeline({ interventions, onEdit }: InterventionTime
                           year: 'numeric',
                         })}
                       </p>
-                      {onEdit && (
-                        <button
-                          onClick={() => onEdit(intervention.id)}
-                          className="text-sm text-[#007AFF] hover:underline"
-                        >
-                          Modifier
-                        </button>
-                      )}
+                      <div className="flex flex-col gap-1">
+                        {onStart && intervention.status === 'scheduled' && (
+                          <button
+                            onClick={() => onStart(intervention.id)}
+                            className="text-sm text-[#FF9500] hover:underline"
+                          >
+                            Démarrer
+                          </button>
+                        )}
+                        {onComplete && intervention.status === 'in_progress' && (
+                          <button
+                            onClick={() => onComplete(intervention)}
+                            className="text-sm text-[#34C759] hover:underline"
+                          >
+                            Terminer
+                          </button>
+                        )}
+                        {onEdit && (
+                          <button
+                            onClick={() => onEdit(intervention.id)}
+                            className="text-sm text-[#007AFF] hover:underline"
+                          >
+                            Modifier
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

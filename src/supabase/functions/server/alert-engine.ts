@@ -397,12 +397,12 @@ export async function analyzePatient(patientId: string): Promise<{
   try {
     // Exécuter toutes les règles en parallèle
     await Promise.all([
-      checkLowCompliance(patientId).then(() => alertsCreated++),
-      checkHighLeak(patientId).then(() => alertsCreated++),
-      checkHighAHI(patientId).then(() => alertsCreated++),
-      checkNoSync(patientId).then(() => alertsCreated++),
-      checkMaintenanceDue(patientId).then(() => alertsCreated++),
-      checkConsumableReplacement(patientId).then(() => alertsCreated++),
+      checkLowCompliance(patientId),
+      checkHighLeak(patientId),
+      checkHighAHI(patientId),
+      checkNoSync(patientId),
+      checkMaintenanceDue(patientId),
+      checkConsumableReplacement(patientId),
     ]);
 
     const duration = Date.now() - startTime;

@@ -118,10 +118,10 @@ export function EspaceMedecin() {
                       Si vous rencontrez des erreurs de type "Forbidden", consultez notre guide de resolution.
                     </p>
                     <div className="flex flex-wrap gap-2">
-                      <Link to="/aide-auth" className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-all">
+                      <Link to="/faq" className="inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white text-xs font-medium rounded-lg hover:bg-blue-700 transition-all">
                         Guide complet
                       </Link>
-                      <Link to="/force-logout" className="inline-flex items-center gap-1.5 px-4 py-2 bg-amber-500 text-white text-xs font-medium rounded-lg hover:bg-amber-600 transition-all">
+                      <Link to="/contact" className="inline-flex items-center gap-1.5 px-4 py-2 bg-amber-500 text-white text-xs font-medium rounded-lg hover:bg-amber-600 transition-all">
                         Solution rapide
                       </Link>
                     </div>

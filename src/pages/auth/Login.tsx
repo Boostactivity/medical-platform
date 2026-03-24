@@ -273,7 +273,7 @@ export function LoginPage() {
         <div className="mt-6 text-center space-y-2">
           <p className="text-sm text-[#86868B]">
             Pas encore de compte ?{' '}
-            <Link to="/auth/signup" className="text-[#007AFF] hover:underline font-medium">
+            <Link to="/contact" className="text-[#007AFF] hover:underline font-medium">
               Creer un compte
             </Link>
           </p>

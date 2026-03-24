@@ -321,7 +321,7 @@ export function Support() {
         <div className="max-w-[1600px] mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl text-[#1D1D1F] mb-2">Centre de Support</h1>
+              <h1 className="text-2xl sm:text-3xl text-[#1D1D1F] mb-2">Centre de Support</h1>
               <p className="text-sm text-[#86868B]">
                 {stats.open} conversations ouvertes • {stats.unread} messages non lus
               </p>
@@ -335,9 +335,9 @@ export function Support() {
         </div>
       </header>
 
-      <div className="max-w-[1600px] mx-auto px-6 py-8">
+      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           <div className="bg-white rounded-2xl p-4 border border-[#D2D2D7]">
             <div className="flex items-center justify-between">
               <div>
@@ -377,9 +377,9 @@ export function Support() {
         </div>
 
         {/* Main Layout: List + Chat */}
-        <div className="grid grid-cols-12 gap-6 h-[calc(100vh-300px)]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[calc(100vh-300px)]">
           {/* Conversations List */}
-          <div className="col-span-4 bg-white rounded-2xl border border-[#D2D2D7] flex flex-col overflow-hidden">
+          <div className="lg:col-span-4 bg-white rounded-2xl border border-[#D2D2D7] flex flex-col overflow-hidden max-h-[50vh] lg:max-h-none">
             {/* Search & Filters */}
             <div className="p-4 border-b border-[#D2D2D7] bg-[#F5F5F7]">
               <div className="relative mb-3">
@@ -457,7 +457,7 @@ export function Support() {
           </div>
 
           {/* Chat Area */}
-          <div className="col-span-8 bg-white rounded-2xl border border-[#D2D2D7] flex flex-col overflow-hidden">
+          <div className="lg:col-span-8 bg-white rounded-2xl border border-[#D2D2D7] flex flex-col overflow-hidden min-h-[400px]">
             {selectedConv ? (
               <>
                 {/* Chat Header */}
@@ -526,7 +526,7 @@ export function Support() {
                 {selectedConv.status !== 'resolved' && (
                   <div className="p-4 border-t border-[#D2D2D7] bg-[#F5F5F7]">
                     <div className="flex items-center gap-3">
-                      <button className="p-2 hover:bg-white rounded-lg transition-colors">
+                      <button className="p-2 hover:bg-white rounded-lg transition-colors min-h-12 min-w-12 flex items-center justify-center" aria-label="Joindre un fichier">
                         <Paperclip className="w-5 h-5 text-[#86868B]" />
                       </button>
                       <input

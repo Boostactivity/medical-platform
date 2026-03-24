@@ -113,7 +113,7 @@ export function PatientsListPage() {
   }
 
   return (
-    <DashboardLayout userRole="medecin" userName="Dr. Martin" userEmail="dr.martin@expair.fr">
+    <DashboardLayout userRole="medecin" userName="Dr. Martin" userEmail="dr.martin@medconnect.fr">
       <div className="space-y-6">
         {/* Header */}
         <div>

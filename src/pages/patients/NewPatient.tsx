@@ -247,7 +247,7 @@ export function NewPatient() {
 
       // Rediriger vers le détail du patient
       setTimeout(() => {
-        navigate(`/patient/${newPatientId}`);
+        navigate(`/patients/${newPatientId}`);
       }, 1500);
 
     } catch (error: any) {

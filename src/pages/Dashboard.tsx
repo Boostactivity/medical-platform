@@ -53,7 +53,7 @@ export function DashboardPage() {
           <>
             {/* Header avec date */}
             <div className="mb-8">
-              <h1 className="text-4xl font-semibold text-gray-900 mb-2">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-900 mb-2">
                 Bonjour, Dr. {userName} 👋
               </h1>
               <p className="text-gray-600 capitalize">
@@ -153,7 +153,7 @@ export function DashboardPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer border-purple-200 hover:border-purple-400" onClick={() => navigate('/telemetry')}>
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer border-purple-200 hover:border-purple-400" onClick={() => navigate('/monitoring-dashboard')}>
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                       <span className="flex items-center gap-2">
@@ -244,11 +244,11 @@ export function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <Button onClick={() => navigate('/suivi')}>
+                  <Button onClick={() => navigate('/dashboard-patient')}>
                     <Activity className="w-4 h-4 mr-2" />
                     Mon Suivi
                   </Button>
-                  <Button variant="outline" onClick={() => navigate('/documents')}>
+                  <Button variant="outline" onClick={() => navigate('/my-data')}>
                     Mes Documents
                   </Button>
                 </div>
@@ -260,7 +260,7 @@ export function DashboardPage() {
         {userRole === 'admin' && (
           <>
             {/* Dashboard admin */}
-            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">

@@ -1,9 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { Users, Package, Activity, LogOut, Bell, Phone, AlertCircle, CheckCircle, Calendar, RefreshCw } from 'lucide-react';
+import {
+  Users, Package, Activity, LogOut, Bell, Phone, AlertCircle, CheckCircle, Calendar, RefreshCw,
+  Monitor, Wrench, Truck, BarChart3, MapPin as MapPinIcon, Mail,
+  Star, FileText, ClipboardList, Clock as ClockIcon, CreditCard, Database, Building2, Cpu, HardDrive, Settings as SettingsIcon, ArrowLeft
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 // Hooks - Version 2.0.1
@@ -29,6 +33,41 @@ import type { Intervention } from '../hooks/useRealtimeInterventions';
 import { BusinessMetrics } from '../components/business/BusinessMetrics';
 import { RevenueRiskAlert } from '../components/business/RevenueRiskAlert';
 
+// Lazy-loaded Admin Modules
+const FleetManagement = lazy(() => import('../components/admin/FleetManagement').then(m => ({ default: m.FleetManagement })));
+const TicketSystem = lazy(() => import('../components/admin/TicketSystem').then(m => ({ default: m.TicketSystem })));
+const AutoShipment = lazy(() => import('../components/admin/AutoShipment').then(m => ({ default: m.AutoShipment })));
+const ROIDashboard = lazy(() => import('../components/admin/ROIDashboard').then(m => ({ default: m.ROIDashboard })));
+const TechnicianPlanning = lazy(() => import('../components/admin/TechnicianPlanning').then(m => ({ default: m.TechnicianPlanning })));
+const AlertDispatcher = lazy(() => import('../components/admin/AlertDispatcher').then(m => ({ default: m.AlertDispatcher })));
+const ProviderScore = lazy(() => import('../components/admin/ProviderScore').then(m => ({ default: m.ProviderScore })));
+const CPAMComplianceReport = lazy(() => import('../components/admin/CPAMComplianceReport'));
+const PrescriptionManager = lazy(() => import('../components/admin/PrescriptionManager'));
+const MilestoneTracker = lazy(() => import('../components/admin/MilestoneTracker'));
+const BillingManager = lazy(() => import('../components/admin/BillingManager').then(m => ({ default: m.BillingManager })));
+const DataExport = lazy(() => import('../components/admin/DataExport').then(m => ({ default: m.DataExport })));
+const MultiSiteManager = lazy(() => import('../components/admin/MultiSiteManager').then(m => ({ default: m.MultiSiteManager })));
+const MultiDeviceSupport = lazy(() => import('../components/admin/MultiDeviceSupport'));
+const SDCardImport = lazy(() => import('../components/admin/SDCardImport'));
+
+const ADMIN_MODULES = [
+  { id: 'fleet', label: 'Parc machines', icon: Monitor, color: 'bg-blue-50 text-blue-600', component: FleetManagement },
+  { id: 'tickets', label: 'Tickets SAV', icon: Wrench, color: 'bg-purple-50 text-purple-600', component: TicketSystem },
+  { id: 'shipment', label: 'Envoi consommables', icon: Truck, color: 'bg-green-50 text-green-600', component: AutoShipment },
+  { id: 'roi', label: 'Dashboard ROI', icon: BarChart3, color: 'bg-emerald-50 text-emerald-600', component: ROIDashboard },
+  { id: 'planning', label: 'Planning techniciens', icon: MapPinIcon, color: 'bg-indigo-50 text-indigo-600', component: TechnicianPlanning },
+  { id: 'dispatcher', label: 'Alertes SMS/Email', icon: Mail, color: 'bg-amber-50 text-amber-600', component: AlertDispatcher },
+  { id: 'score', label: 'Score prestataire', icon: Star, color: 'bg-yellow-50 text-yellow-600', component: ProviderScore },
+  { id: 'cpam', label: 'Rapport CPAM', icon: FileText, color: 'bg-red-50 text-red-600', component: CPAMComplianceReport },
+  { id: 'prescriptions', label: 'Prescriptions', icon: ClipboardList, color: 'bg-teal-50 text-teal-600', component: PrescriptionManager },
+  { id: 'milestones', label: 'Jalons J7-J365', icon: ClockIcon, color: 'bg-pink-50 text-pink-600', component: MilestoneTracker },
+  { id: 'billing', label: 'Facturation', icon: CreditCard, color: 'bg-cyan-50 text-cyan-600', component: BillingManager },
+  { id: 'export', label: 'Import/Export', icon: Database, color: 'bg-gray-50 text-gray-600', component: DataExport },
+  { id: 'multisite', label: 'Multi-sites', icon: Building2, color: 'bg-violet-50 text-violet-600', component: MultiSiteManager },
+  { id: 'multidevice', label: 'Multi-marques', icon: Cpu, color: 'bg-orange-50 text-orange-600', component: MultiDeviceSupport },
+  { id: 'sdcard', label: 'Import SD', icon: HardDrive, color: 'bg-slate-50 text-slate-600', component: SDCardImport },
+];
+
 export function DashboardAdmin() {
   const navigate = useNavigate();
   
@@ -37,7 +76,8 @@ export function DashboardAdmin() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   
   // Views and filters
-  const [activeView, setActiveView] = useState<'alerts' | 'interventions' | 'logistics'>('alerts');
+  const [activeView, setActiveView] = useState<'alerts' | 'interventions' | 'logistics' | 'modules'>('alerts');
+  const [activeModule, setActiveModule] = useState<string | null>(null);
   const [interventionFilter, setInterventionFilter] = useState<'all' | 'scheduled' | 'in_progress' | 'completed'>('all');
   
   // Modal states
@@ -297,18 +337,43 @@ export function DashboardAdmin() {
     }
   };
 
+  // Transform shared Alert type to AlertCard Alert type for display
+  const transformedAlerts = alerts.map((a: any) => ({
+    id: a.id,
+    type: a.type || 'no_data',
+    patientName: a.patient?.user?.name || a.patient_name || `Patient ${(a.patient_id || '').substring(0, 8)}`,
+    patientId: a.patient_id || '',
+    patientPhone: a.patient?.user?.phone || a.patient_phone || undefined,
+    severity: a.severity || 'medium',
+    message: a.message || a.description || a.title || 'Alerte',
+    timestamp: a.created_at || new Date().toISOString(),
+    details: a.details || a.description || undefined,
+    patient: a.patient,
+  }));
+
+  // Transform interventions for InterventionTimeline display
+  const transformedInterventions = interventions.map((i: any) => ({
+    id: i.id,
+    type: i.type || 'maintenance',
+    patientName: i.patientName || i.patient?.user?.name || 'Patient inconnu',
+    technicianName: i.technicianName || i.technician?.name || undefined,
+    date: i.date || new Date().toISOString(),
+    status: i.status || 'scheduled',
+    notes: i.notes || undefined,
+  }));
+
   // Stats calculation
   const stats = {
     alerts: {
       total: alerts.length,
-      high: alerts.filter(a => a.severity === 'high').length,
-      medium: alerts.filter(a => a.severity === 'medium').length,
+      high: alerts.filter((a: any) => a.severity === 'high' || a.severity === 'critical').length,
+      medium: alerts.filter((a: any) => a.severity === 'medium').length,
     },
     interventions: {
       total: interventions.length,
-      scheduled: interventions.filter(i => i.status === 'scheduled').length,
-      in_progress: interventions.filter(i => i.status === 'in_progress').length,
-      completed: interventions.filter(i => i.status === 'completed').length,
+      scheduled: interventions.filter((i: any) => i.status === 'scheduled').length,
+      in_progress: interventions.filter((i: any) => i.status === 'in_progress').length,
+      completed: interventions.filter((i: any) => i.status === 'completed').length,
     },
     patients: {
       total: patients.length,
@@ -502,6 +567,19 @@ export function DashboardAdmin() {
               <span>Logistique</span>
             </div>
           </button>
+          <button
+            onClick={() => { setActiveView('modules'); setActiveModule(null); }}
+            className={`flex-1 px-4 py-3 rounded-lg text-sm transition-all ${
+              activeView === 'modules'
+                ? 'bg-[#007AFF] text-white'
+                : 'text-[#86868B] hover:bg-[#F5F5F7]'
+            }`}
+          >
+            <div className="flex items-center justify-center gap-2">
+              <SettingsIcon className="w-4 h-4" />
+              <span>Modules ({ADMIN_MODULES.length})</span>
+            </div>
+          </button>
         </div>
 
         {/* Content */}
@@ -537,8 +615,7 @@ export function DashboardAdmin() {
                 </div>
               ) : (
                 <AlertList
-                  alerts={alerts}
-                  onResolve={handleResolveAlert}
+                  alerts={transformedAlerts}
                   onDocument={handleDocumentAlert}
                   onCreateIntervention={handleCreateInterventionFromAlert}
                   onIgnore={handleIgnoreAlert}
@@ -592,7 +669,7 @@ export function DashboardAdmin() {
                 </div>
               ) : (
                 <InterventionTimeline
-                  interventions={interventions}
+                  interventions={transformedInterventions}
                   onStart={handleStartIntervention}
                   onComplete={handleCompleteIntervention}
                 />
@@ -613,6 +690,65 @@ export function DashboardAdmin() {
                 <Package className="w-12 h-12 text-[#86868B] mx-auto mb-4" />
                 <p className="text-[#86868B]">Module logistique en développement</p>
                 <p className="text-xs text-[#86868B] mt-2">Gestion du stock et des commandes</p>
+              </div>
+            </motion.div>
+          )}
+
+          {activeView === 'modules' && !activeModule && (
+            <motion.div
+              key="modules-grid"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                {ADMIN_MODULES.map((mod) => {
+                  const Icon = mod.icon;
+                  return (
+                    <button
+                      key={mod.id}
+                      onClick={() => setActiveModule(mod.id)}
+                      className="bg-white rounded-2xl border border-[#D2D2D7] p-5 text-center hover:shadow-lg hover:border-[#007AFF]/40 transition-all group"
+                    >
+                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center mx-auto mb-3 ${mod.color}`}>
+                        <Icon className="w-6 h-6" />
+                      </div>
+                      <p className="text-sm font-medium text-[#1D1D1F] group-hover:text-[#007AFF] transition-colors">{mod.label}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+
+          {activeView === 'modules' && activeModule && (
+            <motion.div
+              key={`module-${activeModule}`}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+            >
+              <button
+                onClick={() => setActiveModule(null)}
+                className="flex items-center gap-2 text-sm text-[#007AFF] hover:text-[#0051D5] mb-4 transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Retour aux modules
+              </button>
+              <div className="bg-white rounded-2xl border border-[#D2D2D7] p-6 overflow-hidden">
+                <Suspense fallback={
+                  <div className="text-center py-12">
+                    <RefreshCw className="w-8 h-8 text-[#007AFF] animate-spin mx-auto mb-4" />
+                    <p className="text-[#86868B]">Chargement du module...</p>
+                  </div>
+                }>
+                  {(() => {
+                    const mod = ADMIN_MODULES.find(m => m.id === activeModule);
+                    if (!mod) return null;
+                    const Component = mod.component;
+                    return <Component />;
+                  })()}
+                </Suspense>
               </div>
             </motion.div>
           )}

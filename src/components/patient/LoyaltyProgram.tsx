@@ -153,15 +153,16 @@ export function LoyaltyProgram() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-[#f8fafc] py-8 px-6">
+    <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-[#1D1D1F] flex items-center gap-2">
           <Gift className="w-6 h-6 text-purple-600" />
-          Programme Fidelite
+          Programme Fidélité
         </h2>
-        <p className="text-sm text-gray-500 mt-1">
-          Gagnez des points chaque nuit et debloquez des recompenses
+        <p className="text-sm text-[#86868B] mt-1">
+          Gagnez des points chaque nuit et débloquez des récompenses
         </p>
       </div>
 
@@ -438,6 +439,7 @@ export function LoyaltyProgram() {
           ))}
         </div>
       )}
+    </div>
     </div>
   );
 }

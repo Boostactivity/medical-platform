@@ -290,21 +290,22 @@ export function MonthlyReport() {
   const maxDailyHours = Math.max(...currentMonth.dailyData.map(d => d.hours), 1);
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-[#f8fafc] py-8 px-6">
+    <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <FileText className="w-6 h-6 text-blue-600" />
+          <h2 className="text-2xl font-bold text-[#1D1D1F] flex items-center gap-2">
+            <FileText className="w-6 h-6 text-[#007AFF]" />
             Mon bilan mensuel
           </h2>
-          <p className="text-sm text-gray-500 mt-1">Recapitulatif de votre traitement PPC</p>
+          <p className="text-sm text-[#86868B] mt-1">Récapitulatif de votre traitement PPC</p>
         </div>
         <button
           onClick={() => generatePDF(currentMonth)}
-          className="inline-flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          className="inline-flex items-center gap-2 bg-gradient-to-r from-[#007AFF] to-[#5AC8FA] text-white px-5 py-2.5 rounded-2xl font-medium hover:shadow-lg transition-all"
         >
-          <Download className="w-4 h-4" /> Telecharger mon bilan
+          <Download className="w-4 h-4" /> Télécharger mon bilan
         </button>
       </div>
 
@@ -485,6 +486,7 @@ export function MonthlyReport() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

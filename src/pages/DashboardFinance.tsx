@@ -270,20 +270,20 @@ export function DashboardFinance() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0A0E27] via-[#1E3A8A] to-[#0A0E27] py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#0A0E27] via-[#1E3A8A] to-[#0A0E27] py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl text-white mb-2">Dashboard Finance & Opérations</h1>
-          <p className="text-gray-300">Pilotage de la rentabilité et de la logistique</p>
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl text-white mb-2">Dashboard Finance & Opérations</h1>
+          <p className="text-sm sm:text-base text-gray-300">Pilotage de la rentabilité et de la logistique</p>
         </div>
 
         {/* Actions Rapides */}
-        <div className="mb-8 flex gap-4">
+        <div className="mb-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
           <button
             onClick={calculateCompliance}
             disabled={calculatingCompliance}
-            className="flex items-center gap-2 px-6 py-3 bg-[#007AFF] text-white rounded-xl hover:bg-[#0051D5] transition-all disabled:opacity-50"
+            className="flex items-center justify-center gap-2 px-4 sm:px-6 py-3 min-h-12 bg-[#007AFF] text-white rounded-xl hover:bg-[#0051D5] transition-all disabled:opacity-50 w-full sm:w-auto text-sm sm:text-base"
           >
             {calculatingCompliance ? (
               <RefreshCw className="w-5 h-5 animate-spin" />
@@ -296,7 +296,7 @@ export function DashboardFinance() {
           <button
             onClick={() => generateRenewalBatch(14)}
             disabled={generatingBatch}
-            className="flex items-center gap-2 px-6 py-3 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-all disabled:opacity-50"
+            className="flex items-center justify-center gap-2 px-4 sm:px-6 py-3 min-h-12 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-all disabled:opacity-50 w-full sm:w-auto text-sm sm:text-base"
           >
             {generatingBatch ? (
               <Package className="w-5 h-5 animate-spin" />
@@ -308,7 +308,7 @@ export function DashboardFinance() {
 
           <button
             onClick={exportToCSV}
-            className="flex items-center gap-2 px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all"
+            className="flex items-center justify-center gap-2 px-4 sm:px-6 py-3 min-h-12 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-all w-full sm:w-auto text-sm sm:text-base"
           >
             <Download className="w-5 h-5" />
             Export CSV
@@ -316,7 +316,7 @@ export function DashboardFinance() {
         </div>
 
         {/* KPIs Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
           {/* CA Sécurisé */}
           <div className="bg-white rounded-2xl p-6 shadow-xl">
             <div className="flex items-center justify-between mb-4">
@@ -416,7 +416,7 @@ export function DashboardFinance() {
                         </span>
                       </div>
                       
-                      <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                         <div className="flex items-center gap-2">
                           <Mail className="w-4 h-4" />
                           {patient.email}

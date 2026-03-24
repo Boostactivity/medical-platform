@@ -1,8 +1,10 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { AlertTriangle, Moon, Heart, Brain, Activity, CheckCircle } from 'lucide-react';
+import { useTranslation } from '../hooks/useTranslation';
 
 export function ApneeSommeil() {
+  const { t } = useTranslation();
   const fadeInUp = {
     initial: { opacity: 0, y: 30 },
     whileInView: { opacity: 1, y: 0 },
@@ -47,7 +49,7 @@ export function ApneeSommeil() {
   ];
 
   return (
-    <div className="bg-white">
+    <div className="bg-white dark:bg-background">
       {/* Hero */}
       <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -65,10 +67,10 @@ export function ApneeSommeil() {
               <Moon className="w-5 h-5 text-blue-600" />
               <span className="text-blue-600">Comprendre l'apnée du sommeil</span>
             </div>
-            <h1 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
+            <h1 className="text-2xl md:text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               Qu'est-ce que l'apnée du sommeil ?
             </h1>
-            <p className="text-xl text-gray-500">
+            <p className="text-xl text-gray-500 dark:text-muted-foreground">
               Le syndrome d'apnées-hypopnées obstructives du sommeil (SAHOS) est un trouble respiratoire 
               nocturne fréquent et sous-diagnostiqué qui peut avoir des conséquences importantes sur votre santé.
             </p>
@@ -77,29 +79,29 @@ export function ApneeSommeil() {
       </section>
 
       {/* What is it */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div {...fadeInUp}>
-              <h2 className="text-4xl text-[#1a2b3c] mb-6">Un trouble respiratoire nocturne</h2>
-              <p className="text-lg text-gray-500 mb-4">
+              <h2 className="text-4xl text-[#1a2b3c] dark:text-foreground mb-6">Un trouble respiratoire nocturne</h2>
+              <p className="text-lg text-gray-500 dark:text-muted-foreground mb-4">
                 L'apnée du sommeil se caractérise par des pauses respiratoires répétées pendant le sommeil. 
                 Ces pauses, appelées "apnées", sont causées par un relâchement des muscles des voies aériennes supérieures.
               </p>
-              <p className="text-lg text-gray-500 mb-4">
+              <p className="text-lg text-gray-500 dark:text-muted-foreground mb-4">
                 Lorsque les voies respiratoires se ferment partiellement ou complètement, l'air ne peut plus passer normalement. 
                 Le cerveau détecte ce manque d'oxygène et provoque un micro-réveil pour rétablir la respiration.
               </p>
-              <p className="text-lg text-gray-500 mb-6">
+              <p className="text-lg text-gray-500 dark:text-muted-foreground mb-6">
                 Ces micro-réveils fragmentent le sommeil sans que vous en ayez conscience, 
                 empêchant votre organisme de bénéficier d'un repos réparateur.
               </p>
-              <div className="bg-[#f8fafc] rounded-2xl p-6">
-                <h4 className="text-[#1a2b3c] mb-3">Classification de la sévérité</h4>
-                <div className="space-y-2 text-gray-500">
-                  <div><strong className="text-[#1a2b3c]">Légère :</strong> 5 à 15 apnées par heure</div>
-                  <div><strong className="text-[#1a2b3c]">Modérée :</strong> 15 à 30 apnées par heure</div>
-                  <div><strong className="text-[#1a2b3c]">Sévère :</strong> Plus de 30 apnées par heure</div>
+              <div className="bg-[#f8fafc] dark:bg-secondary rounded-2xl p-6">
+                <h4 className="text-[#1a2b3c] dark:text-foreground mb-3">Classification de la sévérité</h4>
+                <div className="space-y-2 text-gray-500 dark:text-muted-foreground">
+                  <div><strong className="text-[#1a2b3c] dark:text-foreground">Légère :</strong> 5 à 15 apnées par heure</div>
+                  <div><strong className="text-[#1a2b3c] dark:text-foreground">Modérée :</strong> 15 à 30 apnées par heure</div>
+                  <div><strong className="text-[#1a2b3c] dark:text-foreground">Sévère :</strong> Plus de 30 apnées par heure</div>
                 </div>
               </div>
             </motion.div>
@@ -121,10 +123,10 @@ export function ApneeSommeil() {
       <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl text-[#1a2b3c] mb-6">
+            <h2 className="text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-6">
               Quels sont les symptômes ?
             </h2>
-            <p className="text-lg text-gray-500 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-500 dark:text-muted-foreground max-w-3xl mx-auto">
               Reconnaître les signes de l'apnée du sommeil est la première étape vers un diagnostic et un traitement.
             </p>
           </motion.div>
@@ -137,10 +139,10 @@ export function ApneeSommeil() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
-                className="flex items-center gap-3 bg-white rounded-2xl p-4 shadow-sm"
+                className="flex items-center gap-3 bg-white dark:bg-card rounded-2xl p-4 shadow-sm"
               >
                 <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0" />
-                <span className="text-[#1a2b3c]">{symptom}</span>
+                <span className="text-[#1a2b3c] dark:text-foreground">{symptom}</span>
               </motion.div>
             ))}
           </div>
@@ -148,8 +150,8 @@ export function ApneeSommeil() {
           <motion.div {...fadeInUp} className="text-center">
             <div className="bg-[#FF9500]/10 border-2 border-[#FF9500]/30 rounded-2xl p-8 max-w-3xl mx-auto">
               <AlertTriangle className="w-12 h-12 text-[#FF9500] mx-auto mb-4" />
-              <h4 className="text-xl text-[#1a2b3c] mb-3">Vous vous reconnaissez ?</h4>
-              <p className="text-gray-500 mb-6">
+              <h4 className="text-xl text-[#1a2b3c] dark:text-foreground mb-3">Vous vous reconnaissez ?</h4>
+              <p className="text-gray-500 dark:text-muted-foreground mb-6">
                 Si vous présentez plusieurs de ces symptômes, nous vous recommandons de consulter un médecin. 
                 Le diagnostic précoce permet d'éviter les complications et d'améliorer rapidement votre qualité de vie.
               </p>
@@ -165,13 +167,13 @@ export function ApneeSommeil() {
       </section>
 
       {/* Risks */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl text-[#1a2b3c] mb-6">
+            <h2 className="text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-6">
               Pourquoi se faire traiter ?
             </h2>
-            <p className="text-lg text-gray-500 max-w-3xl mx-auto">
+            <p className="text-lg text-gray-500 dark:text-muted-foreground max-w-3xl mx-auto">
               Non traitée, l'apnée du sommeil peut entraîner de sérieuses complications 
               pour votre santé et votre sécurité.
             </p>
@@ -185,26 +187,26 @@ export function ApneeSommeil() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-[#f8fafc] rounded-3xl p-8"
+                className="bg-[#f8fafc] dark:bg-secondary rounded-3xl p-8"
               >
                 <div className="w-16 h-16 bg-gradient-to-br from-[#FF3B30] to-[#FF9500] rounded-2xl flex items-center justify-center text-white mb-6">
                   {risk.icon}
                 </div>
-                <h3 className="text-2xl text-[#1a2b3c] mb-3">{risk.title}</h3>
-                <p className="text-gray-500">{risk.description}</p>
+                <h3 className="text-2xl text-[#1a2b3c] dark:text-foreground mb-3">{risk.title}</h3>
+                <p className="text-gray-500 dark:text-muted-foreground">{risk.description}</p>
               </motion.div>
             ))}
           </div>
 
           <motion.div {...fadeInUp} className="bg-gradient-to-br from-[#10b981]/10 to-[#30D158]/10 border-2 border-[#10b981]/30 rounded-3xl p-12 text-center">
             <CheckCircle className="w-16 h-16 text-emerald-500 mx-auto mb-6" />
-            <h3 className="text-3xl text-[#1a2b3c] mb-4">La bonne nouvelle</h3>
-            <p className="text-xl text-gray-500 max-w-2xl mx-auto mb-6">
+            <h3 className="text-3xl text-[#1a2b3c] dark:text-foreground mb-4">La bonne nouvelle</h3>
+            <p className="text-xl text-gray-500 dark:text-muted-foreground max-w-2xl mx-auto mb-6">
               L'apnée du sommeil se traite efficacement. Le traitement par PPC (Pression Positive Continue) 
               permet de réduire drastiquement les apnées, d'améliorer la qualité du sommeil et de diminuer 
               significativement les risques de complications.
             </p>
-            <p className="text-lg text-gray-500 max-w-2xl mx-auto">
+            <p className="text-lg text-gray-500 dark:text-muted-foreground max-w-2xl mx-auto">
               De nombreux patients constatent une amélioration dès les premières nuits de traitement : 
               meilleur réveil, plus d'énergie, meilleure humeur et concentration.
             </p>
@@ -216,10 +218,10 @@ export function ApneeSommeil() {
       <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <motion.div {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl text-[#1a2b3c] mb-6">
+            <h2 className="text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-6">
               Prochaine étape : le diagnostic
             </h2>
-            <p className="text-lg text-gray-500 mb-8">
+            <p className="text-lg text-gray-500 dark:text-muted-foreground mb-8">
               Découvrez comment se déroule le parcours diagnostic en France et comment 
               la plateforme peut vous accompagner dès le début.
             </p>
@@ -232,7 +234,7 @@ export function ApneeSommeil() {
               </Link>
               <Link
                 to="/contact"
-                className="px-8 py-4 bg-white border-2 border-blue-600 text-blue-600 rounded-full hover:bg-[#f8fafc] transition-all"
+                className="px-8 py-4 bg-white border-2 border-blue-600 text-blue-600 rounded-full hover:bg-[#f8fafc] dark:bg-secondary transition-all"
               >
                 Être accompagné
               </Link>

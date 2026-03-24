@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { Users, AlertCircle, CheckCircle, LogOut, Search, Download, Filter, FileText } from 'lucide-react';
+import { Users, AlertCircle, CheckCircle, LogOut, Search, Download, Filter, FileText, Activity } from 'lucide-react';
 import { doctorApi } from '../utils/api';
 import { autoFixAuthOnError } from '../utils/autofix-auth';
 import { forceLogoutAndClearTokens } from '../utils/force-logout';
@@ -20,6 +20,21 @@ export function DashboardMedecin() {
   const [showAuthError, setShowAuthError] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState<any>(null);
   const navigate = useNavigate();
+
+  const generateDemoData = (avgHours: number) => {
+    const data = [];
+    for (let i = 30; i > 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      data.push({
+        date: date.toISOString().split('T')[0],
+        hours_used: avgHours + (Math.random() - 0.5) * 2,
+        leakage: Math.random() * 20,
+        events: Math.floor(Math.random() * 10),
+      });
+    }
+    return data;
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -144,21 +159,6 @@ export function DashboardMedecin() {
     loadData();
   }, [navigate]);
 
-  const generateDemoData = (avgHours: number) => {
-    const data = [];
-    for (let i = 30; i > 0; i--) {
-      const date = new Date();
-      date.setDate(date.getDate() - i);
-      data.push({
-        date: date.toISOString().split('T')[0],
-        hours_used: avgHours + (Math.random() - 0.5) * 2,
-        leakage: Math.random() * 20,
-        events: Math.floor(Math.random() * 10),
-      });
-    }
-    return data;
-  };
-
   const handleLogout = () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('user_type');
@@ -216,6 +216,9 @@ export function DashboardMedecin() {
   const alertCount = enhancedPatients.filter((p: any) => p.status === 'alert').length;
   const goodObservance = enhancedPatients.filter((p: any) => p.avgHours >= 4).length;
   const needsAttention = warningCount + alertCount;
+  const avgObservance = enhancedPatients.length > 0
+    ? (enhancedPatients.reduce((acc: number, p: any) => acc + p.avgHours, 0) / enhancedPatients.length).toFixed(1)
+    : '0';
 
   const handleExportPDF = (patientId: string) => {
     toast.success('📄 Export PDF généré', {
@@ -251,7 +254,7 @@ export function DashboardMedecin() {
         </motion.div>
 
         {/* Stats Cards */}
-        <div className="grid md:grid-cols-3 gap-6 mb-8">
+        <div className="grid md:grid-cols-4 gap-6 mb-8">
           {[
             {
               icon: <Users className="w-8 h-8" />,
@@ -273,6 +276,13 @@ export function DashboardMedecin() {
               value: needsAttention,
               subtitle: 'nécessite attention',
               color: 'from-[#FF9500] to-[#FF3B30]',
+            },
+            {
+              icon: <Activity className="w-8 h-8" />,
+              title: 'Observance moyenne',
+              value: `${avgObservance}h`,
+              subtitle: 'heures / nuit (moy.)',
+              color: 'from-[#5856D6] to-[#AF52DE]',
             },
           ].map((stat, index) => (
             <motion.div

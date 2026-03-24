@@ -66,8 +66,8 @@ export function Header() {
           : 'bg-white/60 backdrop-blur-xl'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="flex items-center justify-between h-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-14 sm:h-12">
           {/* Logo - Left */}
           <Link
             to="/"
@@ -87,7 +87,7 @@ export function Header() {
                     onMouseEnter={() => setOpenDropdown(item.label)}
                     onMouseLeave={() => setOpenDropdown(null)}
                   >
-                    <button className="text-sm font-medium text-[#1a2b3c]/70 hover:text-[#1a2b3c] transition-colors flex items-center gap-1 whitespace-nowrap">
+                    <button className="text-sm font-medium text-[#1a2b3c]/70 hover:text-[#1a2b3c] transition-colors flex items-center gap-1 whitespace-nowrap" aria-expanded={openDropdown === item.label} aria-haspopup="true">
                       {item.label}
                       <svg className="w-3 h-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
@@ -157,8 +157,8 @@ export function Header() {
             <LanguageSwitcher />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 -mr-2"
-              aria-label="Toggle menu"
+              className="p-2 -mr-2 min-h-12 min-w-12 flex items-center justify-center"
+              aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             >
               <div className="w-5 h-3.5 flex flex-col justify-between">
                 <span className={`w-full h-0.5 bg-[#1a2b3c] transition-all origin-left ${mobileMenuOpen ? 'rotate-45' : ''}`} />
@@ -180,13 +180,13 @@ export function Header() {
             transition={{ duration: 0.25 }}
             className="lg:hidden bg-white/95 backdrop-blur-xl border-b border-gray-200/60"
           >
-            <div className="max-w-6xl mx-auto px-6 py-4 space-y-1">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 space-y-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`block py-2.5 text-base transition-colors ${
+                  className={`block py-2.5 text-base transition-colors min-h-12 flex items-center ${
                     location.pathname === link.to
                       ? 'text-blue-600 font-medium'
                       : 'text-[#1a2b3c]/70'
@@ -195,11 +195,11 @@ export function Header() {
                   {link.label}
                 </Link>
               ))}
-              <div className="pt-3 border-t border-gray-100 flex items-center gap-4">
+              <div className="pt-3 border-t border-gray-100">
                 <Link
                   to="/espace-patient"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="text-sm font-medium bg-gradient-to-r from-blue-600 to-violet-600 text-white px-5 py-2 rounded-full"
+                  className="block text-center text-sm font-medium bg-gradient-to-r from-blue-600 to-violet-600 text-white w-full py-3 min-h-12 rounded-full"
                 >
                   {t('nav.login')}
                 </Link>

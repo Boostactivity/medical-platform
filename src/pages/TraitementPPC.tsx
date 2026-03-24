@@ -1,9 +1,11 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Wind, Moon, Settings, LineChart, Phone, CheckCircle, ArrowRight } from 'lucide-react';
-import ppcImage from 'figma:asset/5e52033d373c0ca83d94fb39e360fd67e333d04a.png';
+import { useTranslation } from '../hooks/useTranslation';
+const ppcImage = 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=800&q=80';
 
 export function TraitementPPC() {
+  const { t } = useTranslation();
   const fadeInUp = {
     initial: { opacity: 0, y: 30 },
     whileInView: { opacity: 1, y: 0 },
@@ -44,7 +46,7 @@ export function TraitementPPC() {
   ];
 
   return (
-    <div className="bg-white">
+    <div className="bg-white dark:bg-background">
       {/* Hero */}
       <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -62,10 +64,10 @@ export function TraitementPPC() {
               <Wind className="w-5 h-5 text-[#3b82f6]" />
               <span className="text-[#3b82f6]">Traitement par PPC</span>
             </div>
-            <h1 className="text-5xl lg:text-6xl text-[#1a2b3c] mb-6">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl text-[#1a2b3c] dark:text-foreground mb-6">
               La Pression Positive Continue (PPC)
             </h1>
-            <p className="text-xl text-[#6b7280]">
+            <p className="text-xl text-[#6b7280] dark:text-muted-foreground">
               Le traitement de référence pour l'apnée du sommeil modérée à sévère. 
               Efficace, non invasif et pris en charge par la Sécurité sociale.
             </p>
@@ -74,24 +76,24 @@ export function TraitementPPC() {
       </section>
 
       {/* What is PPC */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div {...fadeInUp}>
-              <h2 className="text-4xl text-[#1a2b3c] mb-6">
+              <h2 className="text-4xl text-[#1a2b3c] dark:text-foreground mb-6">
                 Comment fonctionne la PPC ?
               </h2>
-              <p className="text-lg text-[#6b7280] mb-4">
+              <p className="text-lg text-[#6b7280] dark:text-muted-foreground mb-4">
                 La Pression Positive Continue (PPC ou CPAP en anglais) est une machine qui envoie 
                 un flux d'air sous pression via un masque, maintenant vos voies aériennes ouvertes pendant votre sommeil.
               </p>
-              <p className="text-lg text-[#6b7280] mb-4">
+              <p className="text-lg text-[#6b7280] dark:text-muted-foreground mb-4">
                 Grâce à cette pression constante ou auto-ajustée, les pauses respiratoires sont évitées, 
                 votre sommeil n'est plus fragmenté et votre organisme bénéficie d'un repos réparateur.
               </p>
-              <div className="bg-[#f8fafc] rounded-2xl p-6 mb-6">
-                <h4 className="text-[#1a2b3c] mb-3">Points clés</h4>
-                <ul className="space-y-2 text-[#6b7280]">
+              <div className="bg-[#f8fafc] dark:bg-secondary rounded-2xl p-6 mb-6">
+                <h4 className="text-[#1a2b3c] dark:text-foreground mb-3">Points clés</h4>
+                <ul className="space-y-2 text-[#6b7280] dark:text-muted-foreground">
                   <li className="flex items-start gap-2">
                     <CheckCircle className="w-5 h-5 text-[#10b981] flex-shrink-0 mt-0.5" />
                     <span>Ce n'est pas un respirateur de réanimation</span>
@@ -106,7 +108,7 @@ export function TraitementPPC() {
                   </li>
                 </ul>
               </div>
-              <p className="text-[#6b7280]">
+              <p className="text-[#6b7280] dark:text-muted-foreground">
                 Les appareils modernes sont silencieux, compacts et connectés pour un suivi optimal.
               </p>
             </motion.div>
@@ -128,10 +130,10 @@ export function TraitementPPC() {
       <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               Les bénéfices du traitement
             </h2>
-            <p className="text-xl text-[#6b7280] max-w-3xl mx-auto">
+            <p className="text-xl text-[#6b7280] dark:text-muted-foreground max-w-3xl mx-auto">
               De nombreux patients constatent une amélioration dès les premières nuits
             </p>
           </motion.div>
@@ -147,7 +149,7 @@ export function TraitementPPC() {
                 className="bg-white rounded-2xl p-6 shadow-lg"
               >
                 <CheckCircle className="w-8 h-8 text-[#10b981] mb-3" />
-                <p className="text-[#1a2b3c]">{benefit}</p>
+                <p className="text-[#1a2b3c] dark:text-foreground">{benefit}</p>
               </motion.div>
             ))}
           </div>
@@ -164,13 +166,13 @@ export function TraitementPPC() {
       </section>
 
       {/* la plateforme Role */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               Le rôle d'la plateforme
             </h2>
-            <p className="text-xl text-[#6b7280] max-w-3xl mx-auto">
+            <p className="text-xl text-[#6b7280] dark:text-muted-foreground max-w-3xl mx-auto">
               Notre mission : vous aider à réussir votre traitement, pas seulement installer un appareil
             </p>
           </motion.div>
@@ -183,22 +185,22 @@ export function TraitementPPC() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-[#f8fafc] rounded-3xl p-8"
+                className="bg-[#f8fafc] dark:bg-secondary rounded-3xl p-8"
               >
                 <div className="w-16 h-16 bg-gradient-to-br from-[#3b82f6] to-[#5AC8FA] rounded-2xl flex items-center justify-center text-white mb-6">
                   {service.icon}
                 </div>
-                <h3 className="text-2xl text-[#1a2b3c] mb-3">{service.title}</h3>
-                <p className="text-[#6b7280]">{service.description}</p>
+                <h3 className="text-2xl text-[#1a2b3c] dark:text-foreground mb-3">{service.title}</h3>
+                <p className="text-[#6b7280] dark:text-muted-foreground">{service.description}</p>
               </motion.div>
             ))}
           </div>
 
-          <motion.div {...fadeInUp} className="bg-[#f8fafc] rounded-3xl p-12">
+          <motion.div {...fadeInUp} className="bg-[#f8fafc] dark:bg-secondary rounded-3xl p-12">
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <h3 className="text-3xl text-[#1a2b3c] mb-4">Accompagnement renforcé</h3>
-                <p className="text-lg text-[#6b7280] mb-6">
+                <h3 className="text-3xl text-[#1a2b3c] dark:text-foreground mb-4">Accompagnement renforcé</h3>
+                <p className="text-lg text-[#6b7280] dark:text-muted-foreground mb-6">
                   Contrairement au modèle traditionnel "je pose et je pars", nous assurons un suivi actif :
                 </p>
                 <ul className="space-y-3">
@@ -211,7 +213,7 @@ export function TraitementPPC() {
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-[#3b82f6] flex-shrink-0 mt-0.5" />
-                      <span className="text-[#1a2b3c]">{item}</span>
+                      <span className="text-[#1a2b3c] dark:text-foreground">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -233,30 +235,30 @@ export function TraitementPPC() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <motion.div {...fadeInUp} className="text-center mb-12">
-              <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
+              <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
                 Prise en charge financière
               </h2>
             </motion.div>
 
-            <motion.div {...fadeInUp} className="bg-white rounded-3xl p-12 shadow-xl">
-              <h3 className="text-2xl text-[#1a2b3c] mb-6">Comment ça fonctionne en France</h3>
-              <div className="space-y-6 text-[#6b7280]">
+            <motion.div {...fadeInUp} className="bg-white dark:bg-card rounded-3xl p-8 md:p-12 shadow-xl">
+              <h3 className="text-2xl text-[#1a2b3c] dark:text-foreground mb-6">Comment ça fonctionne en France</h3>
+              <div className="space-y-6 text-[#6b7280] dark:text-muted-foreground">
                 <div>
-                  <h4 className="text-[#1a2b3c] mb-2">Location mensuelle</h4>
+                  <h4 className="text-[#1a2b3c] dark:text-foreground mb-2">Location mensuelle</h4>
                   <p>
                     L'appareil PPC n'est pas acheté mais loué. la plateforme est rémunéré par la Sécurité sociale 
                     via un forfait de location qui couvre l'appareil, les accessoires et le suivi.
                   </p>
                 </div>
                 <div>
-                  <h4 className="text-[#1a2b3c] mb-2">Prise en charge à 100%</h4>
+                  <h4 className="text-[#1a2b3c] dark:text-foreground mb-2">Prise en charge à 100%</h4>
                   <p>
                     La Sécurité sociale prend en charge 60% et votre mutuelle complète généralement 
                     les 40% restants. Dans la grande majorité des cas, vous n'avez rien à payer.
                   </p>
                 </div>
                 <div>
-                  <h4 className="text-[#1a2b3c] mb-2">Observance requise</h4>
+                  <h4 className="text-[#1a2b3c] dark:text-foreground mb-2">Observance requise</h4>
                   <p>
                     La Sécurité sociale exige une utilisation minimale (généralement plus de 3h par nuit sur 
                     au moins 20 jours par mois) pour maintenir le remboursement. C'est pourquoi notre 
@@ -270,13 +272,13 @@ export function TraitementPPC() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <motion.div {...fadeInUp}>
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               Prêt à choisir la plateforme ?
             </h2>
-            <p className="text-xl text-[#6b7280] mb-8">
+            <p className="text-xl text-[#6b7280] dark:text-muted-foreground mb-8">
               Que vous soyez déjà appareillé ou sur le point de l'être, 
               contactez-nous pour découvrir la différence la plateforme.
             </p>
@@ -290,7 +292,7 @@ export function TraitementPPC() {
               </Link>
               <Link
                 to="/pourquoi-expair"
-                className="px-8 py-4 bg-white border-2 border-[#3b82f6] text-[#3b82f6] rounded-full hover:bg-[#f8fafc] transition-all inline-flex items-center justify-center"
+                className="px-8 py-4 bg-white border-2 border-[#3b82f6] text-[#3b82f6] rounded-full hover:bg-[#f8fafc] dark:bg-secondary transition-all inline-flex items-center justify-center"
               >
                 Pourquoi la plateforme
               </Link>

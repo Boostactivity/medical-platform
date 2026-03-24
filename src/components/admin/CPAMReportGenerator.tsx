@@ -125,7 +125,7 @@ function generateMockHistory(): GeneratedReport[] {
       nbNonConformes: 1 + Math.floor(Math.random() * 3),
       nbAttention: Math.floor(Math.random() * 3),
       format: i % 2 === 0 ? 'CSV' : 'PDF',
-      generePar: 'admin@expair.fr',
+      generePar: 'admin@plateforme.fr',
     });
   }
   return reports;
@@ -281,7 +281,7 @@ export function CPAMReportGenerator() {
       nbNonConformes: filteredPatients.filter((p) => p.status === 'NON_CONFORME').length,
       nbAttention: filteredPatients.filter((p) => p.status === 'ATTENTION').length,
       format: 'CSV',
-      generePar: 'admin@expair.fr',
+      generePar: 'admin@plateforme.fr',
     };
     setHistory((prev) => [newReport, ...prev]);
 

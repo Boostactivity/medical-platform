@@ -464,7 +464,7 @@ export function SetupPrestataire() {
         <div className="mt-6 text-center">
           <p className="text-sm text-[#86868B]">
             Besoin d'aide ?{' '}
-            <a href="/FIX_NETWORK_ERRORS.md" className="text-[#007AFF] hover:underline">
+            <a href="/faq" className="text-[#007AFF] hover:underline">
               Consultez le guide détaillé
             </a>
           </p>

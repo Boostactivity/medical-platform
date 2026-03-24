@@ -385,7 +385,7 @@ export function DashboardLayout({
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link to="/profile" className="flex items-center cursor-pointer">
+                  <Link to="/settings" className="flex items-center cursor-pointer">
                     <User className="w-4 h-4 mr-2" />
                     Mon Profil
                   </Link>

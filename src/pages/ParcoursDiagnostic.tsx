@@ -1,12 +1,14 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { ClipboardCheck, Stethoscope, FileText, UserCheck, ArrowRight, CheckCircle } from 'lucide-react';
-import medicalImage from 'figma:asset/0e94221a81654bf7b01878dccb715d050a3cff3e.png';
-import prescriptionImage from 'figma:asset/e11fbfd392f7cbc7109c8e8816b16994a192f985.png';
-import sleepTestImage from 'figma:asset/4719bb1bca27dc5d36d99455785e274b8017ad42.png';
-import diagnosisImage from 'figma:asset/5d59416a49ff0951f1d511521ecb04c71d42cc39.png';
+import { useTranslation } from '../hooks/useTranslation';
+const medicalImage = 'https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?auto=format&fit=crop&w=800&q=80';
+const prescriptionImage = 'https://images.unsplash.com/photo-1584982751601-97dcc096659c?auto=format&fit=crop&w=800&q=80';
+const sleepTestImage = 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=800&q=80';
+const diagnosisImage = 'https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=800&q=80';
 
 export function ParcoursDiagnostic() {
+  const { t } = useTranslation();
   const fadeInUp = {
     initial: { opacity: 0, y: 30 },
     whileInView: { opacity: 1, y: 0 },
@@ -62,7 +64,7 @@ export function ParcoursDiagnostic() {
   ];
 
   return (
-    <div className="bg-white">
+    <div className="bg-white dark:bg-background">
       {/* Hero */}
       <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -80,10 +82,10 @@ export function ParcoursDiagnostic() {
               <FileText className="w-5 h-5 text-[#3b82f6]" />
               <span className="text-[#3b82f6]">Parcours diagnostic</span>
             </div>
-            <h1 className="text-5xl lg:text-6xl text-[#1a2b3c] mb-6">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl text-[#1a2b3c] dark:text-foreground dark:text-white mb-6">
               Comment se déroule le diagnostic en France ?
             </h1>
-            <p className="text-xl text-[#6b7280]">
+            <p className="text-xl text-[#6b7280] dark:text-muted-foreground">
               De la suspicion d'apnée du sommeil jusqu'à la mise en place du traitement, 
               voici les étapes clés de votre parcours médical en France.
             </p>
@@ -92,7 +94,7 @@ export function ParcoursDiagnostic() {
       </section>
 
       {/* Steps */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="space-y-24">
             {steps.map((step, index) => (
@@ -111,13 +113,13 @@ export function ParcoursDiagnostic() {
                     <div className="text-6xl text-[#3b82f6]/10 mb-4">
                       {String(index + 1).padStart(2, '0')}
                     </div>
-                    <h2 className="text-3xl lg:text-4xl text-[#1a2b3c] mb-4">{step.title}</h2>
-                    <p className="text-xl text-[#6b7280] mb-6">{step.description}</p>
+                    <h2 className="text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-4">{step.title}</h2>
+                    <p className="text-xl text-[#6b7280] dark:text-muted-foreground mb-6">{step.description}</p>
                     <ul className="space-y-3">
                       {step.details.map((detail) => (
                         <li key={detail} className="flex items-start gap-3">
                           <CheckCircle className="w-6 h-6 text-[#10b981] flex-shrink-0 mt-0.5" />
-                          <span className="text-[#1a2b3c]">{detail}</span>
+                          <span className="text-[#1a2b3c] dark:text-foreground">{detail}</span>
                         </li>
                       ))}
                     </ul>
@@ -173,14 +175,14 @@ export function ParcoursDiagnostic() {
       <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-8">
-            <motion.div {...fadeInUp} className="bg-white rounded-3xl p-8 shadow-lg">
-              <h3 className="text-2xl text-[#1a2b3c] mb-4">Prise en charge financière</h3>
-              <p className="text-[#6b7280] mb-4">
+            <motion.div {...fadeInUp} className="bg-white dark:bg-card rounded-3xl p-8 shadow-lg">
+              <h3 className="text-2xl text-[#1a2b3c] dark:text-foreground mb-4">Prise en charge financière</h3>
+              <p className="text-[#6b7280] dark:text-muted-foreground mb-4">
                 En France, le test du sommeil prescrit par un médecin est un examen médical 
                 remboursé par la Sécurité sociale (à 60%) et complété par votre mutuelle.
               </p>
-              <p className="text-[#6b7280]">
-                <strong className="text-[#1a2b3c]">Important :</strong> Vous n'avez pas à acheter un "pack diagnostic" 
+              <p className="text-[#6b7280] dark:text-muted-foreground">
+                <strong className="text-[#1a2b3c] dark:text-foreground">Important :</strong> Vous n'avez pas à acheter un "pack diagnostic" 
                 comme dans certains pays. Le parcours médical français garantit une prise en charge.
               </p>
             </motion.div>
@@ -208,13 +210,13 @@ export function ParcoursDiagnostic() {
       </section>
 
       {/* la plateforme Accompagnement */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               la plateforme vous accompagne dès le début
             </h2>
-            <p className="text-xl text-[#6b7280] max-w-3xl mx-auto">
+            <p className="text-xl text-[#6b7280] dark:text-muted-foreground max-w-3xl mx-auto">
               Vous n'avez pas à attendre d'avoir une prescription de PPC pour nous contacter. 
               Nous pouvons vous guider dès les premiers symptômes.
             </p>
@@ -253,14 +255,14 @@ export function ParcoursDiagnostic() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-[#f8fafc] rounded-3xl p-8"
+                className="bg-[#f8fafc] dark:bg-secondary rounded-3xl p-8"
               >
-                <h3 className="text-xl text-[#1a2b3c] mb-6">{phase.title}</h3>
+                <h3 className="text-xl text-[#1a2b3c] dark:text-foreground mb-6">{phase.title}</h3>
                 <ul className="space-y-3">
                   {phase.items.map((item) => (
                     <li key={item} className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-[#3b82f6] flex-shrink-0 mt-0.5" />
-                      <span className="text-[#6b7280]">{item}</span>
+                      <span className="text-[#6b7280] dark:text-muted-foreground">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -274,10 +276,10 @@ export function ParcoursDiagnostic() {
       <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <motion.div {...fadeInUp}>
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               Prêt à commencer votre parcours ?
             </h2>
-            <p className="text-xl text-[#6b7280] mb-8">
+            <p className="text-xl text-[#6b7280] dark:text-muted-foreground mb-8">
               Contactez-nous pour un premier échange gratuit, que vous soyez au début 
               de votre réflexion ou déjà diagnostiqué.
             </p>
@@ -290,7 +292,7 @@ export function ParcoursDiagnostic() {
               </Link>
               <Link
                 to="/traitement-ppc"
-                className="px-8 py-4 bg-white border-2 border-[#3b82f6] text-[#3b82f6] rounded-full hover:bg-[#f8fafc] transition-all"
+                className="px-8 py-4 bg-white border-2 border-[#3b82f6] text-[#3b82f6] rounded-full hover:bg-[#f8fafc] dark:bg-secondary transition-all"
               >
                 En savoir plus sur le traitement
               </Link>

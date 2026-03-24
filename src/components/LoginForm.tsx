@@ -1,18 +1,28 @@
 'use client';
 
 import { useState } from 'react';
-import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
-import { createClient } from '../utils/supabase/client';
+import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { LoadingSpinner } from './LoadingSpinner';
 import { ProSanteConnectButton } from './ProSanteConnectButton';
 import { useTranslation } from '../hooks/useTranslation';
+import { useAuth } from '../contexts/AuthContext';
 
 interface LoginFormProps {
   userType: 'patient' | 'doctor' | 'admin';
   redirectTo: string;
 }
+
+/**
+ * Mappe le userType du composant (patient/doctor/admin) vers le role DB (patient/medecin/admin).
+ * Les pages Espace utilisent "doctor" mais la DB stocke "medecin".
+ */
+const userTypeToDbRole: Record<string, string[]> = {
+  patient: ['patient'],
+  doctor: ['medecin', 'infirmier'],
+  admin: ['admin', 'prestataire'],
+};
 
 export function LoginForm({ userType, redirectTo }: LoginFormProps) {
   const [email, setEmail] = useState('');
@@ -22,6 +32,7 @@ export function LoginForm({ userType, redirectTo }: LoginFormProps) {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { signIn, userRole, signOut } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,53 +40,25 @@ export function LoginForm({ userType, redirectTo }: LoginFormProps) {
     setLoading(true);
 
     try {
-      const supabase = createClient();
-      const { data, error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      const { error: signInError, needsMfa } = await signIn(email, password);
 
       if (signInError) {
-        setError(t('login.errorInvalid'));
+        setError(signInError.message || t('login.errorInvalid'));
         setLoading(false);
         return;
       }
 
-      if (data.session) {
-        // Get user metadata to check role
-        const userRole = data.user?.user_metadata?.role;
-
-        // Verify that the user role matches the login page type
-        if (userRole !== userType) {
-          setError(`Ce compte n'est pas un compte ${userTypeLabels[userType]}. ${!userRole ? 'Le role du compte n\'est pas defini. ' : ''}Visitez /fix-auth pour corriger.`);
-          setLoading(false);
-          toast.error('Acces refuse', {
-            description: `Veuillez utiliser la page de connexion ${userTypeLabels[userRole] || 'appropriee'}.`,
-          });
-          // Sign out the user
-          await supabase.auth.signOut();
-          return;
-        }
-
-        // Store session
-        localStorage.setItem('access_token', data.session.access_token);
-        localStorage.setItem('user_type', userType);
-        localStorage.setItem('user_role', userRole);
-
-        // Show success toast
-        toast.success('Connexion reussie !', {
-          description: 'Vous allez etre redirige vers votre espace.',
-        });
-
-        // Redirect to dashboard
-        setTimeout(() => navigate(redirectTo), 500);
+      if (needsMfa) {
+        // MFA sera gere par le ProtectedRoute / AuthContext
+        navigate(redirectTo);
+        return;
       }
+
+      // Redirect to dashboard
+      setTimeout(() => navigate(redirectTo), 300);
     } catch (err) {
       console.error('Login error:', err);
       setError('Une erreur est survenue lors de la connexion');
-      toast.error('Erreur de connexion', {
-        description: 'Veuillez verifier vos identifiants.',
-      });
       setLoading(false);
     }
   };
@@ -171,23 +154,39 @@ export function LoginForm({ userType, redirectTo }: LoginFormProps) {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white text-sm font-medium rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full py-3 bg-gradient-to-r from-blue-600 to-violet-600 text-white text-sm font-medium rounded-xl hover:shadow-lg hover:shadow-blue-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
-            {loading ? t('login.loading') : t('login.submit')}
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                {t('login.loading')}
+              </>
+            ) : (
+              t('login.submit')
+            )}
           </button>
 
           {/* Demo Accounts */}
           <div className="mt-6 pt-5 border-t border-gray-100">
             <p className="text-xs text-gray-400 text-center mb-3">{t('login.demoAccounts')}</p>
-            <div className="text-xs text-gray-400 text-center">
+            <div className="text-xs text-gray-400 text-center space-y-1">
               {userType === 'patient' && (
-                <p><strong className="text-gray-500">Patient :</strong> testpatient@demo.fr / Test-123</p>
+                <>
+                  <p><strong className="text-gray-500">Patient :</strong> pierre.moreau@email.fr / Demo123!</p>
+                  <p><strong className="text-gray-500">Patient :</strong> anne.lambert@email.fr / Demo123!</p>
+                </>
               )}
               {userType === 'doctor' && (
-                <p><strong className="text-gray-500">Medecin :</strong> testmedecin@demo.fr / Test-123</p>
+                <>
+                  <p><strong className="text-gray-500">Medecin :</strong> dr.martin@medconnect.fr / Demo123!</p>
+                  <p><strong className="text-gray-500">Infirmier :</strong> inf.leroy@medconnect.fr / Demo123!</p>
+                </>
               )}
               {userType === 'admin' && (
-                <p><strong className="text-gray-500">Admin :</strong> admin@demo.fr / Test-123</p>
+                <>
+                  <p><strong className="text-gray-500">Admin :</strong> admin@medconnect.fr / Demo123!</p>
+                  <p><strong className="text-gray-500">Prestataire :</strong> tech.dupuis@medconnect.fr / Demo123!</p>
+                </>
               )}
             </div>
 
@@ -196,7 +195,7 @@ export function LoginForm({ userType, redirectTo }: LoginFormProps) {
               <div className="p-2.5 bg-blue-50 border border-blue-100 rounded-xl">
                 <p className="text-[11px] text-blue-600 text-center">
                   {t('login.firstTime')}{' '}
-                  <Link to="/init-demo" className="text-blue-700 font-medium hover:underline">
+                  <Link to="/setup-prestataire" className="text-blue-700 font-medium hover:underline">
                     {t('login.initButton')}
                   </Link>
                 </p>
@@ -205,11 +204,11 @@ export function LoginForm({ userType, redirectTo }: LoginFormProps) {
               <div className="p-2.5 bg-amber-50 border border-amber-100 rounded-xl">
                 <p className="text-[11px] text-amber-600 text-center">
                   {t('login.authError')}{' '}
-                  <Link to="/fix-auth" className="text-amber-700 font-medium hover:underline">
+                  <Link to="/contact" className="text-amber-700 font-medium hover:underline">
                     {t('login.repairButton')}
                   </Link>
                   {' / '}
-                  <Link to="/force-logout" className="text-amber-700 font-medium hover:underline">
+                  <Link to="/faq" className="text-amber-700 font-medium hover:underline">
                     {t('login.forceLogout')}
                   </Link>
                 </p>

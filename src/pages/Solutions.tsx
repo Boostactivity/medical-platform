@@ -4,17 +4,17 @@ export default function Solutions() {
   return (
     <div className="bg-white">
       {/* Hero */}
-      <section className="min-h-[60vh] flex items-center justify-center px-6 pt-32 pb-20">
+      <section className="min-h-[60vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-12 sm:pb-20">
         <div className="max-w-[980px] w-full text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
           >
-            <h1 className="text-[#1d1d1f] mb-6">
+            <h1 className="text-2xl sm:text-3xl lg:text-5xl font-semibold text-[#1d1d1f] mb-6">
               Solutions d'appareillage
             </h1>
-            <p className="text-[21px] text-[#86868b] max-w-[600px] mx-auto leading-[1.38]">
+            <p className="text-base sm:text-lg lg:text-[21px] text-[#86868b] max-w-[600px] mx-auto leading-[1.38]">
               Des dispositifs médicaux certifiés et un accompagnement complet 
               pour traiter efficacement l'apnée du sommeil
             </p>
@@ -23,20 +23,20 @@ export default function Solutions() {
       </section>
 
       {/* Main Solutions */}
-      <section className="py-24 px-6">
+      <section className="py-12 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-[1200px] mx-auto space-y-32">
           {/* PPC Devices */}
-          <div className="grid lg:grid-cols-2 gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             >
-              <h2 className="text-[#1d1d1f] mb-6">
+              <h2 className="text-xl sm:text-2xl lg:text-4xl font-semibold text-[#1d1d1f] mb-6">
                 Appareils PPC
               </h2>
-              <p className="text-[21px] text-[#86868b] mb-8 leading-[1.38]">
+              <p className="text-base sm:text-lg lg:text-[21px] text-[#86868b] mb-8 leading-[1.38]">
                 Dispositifs de pression positive continue de dernière génération. 
                 Silencieux, efficaces et confortables.
               </p>
@@ -73,15 +73,15 @@ export default function Solutions() {
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               className="bg-[#fbfbfd] rounded-[28px] aspect-square flex items-center justify-center"
             >
-              <div className="text-center p-12">
-                <div className="text-[72px] font-semibold text-[#1d1d1f] mb-4">&lt; 26 dB</div>
-                <div className="text-[21px] text-[#86868b]">Plus silencieux qu'un murmure</div>
+              <div className="text-center p-6 sm:p-12">
+                <div className="text-4xl sm:text-6xl lg:text-[72px] font-semibold text-[#1d1d1f] mb-4">&lt; 26 dB</div>
+                <div className="text-base sm:text-lg lg:text-[21px] text-[#86868b]">Plus silencieux qu'un murmure</div>
               </div>
             </motion.div>
           </div>
 
           {/* Télésurveillance */}
-          <div className="grid lg:grid-cols-2 gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -90,11 +90,11 @@ export default function Solutions() {
               className="order-2 lg:order-1 bg-gradient-to-br from-[#0071e3] to-[#0077ed] rounded-[28px] aspect-square flex items-center justify-center text-white p-12"
             >
               <div className="space-y-6">
-                <div className="text-[48px] font-semibold">100%</div>
-                <div className="text-[21px] opacity-90">des données transmises en temps réel</div>
+                <div className="text-3xl sm:text-4xl lg:text-[48px] font-semibold">100%</div>
+                <div className="text-base sm:text-lg lg:text-[21px] opacity-90">des données transmises en temps réel</div>
                 <div className="pt-6 border-t border-white/20">
-                  <div className="text-[28px] font-semibold">24h</div>
-                  <div className="text-[17px] opacity-80">Délai de détection d'anomalie</div>
+                  <div className="text-xl sm:text-2xl lg:text-[28px] font-semibold">24h</div>
+                  <div className="text-sm sm:text-base lg:text-[17px] opacity-80">Délai de détection d'anomalie</div>
                 </div>
               </div>
             </motion.div>
@@ -106,10 +106,10 @@ export default function Solutions() {
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               className="order-1 lg:order-2"
             >
-              <h2 className="text-[#1d1d1f] mb-6">
+              <h2 className="text-xl sm:text-2xl lg:text-4xl font-semibold text-[#1d1d1f] mb-6">
                 Télésurveillance
               </h2>
-              <p className="text-[21px] text-[#86868b] mb-8 leading-[1.38]">
+              <p className="text-base sm:text-lg lg:text-[21px] text-[#86868b] mb-8 leading-[1.38]">
                 Suivi en temps réel de votre traitement grâce à notre plateforme 
                 cloud sécurisée
               </p>
@@ -140,17 +140,17 @@ export default function Solutions() {
           </div>
 
           {/* Accompagnement */}
-          <div className="grid lg:grid-cols-2 gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             >
-              <h2 className="text-[#1d1d1f] mb-6">
+              <h2 className="text-xl sm:text-2xl lg:text-4xl font-semibold text-[#1d1d1f] mb-6">
                 Accompagnement personnalisé
               </h2>
-              <p className="text-[21px] text-[#86868b] mb-8 leading-[1.38]">
+              <p className="text-base sm:text-lg lg:text-[21px] text-[#86868b] mb-8 leading-[1.38]">
                 Un suivi régulier par nos techniciens spécialisés pour garantir 
                 l'efficacité de votre traitement
               </p>
@@ -182,12 +182,12 @@ export default function Solutions() {
             >
               <div className="space-y-10">
                 <div>
-                  <div className="text-[56px] font-semibold text-[#1d1d1f] mb-2">150+</div>
-                  <div className="text-[19px] text-[#86868b]">Techniciens spécialisés</div>
+                  <div className="text-3xl sm:text-4xl lg:text-[56px] font-semibold text-[#1d1d1f] mb-2">150+</div>
+                  <div className="text-base sm:text-lg lg:text-[19px] text-[#86868b]">Techniciens spécialisés</div>
                 </div>
                 <div className="border-t border-black/5 pt-10">
-                  <div className="text-[56px] font-semibold text-[#1d1d1f] mb-2">40h</div>
-                  <div className="text-[19px] text-[#86868b]">Formation annuelle</div>
+                  <div className="text-3xl sm:text-4xl lg:text-[56px] font-semibold text-[#1d1d1f] mb-2">40h</div>
+                  <div className="text-base sm:text-lg lg:text-[19px] text-[#86868b]">Formation annuelle</div>
                 </div>
               </div>
             </motion.div>
@@ -196,7 +196,7 @@ export default function Solutions() {
       </section>
 
       {/* Reimbursement */}
-      <section className="py-24 px-6 bg-[#fbfbfd]">
+      <section className="py-12 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 bg-[#fbfbfd]">
         <div className="max-w-[980px] mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -204,15 +204,15 @@ export default function Solutions() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           >
-            <h2 className="text-[#1d1d1f] mb-6">
+            <h2 className="text-xl sm:text-2xl lg:text-4xl font-semibold text-[#1d1d1f] mb-6">
               Prise en charge à 100%
             </h2>
-            <p className="text-[21px] text-[#86868b] max-w-[700px] mx-auto mb-12 leading-[1.38]">
+            <p className="text-base sm:text-lg lg:text-[21px] text-[#86868b] max-w-[700px] mx-auto mb-12 leading-[1.38]">
               Remboursement intégral par l'Assurance maladie. 
               Tiers payant systématique, aucun frais à avancer.
             </p>
 
-            <div className="grid md:grid-cols-3 gap-8 mt-16">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 mt-16">
               {[
                 { title: 'Remboursement', desc: 'Pris en charge à 100%' },
                 { title: 'Tiers payant', desc: 'Aucune avance de frais' },

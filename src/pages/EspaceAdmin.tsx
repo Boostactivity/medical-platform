@@ -101,7 +101,7 @@ export function EspaceAdmin() {
                     <p className="text-xs text-amber-600 mb-3">
                       Cliquez ci-dessous pour reparer automatiquement les metadonnees de votre compte.
                     </p>
-                    <Link to="/fix-auth" className="inline-flex items-center gap-1.5 px-4 py-2 bg-amber-500 text-white text-xs font-medium rounded-lg hover:bg-amber-600 transition-all">
+                    <Link to="/contact" className="inline-flex items-center gap-1.5 px-4 py-2 bg-amber-500 text-white text-xs font-medium rounded-lg hover:bg-amber-600 transition-all">
                       Reparer l'authentification
                     </Link>
                   </div>

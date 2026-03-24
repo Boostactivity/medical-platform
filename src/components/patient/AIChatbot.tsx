@@ -195,7 +195,7 @@ export function AIChatbot() {
     {
       id: 'welcome',
       role: 'assistant',
-      content: 'Bonjour ! Je suis votre assistant virtuel ExpAir. Comment puis-je vous aider aujourd\'hui ? Vous pouvez me poser une question ou choisir un sujet ci-dessous.',
+      content: 'Bonjour ! Je suis votre assistant virtuel. Comment puis-je vous aider aujourd\'hui ? Vous pouvez me poser une question ou choisir un sujet ci-dessous.',
       timestamp: new Date(),
     },
   ]);
@@ -310,7 +310,7 @@ Un ticket de support a ete cree avec votre question. Vous serez notifie de la re
             <Bot className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-semibold text-sm">Assistant ExpAir</h3>
+            <h3 className="font-semibold text-sm">Assistant virtuel</h3>
             {!isMinimized && (
               <p className="text-xs text-white/80">En ligne</p>
             )}

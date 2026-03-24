@@ -26,7 +26,7 @@ export interface Users {
   id: string
   email: string
   password_hash?: string
-  role: 'patient' | 'medecin' | 'admin' | 'prestataire'
+  role: 'patient' | 'medecin' | 'admin' | 'prestataire' | 'infirmier'
   first_name: string
   last_name: string
   phone?: string
@@ -295,13 +295,15 @@ export interface Billing {
 export interface AuditLogs {
   id: string
   user_id?: string
-  action: string // Ex: "LOGIN", "PATIENT_VIEW", "DATA_EXPORT"
+  action: string // Ex: "login", "PATIENT_VIEW", "DATA_EXPORT"
   resource_type?: string // Ex: "patient", "telemetry"
   resource_id?: string
   ip_address?: string
   user_agent?: string
   details?: Json
-  timestamp: string
+  metadata?: Json // Additional context (user_agent, screen_resolution, etc.)
+  created_at: string
+  timestamp?: string // Legacy alias for created_at
 }
 
 /**

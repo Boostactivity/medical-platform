@@ -5,7 +5,7 @@ export default function Technology() {
   return (
     <div className="bg-white">
       {/* Hero */}
-      <section className="min-h-[70vh] flex items-center justify-center px-6 pt-32 pb-20">
+      <section className="min-h-[70vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-12 sm:pb-20">
         <div className="max-w-[980px] w-full">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -13,10 +13,10 @@ export default function Technology() {
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
             className="text-center mb-16"
           >
-            <h1 className="text-[#1d1d1f] mb-6">
+            <h1 className="text-2xl sm:text-3xl lg:text-5xl font-semibold text-[#1d1d1f] mb-6">
               Technologie de pointe
             </h1>
-            <p className="text-[21px] text-[#86868b] max-w-[700px] mx-auto leading-[1.38]">
+            <p className="text-base sm:text-lg lg:text-[21px] text-[#86868b] max-w-[700px] mx-auto leading-[1.38]">
               Nos dispositifs intègrent les innovations les plus avancées 
               pour garantir efficacité et confort
             </p>
@@ -38,19 +38,19 @@ export default function Technology() {
       </section>
 
       {/* AutoSet */}
-      <section className="py-32 px-6 bg-[#fbfbfd]">
+      <section className="py-12 sm:py-20 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#fbfbfd]">
         <div className="max-w-[1200px] mx-auto">
-          <div className="grid lg:grid-cols-2 gap-20 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center">
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true, margin: "-100px" }}
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
             >
-              <h2 className="text-[#1d1d1f] mb-6">
+              <h2 className="text-xl sm:text-2xl lg:text-4xl font-semibold text-[#1d1d1f] mb-6">
                 AutoSet™ Technology
               </h2>
-              <p className="text-[21px] text-[#86868b] mb-8 leading-[1.38]">
+              <p className="text-base sm:text-lg lg:text-[21px] text-[#86868b] mb-8 leading-[1.38]">
                 Notre technologie AutoSet analyse votre respiration en temps réel 
                 et ajuste automatiquement la pression délivrée
               </p>
@@ -103,12 +103,12 @@ export default function Technology() {
             >
               <div className="space-y-8">
                 <div>
-                  <div className="text-[48px] font-semibold text-[#1d1d1f] mb-2">±0.5</div>
-                  <div className="text-[19px] text-[#86868b]">cmH₂O de précision</div>
+                  <div className="text-3xl sm:text-4xl lg:text-[48px] font-semibold text-[#1d1d1f] mb-2">±0.5</div>
+                  <div className="text-base sm:text-lg lg:text-[19px] text-[#86868b]">cmH₂O de précision</div>
                 </div>
                 <div className="border-t border-black/5 pt-8">
-                  <div className="text-[48px] font-semibold text-[#1d1d1f] mb-2">50+</div>
-                  <div className="text-[19px] text-[#86868b]">Paramètres analysés en temps réel</div>
+                  <div className="text-3xl sm:text-4xl lg:text-[48px] font-semibold text-[#1d1d1f] mb-2">50+</div>
+                  <div className="text-base sm:text-lg lg:text-[19px] text-[#86868b]">Paramètres analysés en temps réel</div>
                 </div>
               </div>
             </motion.div>
@@ -117,7 +117,7 @@ export default function Technology() {
       </section>
 
       {/* Cloud & Security */}
-      <section className="py-32 px-6">
+      <section className="py-12 sm:py-20 lg:py-32 px-4 sm:px-6 lg:px-8">
         <div className="max-w-[980px] mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -125,15 +125,15 @@ export default function Technology() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           >
-            <h2 className="text-[#1d1d1f] mb-6">
+            <h2 className="text-xl sm:text-2xl lg:text-4xl font-semibold text-[#1d1d1f] mb-6">
               Cloud médical sécurisé
             </h2>
-            <p className="text-[21px] text-[#86868b] max-w-[700px] mx-auto mb-16 leading-[1.38]">
+            <p className="text-base sm:text-lg lg:text-[21px] text-[#86868b] max-w-[700px] mx-auto mb-16 leading-[1.38]">
               Infrastructure certifiée HDS garantissant la confidentialité 
               et la sécurité de vos données médicales
             </p>
 
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
               {[
                 { icon: '🔒', title: 'Chiffrement', desc: 'SSL/TLS et AES-256' },
                 { icon: '🏥', title: 'Certifié HDS', desc: 'Hébergement de données de santé' },
@@ -158,7 +158,7 @@ export default function Technology() {
       </section>
 
       {/* Certifications */}
-      <section className="py-32 px-6 bg-[#fbfbfd]">
+      <section className="py-12 sm:py-20 lg:py-32 px-4 sm:px-6 lg:px-8 bg-[#fbfbfd]">
         <div className="max-w-[980px] mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -166,10 +166,10 @@ export default function Technology() {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           >
-            <h2 className="text-[#1d1d1f] mb-6">
+            <h2 className="text-xl sm:text-2xl lg:text-4xl font-semibold text-[#1d1d1f] mb-6">
               Certifications
             </h2>
-            <p className="text-[21px] text-[#86868b] max-w-[700px] mx-auto mb-16 leading-[1.38]">
+            <p className="text-base sm:text-lg lg:text-[21px] text-[#86868b] max-w-[700px] mx-auto mb-16 leading-[1.38]">
               Conformité totale aux normes les plus strictes
             </p>
 

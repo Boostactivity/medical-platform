@@ -110,6 +110,7 @@ const ConsumablesShop = lazy(() => import('./components/marketplace/ConsumablesS
 const APIDocumentation = lazy(() => import('./pages/APIDocumentation').then(m => ({ default: m.APIDocumentation })));
 
 // PHASE 5 : Blog, Simulateur public, Jalons patient, Satisfaction, Bilan mensuel, Fidelite, Facturation, Data Export
+const InitSetup = lazy(() => import('./pages/InitSetup').then(m => ({ default: m.InitSetup })));
 const Blog = lazy(() => import('./pages/Blog').then(m => ({ default: m.Blog })));
 const BlogArticleView = lazy(() => import('./pages/Blog').then(m => ({ default: m.BlogArticleView })));
 const SleepScoreSimulator = lazy(() => import('./components/public/SleepScoreSimulator').then(m => ({ default: m.SleepScoreSimulator })));
@@ -190,6 +191,7 @@ export default function App() {
                     <Route path="/auth/login" element={<LoginPage />} />
                     <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/init-setup" element={<InitSetup />} />
 
                     {/* Routes protegees - Dashboard principal */}
                     <Route

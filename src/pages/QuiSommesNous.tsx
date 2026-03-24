@@ -1,8 +1,10 @@
 import { motion } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { Heart, Target, Users, Award, TrendingUp, Shield } from 'lucide-react';
+import { useTranslation } from '../hooks/useTranslation';
 
 export function QuiSommesNous() {
+  const { t } = useTranslation();
   const fadeInUp = {
     initial: { opacity: 0, y: 30 },
     whileInView: { opacity: 1, y: 0 },
@@ -25,7 +27,7 @@ export function QuiSommesNous() {
   ];
 
   return (
-    <div className="bg-white">
+    <div className="bg-white dark:bg-background">
       {/* Hero */}
       <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -42,10 +44,10 @@ export function QuiSommesNous() {
             <div className="w-20 h-20 bg-gradient-to-br from-[#3b82f6] to-[#5AC8FA] rounded-3xl flex items-center justify-center text-white mx-auto mb-8 shadow-2xl">
               <span className="text-3xl">E</span>
             </div>
-            <h1 className="text-5xl lg:text-6xl text-[#1a2b3c] mb-6">
+            <h1 className="text-5xl lg:text-6xl text-[#1a2b3c] dark:text-foreground mb-6">
               Qui sommes-nous ?
             </h1>
-            <p className="text-xl text-[#6b7280]">
+            <p className="text-xl text-[#6b7280] dark:text-muted-foreground">
               la plateforme est une entreprise française spécialisée dans l'appareillage respiratoire 
               à domicile pour le traitement de l'apnée du sommeil.
             </p>
@@ -54,23 +56,23 @@ export function QuiSommesNous() {
       </section>
 
       {/* Mission */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div {...fadeInUp}>
-              <h2 className="text-4xl text-[#1a2b3c] mb-6">Notre mission</h2>
-              <p className="text-xl text-[#6b7280] mb-6">
+              <h2 className="text-4xl text-[#1a2b3c] dark:text-foreground mb-6">Notre mission</h2>
+              <p className="text-xl text-[#6b7280] dark:text-muted-foreground mb-6">
                 la plateforme naît d'un constat simple : le système actuel de l'appareillage médical 
                 en France est trop opaque, trop peu centré sur le patient, et basé sur des habitudes 
                 de renvoi entre médecins et prestataires historiques.
               </p>
-              <p className="text-xl text-[#6b7280] mb-6">
+              <p className="text-xl text-[#6b7280] dark:text-muted-foreground mb-6">
                 Notre mission est de rendre le système lisible, humain et moderne. Nous voulons remettre 
                 le choix et l'information dans les mains du patient, tout en garantissant un niveau 
                 d'expertise médicale et d'accompagnement inégalé.
               </p>
               <div className="bg-[#3b82f6]/10 border-2 border-[#3b82f6]/30 rounded-2xl p-6">
-                <p className="text-lg text-[#1a2b3c]">
+                <p className="text-lg text-[#1a2b3c] dark:text-foreground">
                   <strong>Notre ambition :</strong> devenir LA référence moderne en France pour 
                   l'appareillage PPC et l'accompagnement des patients souffrant d'apnée du sommeil.
                 </p>
@@ -94,8 +96,8 @@ export function QuiSommesNous() {
       <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">Nos valeurs</h2>
-            <p className="text-xl text-[#6b7280] max-w-3xl mx-auto">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">Nos valeurs</h2>
+            <p className="text-xl text-[#6b7280] dark:text-muted-foreground max-w-3xl mx-auto">
               Les principes qui guident chacune de nos actions au quotidien
             </p>
           </motion.div>
@@ -113,8 +115,8 @@ export function QuiSommesNous() {
                 <div className="w-16 h-16 bg-gradient-to-br from-[#3b82f6] to-[#5AC8FA] rounded-2xl flex items-center justify-center text-white mx-auto mb-6">
                   {value.icon}
                 </div>
-                <h3 className="text-xl text-[#1a2b3c] mb-3">{value.title}</h3>
-                <p className="text-[#6b7280]">{value.description}</p>
+                <h3 className="text-xl text-[#1a2b3c] dark:text-foreground mb-3">{value.title}</h3>
+                <p className="text-[#6b7280] dark:text-muted-foreground">{value.description}</p>
               </motion.div>
             ))}
           </div>
@@ -122,11 +124,11 @@ export function QuiSommesNous() {
       </section>
 
       {/* Team */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">Notre équipe</h2>
-            <p className="text-xl text-[#6b7280] max-w-3xl mx-auto">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">Notre équipe</h2>
+            <p className="text-xl text-[#6b7280] dark:text-muted-foreground max-w-3xl mx-auto">
               Des professionnels de santé experts et dédiés à votre réussite
             </p>
           </motion.div>
@@ -139,11 +141,11 @@ export function QuiSommesNous() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-[#f8fafc] rounded-3xl p-8"
+                className="bg-[#f8fafc] dark:bg-secondary rounded-3xl p-8"
               >
                 <Users className="w-12 h-12 text-[#3b82f6] mb-4" />
-                <h3 className="text-2xl text-[#1a2b3c] mb-3">{member.role}</h3>
-                <p className="text-lg text-[#6b7280]">{member.description}</p>
+                <h3 className="text-2xl text-[#1a2b3c] dark:text-foreground mb-3">{member.role}</h3>
+                <p className="text-lg text-[#6b7280] dark:text-muted-foreground">{member.description}</p>
               </motion.div>
             ))}
           </div>
@@ -154,7 +156,7 @@ export function QuiSommesNous() {
       <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">Agréments et certifications</h2>
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">Agréments et certifications</h2>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
@@ -174,8 +176,8 @@ export function QuiSommesNous() {
                 <div className="w-20 h-20 bg-gradient-to-br from-[#34C759] to-[#30D158] rounded-2xl flex items-center justify-center text-white mx-auto mb-6">
                   {cert.icon}
                 </div>
-                <h3 className="text-xl text-[#1a2b3c] mb-3">{cert.title}</h3>
-                <p className="text-[#6b7280]">{cert.desc}</p>
+                <h3 className="text-xl text-[#1a2b3c] dark:text-foreground mb-3">{cert.title}</h3>
+                <p className="text-[#6b7280] dark:text-muted-foreground">{cert.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -183,13 +185,13 @@ export function QuiSommesNous() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-white">
+      <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <motion.div {...fadeInUp}>
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] mb-6">
+            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               Rejoignez la plateforme
             </h2>
-            <p className="text-xl text-[#6b7280] mb-8">
+            <p className="text-xl text-[#6b7280] dark:text-muted-foreground mb-8">
               Patients ou médecins, découvrez une nouvelle façon de vivre le traitement de l'apnée du sommeil.
             </p>
             <Link

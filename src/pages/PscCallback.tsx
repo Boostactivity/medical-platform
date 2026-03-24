@@ -35,7 +35,7 @@ export function PscCallback() {
         });
         
         // Rediriger vers login après 5 secondes
-        setTimeout(() => navigate('/login-medecin'), 5000);
+        setTimeout(() => navigate('/espace-medecin'), 5000);
         return;
       }
 
@@ -50,7 +50,7 @@ export function PscCallback() {
           description: 'Impossible de créer votre session. Veuillez réessayer.',
         });
         
-        setTimeout(() => navigate('/login-medecin'), 5000);
+        setTimeout(() => navigate('/espace-medecin'), 5000);
         return;
       }
 
@@ -98,7 +98,7 @@ export function PscCallback() {
           description: error.message || 'Une erreur est survenue.',
         });
         
-        setTimeout(() => navigate('/login-medecin'), 5000);
+        setTimeout(() => navigate('/espace-medecin'), 5000);
       }
     };
 
@@ -180,7 +180,7 @@ export function PscCallback() {
               <div className="text-center">
                 <p className="text-red-600 mb-4">{message}</p>
                 <button
-                  onClick={() => navigate('/login-medecin')}
+                  onClick={() => navigate('/espace-medecin')}
                   className="px-6 py-2 bg-[#007AFF] text-white rounded-full hover:bg-[#0051D5] transition-all"
                 >
                   Retour à la connexion

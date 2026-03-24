@@ -4,7 +4,7 @@
  * Version: 2.0.1 - Build fix
  */
 
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { createClient } from '../utils/supabase/client';
 import { alertKeys } from './useAlerts';
@@ -66,7 +66,7 @@ export function useRealtimeAlerts(enabled: boolean = true) {
         ) {
           // ✅ FALLBACK SILENCIEUX : pas de console.warn en production
           // Seulement en développement pour debug
-          if (process.env.NODE_ENV === 'development') {
+          if (import.meta.env.DEV) {
             console.warn('[useRealtimeAlerts] RLS configuration pending - Using empty array fallback');
             console.warn('[useRealtimeAlerts] Error code:', fetchError.code);
             console.warn('[useRealtimeAlerts] Error message:', fetchError.message);

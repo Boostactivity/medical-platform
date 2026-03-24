@@ -75,7 +75,7 @@ function InviteModal({ isOpen, onClose, onSubmit }: InviteModalProps) {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="exemple@expair.fr"
+              placeholder="exemple@plateforme.fr"
               className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
               required
             />
@@ -195,7 +195,7 @@ export function AdminTeam() {
 
       // Créer l'utilisateur via Auth Admin
       // Note: En production, il faudrait un endpoint backend sécurisé
-      const tempPassword = 'expair' + Math.random().toString(36).slice(-8);
+      const tempPassword = 'medco' + Math.random().toString(36).slice(-8);
       
       // Pour cette démo, on ajoute directement dans profiles avec statut pending
       const newId = crypto.randomUUID();

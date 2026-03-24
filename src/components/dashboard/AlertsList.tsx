@@ -168,7 +168,7 @@ export function AlertsList({ alerts, maxItems = 5 }: AlertsListProps) {
       {alerts.length > maxItems && (
         <div className="mt-4 pt-4 border-t border-gray-100">
           <button
-            onClick={() => navigate('/alertes')}
+            onClick={() => navigate('/monitoring-dashboard')}
             className="w-full text-center text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline"
           >
             Voir toutes les alertes ({alerts.length})

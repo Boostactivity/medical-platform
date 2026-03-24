@@ -234,7 +234,7 @@ export function Onboarding({ onComplete }: OnboardingProps) {
                 : 'text-[#007AFF] hover:bg-[#007AFF]/10'
             }`}
           >
-            Precedent
+            Précédent
           </button>
 
           {screen.isFinal ? (

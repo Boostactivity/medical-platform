@@ -14,7 +14,7 @@
  * - admin : tout acces
  */
 
-import React, { useState } from 'react'
+import React from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { MFAChallenge } from '../security/MFASetup'
@@ -56,14 +56,12 @@ export function ProtectedRoute({ children, requiredRole, allowedRoles, requireMf
   }
 
   // MFA Challenge: if user has MFA enabled and hasn't verified yet
-  if (needsMfaChallenge || (requireMfa && mfaEnabled && !needsMfaChallenge === false)) {
-    if (needsMfaChallenge) {
-      return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
-          <MFAChallenge onSuccess={completeMfaChallenge} />
-        </div>
-      )
-    }
+  if (needsMfaChallenge || (requireMfa && mfaEnabled)) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4">
+        <MFAChallenge onSuccess={completeMfaChallenge} />
+      </div>
+    )
   }
 
   // RGPD consent for patient users

@@ -191,20 +191,21 @@ export function Interventions() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-4xl text-[#1D1D1F] mb-2">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl text-[#1D1D1F] mb-2">
                 Historique des Interventions
               </h1>
-              <p className="text-lg text-[#86868B]">
+              <p className="text-base sm:text-lg text-[#86868B]">
                 Toutes les alertes résolues
               </p>
             </div>
-            
+
             <button
               onClick={handleRefresh}
               disabled={isLoading}
-              className="flex items-center gap-2 px-4 py-2 bg-[#007AFF] text-white rounded-lg hover:bg-[#0051D5] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Actualiser la liste"
+              className="flex items-center justify-center gap-2 px-4 py-2 min-h-12 bg-[#007AFF] text-white rounded-lg hover:bg-[#0051D5] transition-all disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
             >
               <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
               Actualiser

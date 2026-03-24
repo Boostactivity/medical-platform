@@ -248,15 +248,16 @@ export function PatientMilestones() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen bg-[#f8fafc] py-8 px-6">
+    <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-            <CalendarDays className="w-6 h-6 text-blue-600" />
+          <h2 className="text-2xl font-bold text-[#1D1D1F] flex items-center gap-2">
+            <CalendarDays className="w-6 h-6 text-[#007AFF]" />
             Mes jalons de traitement
           </h2>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-[#86868B] mt-1">
             Suivi de votre parcours PPC depuis le {new Date(PATIENT_START_DATE).toLocaleDateString('fr-FR')}
           </p>
         </div>
@@ -491,6 +492,7 @@ export function PatientMilestones() {
           })}
         </div>
       </div>
+    </div>
     </div>
   );
 }

@@ -12,8 +12,8 @@
  * Utilise Supabase Auth pour gerer les sessions
  */
 
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
-import { User, Session, AuthenticatorAssuranceLevels } from '@supabase/supabase-js'
+import React, { createContext, useContext, useEffect, useState, useCallback, useRef } from 'react'
+import { User, Session } from '@supabase/supabase-js'
 import { createClient } from '../utils/supabase/client'
 import { toast } from 'sonner'
 
@@ -42,19 +42,77 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
+  const [userRole, setUserRole] = useState<UserRole>('patient')
   const [mfaEnabled, setMfaEnabled] = useState(false)
   const [mfaVerified, setMfaVerified] = useState(false)
   const [needsMfaChallenge, setNeedsMfaChallenge] = useState(false)
+  const roleLoadedRef = useRef(false)
 
   const supabase = createClient()
 
-  // Determine user role from metadata
-  const getUserRole = (u: User | null): UserRole => {
+  /**
+   * Charge le role depuis la table profiles (ou users) dans la DB.
+   * Fallback : user_metadata.role, puis 'patient'.
+   * Si le profil n'existe pas, le creer a partir de user_metadata.
+   */
+  const loadUserRole = useCallback(async (u: User | null): Promise<UserRole> => {
     if (!u) return 'patient'
-    return (u.user_metadata?.role as UserRole) || 'patient'
-  }
 
-  const userRole = getUserRole(user)
+    // Tenter profiles d'abord
+    const { data: profile, error: profileErr } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', u.id)
+      .maybeSingle()
+
+    if (!profileErr && profile?.role) {
+      return profile.role as UserRole
+    }
+
+    // Tenter users ensuite
+    const { data: userRow, error: userErr } = await supabase
+      .from('users')
+      .select('role')
+      .eq('id', u.id)
+      .maybeSingle()
+
+    if (!userErr && userRow?.role) {
+      return userRow.role as UserRole
+    }
+
+    // Fallback : user_metadata
+    const metaRole = u.user_metadata?.role as UserRole | undefined
+
+    // Tenter de creer le profil si aucun n'existe
+    if (metaRole) {
+      const profileData = {
+        id: u.id,
+        email: u.email,
+        role: metaRole,
+        full_name: u.user_metadata?.full_name || u.user_metadata?.name || u.email,
+        nom: u.user_metadata?.nom || '',
+        prenom: u.user_metadata?.prenom || '',
+        updated_at: new Date().toISOString(),
+      }
+      // Try profiles table, ignore error (table might not exist)
+      await supabase.from('profiles').upsert(profileData, { onConflict: 'id' }).then(() => {})
+    }
+
+    return metaRole || 'patient'
+  }, [supabase])
+
+  /**
+   * Met a jour le state user + role.
+   */
+  const setUserWithRole = useCallback(async (u: User | null) => {
+    setUser(u)
+    if (u) {
+      const role = await loadUserRole(u)
+      setUserRole(role)
+    } else {
+      setUserRole('patient')
+    }
+  }, [loadUserRole])
 
   // Check MFA status
   const checkMfaStatus = useCallback(async () => {
@@ -100,11 +158,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Verifier la session au demarrage
   useEffect(() => {
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
+    supabase.auth.getSession().then(async ({ data: { session: s } }) => {
+      setSession(s)
+      await setUserWithRole(s?.user ?? null)
 
-      if (session?.user) {
+      if (s?.user) {
         await checkMfaStatus()
       }
 
@@ -114,11 +172,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Ecouter les changements d'etat d'authentification
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setSession(session)
-      setUser(session?.user ?? null)
+    } = supabase.auth.onAuthStateChange(async (_event, s) => {
+      setSession(s)
+      await setUserWithRole(s?.user ?? null)
 
-      if (session?.user) {
+      if (s?.user) {
         await checkMfaStatus()
       } else {
         setMfaEnabled(false)
@@ -130,7 +188,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
 
     return () => subscription.unsubscribe()
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [supabase, setUserWithRole, checkMfaStatus])
 
   // Connexion avec email/password
   const signIn = async (email: string, password: string) => {
@@ -141,14 +200,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       })
 
       if (error) {
+        // Message d'erreur en francais
+        const friendlyMessage =
+          error.message === 'Invalid login credentials'
+            ? 'Email ou mot de passe incorrect'
+            : error.message
         toast.error('Erreur de connexion', {
-          description: error.message
+          description: friendlyMessage,
         })
-        return { error }
+        return { error: { ...error, message: friendlyMessage } }
       }
 
-      // Log the connection
+      // Charger le role depuis la DB
       if (data.user) {
+        const role = await loadUserRole(data.user)
+        setUserRole(role)
         await logConnection(data.user.id)
       }
 
@@ -251,6 +317,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       toast.success('Deconnexion reussie')
       setUser(null)
       setSession(null)
+      setUserRole('patient')
       setMfaEnabled(false)
       setMfaVerified(false)
       setNeedsMfaChallenge(false)

@@ -262,7 +262,7 @@ export function DashboardPatient() {
               className="flex items-center gap-2 px-4 py-2 text-sm text-gray-400 hover:text-red-500 transition-colors"
             >
               <LogOut className="w-4 h-4" />
-              Deconnexion
+              Déconnexion
             </button>
           </div>
         </div>
@@ -464,8 +464,8 @@ export function DashboardPatient() {
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-white">Quiz Sante</h3>
-              <p className="text-white/80 text-sm">Testez vos connaissances sur l'apnee et le traitement PPC</p>
+              <h3 className="text-lg font-semibold text-white">Quiz Santé</h3>
+              <p className="text-white/80 text-sm">Testez vos connaissances sur l'apnée et le traitement PPC</p>
             </div>
             <svg className="w-6 h-6 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -493,7 +493,7 @@ export function DashboardPatient() {
                 <div className="text-lg text-[#1a2b3c]">{userData.doctor.name}</div>
                 <div className="text-sm text-gray-500">{userData.doctor.specialty}</div>
               </div>
-              <button className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-[#0051D5] transition-all">
+              <button className="px-6 py-3 bg-gradient-to-r from-[#007AFF] to-[#5AC8FA] text-white rounded-full hover:shadow-lg transition-all">
                 Contacter
               </button>
             </div>

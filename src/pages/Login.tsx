@@ -91,7 +91,7 @@ export default function Login() {
 
         {/* Liens utiles */}
         <div className="mt-6 text-center text-sm text-slate-500">
-          <a href="/aide-auth" className="hover:text-slate-700 underline">
+          <a href="/faq" className="hover:text-slate-700 underline">
             Problèmes de connexion ?
           </a>
           {' · '}

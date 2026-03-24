@@ -1,0 +1,19 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" rx="115" fill="url(#gradient)"/>
+  
+  <!-- Letter E -->
+  <path d="M180 140H360V190H240V230H340V280H240V320H360V370H180V140Z" fill="white"/>
+  
+  <!-- Breathing wave -->
+  <path d="M140 410 C 160 390, 180 420, 200 410 S 240 390, 260 410 S 300 420, 320 410 S 360 390, 380 410" 
+        stroke="#C8A2F0" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.6"/>
+  
+  <!-- Gradient definition -->
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00D4D4"/>
+      <stop offset="1" stop-color="#0A0E27"/>
+    </linearGradient>
+  </defs>
+</svg>

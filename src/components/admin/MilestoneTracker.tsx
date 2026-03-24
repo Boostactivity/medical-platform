@@ -5,13 +5,14 @@
  * Actions automatiques, notifications, vue calendrier, dashboard retards
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Calendar, Clock, CheckCircle, AlertTriangle, XCircle, ChevronDown,
   ChevronRight, Search, Filter, User, Bell, Mail, Wrench, Activity,
   CalendarDays, BarChart3, ArrowRight, Play, Eye
 } from 'lucide-react';
+import { supabase } from '../../supabase/client';
 
 // ---- Types ----
 
@@ -129,11 +130,55 @@ function buildMockPatientMilestones(): PatientMilestones[] {
 // ---- Composant Principal ----
 
 export default function MilestoneTracker() {
-  const [patientsData] = useState<PatientMilestones[]>(buildMockPatientMilestones);
+  const [patientsData, setPatientsData] = useState<PatientMilestones[]>(buildMockPatientMilestones);
   const [viewMode, setViewMode] = useState<ViewMode>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedPatient, setSelectedPatient] = useState<string | null>(null);
   const [statusFilter, setStatusFilter] = useState<MilestoneStatus | 'all'>('all');
+
+  useEffect(() => {
+    const fetchMilestones = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('milestones')
+          .select('*')
+          .order('due_date', { ascending: true });
+        if (!error && data?.length) {
+          // Group milestones by patient
+          const byPatient = new Map<string, any[]>();
+          data.forEach((m: any) => {
+            const pid = m.patient_id;
+            const list = byPatient.get(pid) || [];
+            list.push(m);
+            byPatient.set(pid, list);
+          });
+          if (byPatient.size > 0) {
+            const mapped: PatientMilestones[] = Array.from(byPatient.entries()).map(([pid, milestones]) => ({
+              patientId: pid,
+              patientName: milestones[0]?.patient_name || pid,
+              startDate: milestones[0]?.start_date || '',
+              deviceSerial: milestones[0]?.device_serial || '',
+              medecinName: milestones[0]?.medecin_name || '',
+              milestones: milestones.map((m: any) => ({
+                id: m.id,
+                type: m.type,
+                label: m.label || `${m.type}`,
+                description: m.description || '',
+                dueDate: m.due_date,
+                completedDate: m.completed_date,
+                status: m.status || computeStatus(m.due_date, m.completed_date),
+                actions: m.actions || generateMilestoneActions(m.type),
+              })),
+            }));
+            setPatientsData(mapped);
+          }
+        }
+      } catch (e) {
+        console.warn('MilestoneTracker: Using mock data', e);
+      }
+    };
+    fetchMilestones();
+  }, []);
 
   // All milestones flat
   const allMilestones = useMemo(() => {

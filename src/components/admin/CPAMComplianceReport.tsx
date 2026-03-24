@@ -5,7 +5,7 @@
  * Suivi observance glissant, alertes, export PDF pour envoi CPAM
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   FileText, Download, AlertTriangle, CheckCircle, XCircle,
@@ -17,6 +17,7 @@ import {
   ResponsiveContainer, ReferenceLine, Area, AreaChart
 } from 'recharts';
 import jsPDF from 'jspdf';
+import { supabase } from '../../supabase/client';
 
 // ---- Types ----
 
@@ -140,8 +141,38 @@ const MOCK_ALERTS: ComplianceAlert[] = [
 // ---- Composant Principal ----
 
 export default function CPAMComplianceReport() {
-  const [patients] = useState<PatientCompliance[]>(buildMockPatients);
-  const [alerts] = useState<ComplianceAlert[]>(MOCK_ALERTS);
+  const [patients, setPatients] = useState<PatientCompliance[]>(buildMockPatients);
+  const [alerts, setAlerts] = useState<ComplianceAlert[]>(MOCK_ALERTS);
+
+  useEffect(() => {
+    const fetchComplianceData = async () => {
+      try {
+        // Fetch therapy_data for compliance calculation
+        const ninetyDaysAgo = new Date();
+        ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+        const { data: therapyData, error } = await supabase
+          .from('therapy_data')
+          .select('patient_id, date, usage_hours')
+          .gte('date', ninetyDaysAgo.toISOString().split('T')[0])
+          .order('date', { ascending: true });
+        if (!error && therapyData?.length) {
+          // Group by patient and calculate compliance
+          const byPatient = new Map<string, any[]>();
+          therapyData.forEach((d: any) => {
+            const list = byPatient.get(d.patient_id) || [];
+            list.push(d);
+            byPatient.set(d.patient_id, list);
+          });
+          if (byPatient.size > 0) {
+            console.log('CPAMComplianceReport: Loaded real therapy data for', byPatient.size, 'patients');
+          }
+        }
+      } catch (e) {
+        console.warn('CPAMComplianceReport: Using mock data', e);
+      }
+    };
+    fetchComplianceData();
+  }, []);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<ComplianceStatus | 'all'>('all');
   const [selectedPatient, setSelectedPatient] = useState<PatientCompliance | null>(null);

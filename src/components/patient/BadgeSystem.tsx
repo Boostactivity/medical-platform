@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { supabase } from '../../supabase/client';
 
 export interface BadgeDef {
   id: string;
@@ -199,10 +200,36 @@ export function BadgeSystem({ progressData, compact = false }: BadgeSystemProps)
   useEffect(() => {
     if (progressData) {
       setProgress(progressData);
-    } else {
+      return;
+    }
+    const fetchBadges = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: realData, error } = await supabase
+            .from('badges')
+            .select('*')
+            .eq('patient_id', user.id);
+          if (!error && realData?.length) {
+            const mapped: BadgeProgress[] = realData.map((b: any) => ({
+              badgeId: b.badge_id || b.id,
+              current: b.current ?? 0,
+              target: b.target ?? 1,
+              unlocked: b.unlocked ?? false,
+              unlockedAt: b.unlocked_at,
+            }));
+            setProgress(mapped);
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('Using mock badge data:', e);
+      }
+      // Fallback to localStorage/demo
       const stored = getStoredProgress();
       setProgress(stored.length > 0 ? stored : getDefaultProgress());
-    }
+    };
+    fetchBadges();
   }, [progressData]);
 
   const getBadgeProgress = (badgeId: string): BadgeProgress => {

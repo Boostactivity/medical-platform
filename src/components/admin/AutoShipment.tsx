@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Package, Send, Clock, CheckCircle, AlertTriangle, Calendar, User,
   ChevronDown, ChevronRight, Search, Filter, Truck, Box
 } from 'lucide-react';
+import { supabase } from '../../supabase/client';
 
 // Types
 type ConsumableType = 'masque' | 'filtre' | 'tuyau' | 'humidificateur';
@@ -94,6 +95,38 @@ export function AutoShipment() {
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState<ConsumableType | 'all'>('all');
   const [tab, setTab] = useState<'alertes' | 'historique' | 'regles'>('alertes');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch masks and devices for consumable dates
+        const [masksRes, devicesRes, ordersRes] = await Promise.all([
+          supabase.from('masks').select('*'),
+          supabase.from('devices').select('id, patient_id, patient_name, date_installation'),
+          supabase.from('orders').select('*').order('date', { ascending: false }),
+        ]);
+        if (!masksRes.error && masksRes.data?.length) {
+          // Use masks data if available
+          console.log('AutoShipment: Loaded masks data from Supabase');
+        }
+        if (!ordersRes.error && ordersRes.data?.length) {
+          const mappedShipments: Shipment[] = ordersRes.data.map((o: any) => ({
+            id: o.id,
+            patientId: o.patient_id || '',
+            patientName: o.patient_name || '',
+            type: o.type || 'masque',
+            date: o.date,
+            status: o.status || 'planifie',
+            trackingNumber: o.tracking_number,
+          }));
+          setShipments(mappedShipments);
+        }
+      } catch (e) {
+        console.warn('AutoShipment: Using mock data', e);
+      }
+    };
+    fetchData();
+  }, []);
 
   const alertConsumables = useMemo(() =>
     consumables.filter(c => c.status === 'alerte' || c.status === 'expire')

@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { StickyNote, Save, Clock, Trash2, Plus, Lock } from 'lucide-react';
+import { supabase } from '../../supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
 import { Button } from '../ui/button';
 import { Textarea } from '../ui/textarea';
@@ -50,6 +51,25 @@ function saveStoredNotes(patientId: string, notes: NoteEntry[]) {
   notesStorage[patientId] = notes;
 }
 
+async function syncNoteToSupabase(doctorId: string, patientId: string, note: NoteEntry, isDelete = false) {
+  try {
+    if (isDelete) {
+      await supabase.from('doctor_notes').delete().eq('id', note.id);
+    } else {
+      await supabase.from('doctor_notes').upsert({
+        id: note.id,
+        doctor_id: doctorId,
+        patient_id: patientId,
+        content: note.content,
+        created_at: note.created_at,
+        updated_at: note.updated_at,
+      });
+    }
+  } catch (e) {
+    console.warn('PrivateNotes: Supabase sync failed', e);
+  }
+}
+
 export function PrivateNotes({ patientId, patientName, doctorId = 'dr-001' }: PrivateNotesProps) {
   const [notes, setNotes] = useState<NoteEntry[]>([]);
   const [currentNote, setCurrentNote] = useState('');
@@ -57,11 +77,34 @@ export function PrivateNotes({ patientId, patientName, doctorId = 'dr-001' }: Pr
   const [saveStatus, setSaveStatus] = useState<'saved' | 'saving' | 'unsaved'>('saved');
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Load notes on mount
+  // Load notes on mount - try Supabase first, fallback to localStorage
   useEffect(() => {
-    const loaded = getStoredNotes(patientId);
-    setNotes(loaded);
-  }, [patientId]);
+    const loadNotes = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('doctor_notes')
+          .select('*')
+          .eq('doctor_id', doctorId)
+          .eq('patient_id', patientId)
+          .order('created_at', { ascending: false });
+        if (!error && data?.length) {
+          const mapped: NoteEntry[] = data.map((n: any) => ({
+            id: n.id,
+            content: n.content,
+            created_at: n.created_at,
+            updated_at: n.updated_at || n.created_at,
+          }));
+          setNotes(mapped);
+          return;
+        }
+      } catch (e) {
+        console.warn('PrivateNotes: Supabase fetch failed, using localStorage', e);
+      }
+      const loaded = getStoredNotes(patientId);
+      setNotes(loaded);
+    };
+    loadNotes();
+  }, [patientId, doctorId]);
 
   // Auto-save with 2s debounce
   const autoSave = useCallback(
@@ -100,13 +143,18 @@ export function PrivateNotes({ patientId, patientName, doctorId = 'dr-001' }: Pr
 
         setNotes(updatedNotes);
         saveStoredNotes(patientId, updatedNotes);
+        // Sync to Supabase
+        const targetNote = noteId
+          ? updatedNotes.find(n => n.id === noteId)
+          : updatedNotes[0];
+        if (targetNote) syncNoteToSupabase(doctorId, patientId, targetNote);
 
         setTimeout(() => {
           setSaveStatus('saved');
         }, 300);
       }, 2000);
     },
-    [notes, patientId]
+    [notes, patientId, doctorId]
   );
 
   const handleContentChange = (value: string) => {
@@ -127,9 +175,11 @@ export function PrivateNotes({ patientId, patientName, doctorId = 'dr-001' }: Pr
   };
 
   const handleDeleteNote = (noteId: string) => {
+    const deletedNote = notes.find(n => n.id === noteId);
     const updatedNotes = notes.filter((n) => n.id !== noteId);
     setNotes(updatedNotes);
     saveStoredNotes(patientId, updatedNotes);
+    if (deletedNote) syncNoteToSupabase(doctorId, patientId, deletedNote, true);
     if (editingId === noteId) {
       setEditingId(null);
       setCurrentNote('');
@@ -165,6 +215,11 @@ export function PrivateNotes({ patientId, patientName, doctorId = 'dr-001' }: Pr
 
     setNotes(updatedNotes);
     saveStoredNotes(patientId, updatedNotes);
+    // Sync to Supabase
+    const targetNote = editingId
+      ? updatedNotes.find(n => n.id === editingId)
+      : updatedNotes[0];
+    if (targetNote) syncNoteToSupabase(doctorId, patientId, targetNote);
 
     setTimeout(() => {
       setSaveStatus('saved');

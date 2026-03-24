@@ -5,8 +5,9 @@
  * Percentile du patient
  */
 
-import { useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Users, TrendingUp, Award } from 'lucide-react';
+import { supabase } from '../../supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
 import { Badge } from '../ui/badge';
 import {
@@ -136,7 +137,39 @@ export function CohortComparison({
   patientIAHSeverity = 'modere',
   patientMetrics,
 }: CohortComparisonProps) {
-  const metrics: PatientMetrics = patientMetrics || {
+  const [realMetrics, setRealMetrics] = useState<PatientMetrics | null>(null);
+
+  useEffect(() => {
+    const fetchCohortData = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('therapy_data')
+          .select('usage_hours, ahi, leaks, patient_comfort_rating')
+          .eq('patient_id', patientId)
+          .order('date', { ascending: false })
+          .limit(30);
+        if (!error && data?.length) {
+          const avgUsage = data.reduce((s: number, d: any) => s + (d.usage_hours ?? 0), 0) / data.length;
+          const avgAhi = data.reduce((s: number, d: any) => s + (d.ahi ?? 0), 0) / data.length;
+          const avgLeaks = data.reduce((s: number, d: any) => s + (d.leaks ?? 0), 0) / data.length;
+          const avgComfort = data.reduce((s: number, d: any) => s + (d.patient_comfort_rating ?? 3), 0) / data.length;
+          const observantNights = data.filter((d: any) => (d.usage_hours ?? 0) >= 4).length;
+          setRealMetrics({
+            observance: Math.round((observantNights / data.length) * 100),
+            ahiResiduel: +avgAhi.toFixed(1),
+            fuites: +avgLeaks.toFixed(1),
+            confort: Math.round(avgComfort * 20),
+            usageMoyen: +avgUsage.toFixed(1),
+          });
+        }
+      } catch (e) {
+        console.warn('CohortComparison: Using mock data', e);
+      }
+    };
+    fetchCohortData();
+  }, [patientId]);
+
+  const metrics: PatientMetrics = realMetrics || patientMetrics || {
     observance: 85,
     ahiResiduel: 3.4,
     fuites: 8.5,

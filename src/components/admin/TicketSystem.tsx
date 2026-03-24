@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Ticket, Plus, Clock, CheckCircle, AlertCircle, User, ChevronDown, ChevronRight,
   ArrowRight, Filter, Search, X, Wrench, MessageSquare, Calendar, AlertTriangle
 } from 'lucide-react';
+import { supabase } from '../../supabase/client';
 
 // Types
 type TicketStatus = 'ouvert' | 'en_cours' | 'resolu' | 'ferme';
@@ -129,6 +130,40 @@ export function TicketSystem() {
   const [expandedTicket, setExpandedTicket] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newTicket, setNewTicket] = useState({ patientName: '', type: 'panne' as TicketType, priority: 'normale' as TicketPriority, description: '' });
+
+  useEffect(() => {
+    const fetchTickets = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('tickets')
+          .select('*')
+          .order('created_at', { ascending: false });
+        if (!error && data?.length) {
+          const mapped: SupportTicket[] = data.map((t: any) => ({
+            id: t.id,
+            reference: t.reference || t.id,
+            patientName: t.patient_name || '',
+            patientId: t.patient_id || '',
+            type: t.type || 'autre',
+            priority: t.priority || 'normale',
+            status: t.status || 'ouvert',
+            description: t.description || '',
+            technicianName: t.technician_name,
+            createdAt: t.created_at,
+            updatedAt: t.updated_at || t.created_at,
+            resolvedAt: t.resolved_at,
+            slaResponseDeadline: t.sla_response_deadline || '',
+            slaResolutionDeadline: t.sla_resolution_deadline || '',
+            timeline: t.timeline || [],
+          }));
+          setTickets(mapped);
+        }
+      } catch (e) {
+        console.warn('TicketSystem: Using mock data', e);
+      }
+    };
+    fetchTickets();
+  }, []);
 
   const filteredTickets = useMemo(() => {
     return tickets.filter(t => {

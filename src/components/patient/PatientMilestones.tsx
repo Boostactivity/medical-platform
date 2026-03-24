@@ -6,13 +6,14 @@
  * Bilan automatique PDF a chaque jalon
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   CalendarDays, CheckCircle, Clock, AlertTriangle, Download, Bell,
   ChevronDown, ChevronUp, Trophy, ArrowRight, FileText, Star
 } from 'lucide-react';
 import jsPDF from 'jspdf';
+import { supabase } from '../../supabase/client';
 
 // ---- Types ----
 
@@ -198,9 +199,40 @@ function generateBilanPDF(milestone: PatientMilestone) {
 // ---- Composant Principal ----
 
 export function PatientMilestones() {
-  const [milestones] = useState<PatientMilestone[]>(buildPatientMilestones);
+  const [milestones, setMilestones] = useState<PatientMilestone[]>(buildPatientMilestones);
   const [expandedMilestone, setExpandedMilestone] = useState<string | null>(null);
   const [showNotifications, setShowNotifications] = useState(false);
+
+  useEffect(() => {
+    const fetchMilestones = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+        const { data, error } = await supabase
+          .from('milestones')
+          .select('*')
+          .eq('patient_id', user.id)
+          .order('due_date', { ascending: true });
+        if (!error && data?.length) {
+          const mapped: PatientMilestone[] = data.map((m: any) => ({
+            id: m.id,
+            type: m.type,
+            label: m.label || `${m.type}`,
+            description: m.description || '',
+            dueDate: m.due_date,
+            completedDate: m.completed_date,
+            status: m.status || (m.completed_date ? 'realise' : 'a_venir'),
+            bilanData: m.bilan_data,
+            notificationSent: m.notification_sent ?? false,
+          }));
+          setMilestones(mapped);
+        }
+      } catch (e) {
+        console.warn('PatientMilestones: Using mock data', e);
+      }
+    };
+    fetchMilestones();
+  }, []);
 
   const notifications = useMemo(() => buildNotifications(milestones), [milestones]);
   const unreadCount = notifications.filter(n => !n.read).length;

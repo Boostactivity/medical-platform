@@ -5,13 +5,14 @@
  * alertes renouvellement, historique, statuts
  */
 
-import { useState, useMemo, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   FileText, Upload, AlertTriangle, CheckCircle, Clock, Calendar,
   Search, Filter, ChevronDown, ChevronRight, User, Plus, Eye,
   Download, X, Bell, Stethoscope, RefreshCw, Paperclip, Trash2
 } from 'lucide-react';
+import { supabase } from '../../supabase/client';
 
 // ---- Types ----
 
@@ -136,13 +137,48 @@ function computeRenewalAlerts(prescriptions: Prescription[]): RenewalAlert[] {
 // ---- Composant Principal ----
 
 export default function PrescriptionManager() {
-  const [prescriptions] = useState<Prescription[]>(MOCK_PRESCRIPTIONS);
+  const [prescriptions, setPrescriptions] = useState<Prescription[]>(MOCK_PRESCRIPTIONS);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<PrescriptionStatus | 'all'>('all');
   const [selectedRx, setSelectedRx] = useState<Prescription | null>(null);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [uploadTarget, setUploadTarget] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const fetchPrescriptions = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('prescriptions')
+          .select('*')
+          .order('date_creation', { ascending: false });
+        if (!error && data?.length) {
+          const mapped: Prescription[] = data.map((p: any) => ({
+            id: p.id,
+            patientId: p.patient_id,
+            patientName: p.patient_name || '',
+            medecinPrescripteur: p.medecin_prescripteur || { id: '', name: '', rpps: '', specialty: '' },
+            dateCreation: p.date_creation,
+            dateDebut: p.date_debut,
+            dateFin: p.date_fin,
+            dureeInitialeMois: p.duree_initiale_mois || 6,
+            renouvellementAuto: p.renouvellement_auto ?? false,
+            status: p.status || 'active',
+            scanUrl: p.scan_url,
+            scanFilename: p.scan_filename,
+            notes: p.notes,
+            deviceType: p.device_type,
+            pressureMin: p.pressure_min,
+            pressureMax: p.pressure_max,
+          }));
+          setPrescriptions(mapped);
+        }
+      } catch (e) {
+        console.warn('PrescriptionManager: Using mock data', e);
+      }
+    };
+    fetchPrescriptions();
+  }, []);
 
   const renewalAlerts = useMemo(() => computeRenewalAlerts(prescriptions), [prescriptions]);
 

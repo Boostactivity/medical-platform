@@ -6,13 +6,14 @@
  * Graphique du mois, message motivationnel, bouton telecharger
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'motion/react';
 import {
   FileText, Download, Calendar, Clock, Activity, Moon, TrendingUp,
   Award, ChevronLeft, ChevronRight, Heart, Zap, BarChart3
 } from 'lucide-react';
 import jsPDF from 'jspdf';
+import { supabase } from '../../supabase/client';
 
 // ---- Types ----
 
@@ -228,8 +229,59 @@ function generatePDF(data: MonthlyData) {
 // ---- Composant Principal ----
 
 export function MonthlyReport() {
-  const [monthsData] = useState<MonthlyData[]>(generateMonthlyData);
+  const [monthsData, setMonthsData] = useState<MonthlyData[]>(generateMonthlyData);
   const [selectedMonthIdx, setSelectedMonthIdx] = useState(0);
+
+  useEffect(() => {
+    const fetchFromSupabase = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        const { data: therapyData, error } = await supabase
+          .from('therapy_data')
+          .select('date, usage_hours, ahi, leaks')
+          .eq('patient_id', user.id)
+          .gte('date', thirtyDaysAgo.toISOString().split('T')[0])
+          .order('date', { ascending: true });
+        if (!error && therapyData?.length) {
+          // Build current month from real data
+          const dailyData = therapyData.map((d: any) => ({
+            day: new Date(d.date).getDate(),
+            hours: d.usage_hours ?? 0,
+            iah: d.ahi ?? 0,
+            observant: (d.usage_hours ?? 0) >= 4,
+          }));
+          const observantNights = dailyData.filter((d: any) => d.observant).length;
+          const totalHours = +dailyData.reduce((s: number, d: any) => s + d.hours, 0).toFixed(1);
+          const avgIAH = dailyData.length > 0
+            ? +(dailyData.reduce((s: number, d: any) => s + d.iah, 0) / dailyData.length).toFixed(1)
+            : 0;
+          const avgUsage = dailyData.length > 0 ? +(totalHours / dailyData.length).toFixed(1) : 0;
+          const now = new Date();
+          const monthNames = ['Janvier','Fevrier','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre'];
+          const currentMonthData: MonthlyData = {
+            month: `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`,
+            label: `${monthNames[now.getMonth()]} ${now.getFullYear()}`,
+            totalNights: dailyData.length,
+            observantNights,
+            totalHours,
+            avgIAH,
+            avgUsagePerNight: avgUsage,
+            avgLeaks: therapyData.reduce((s: number, d: any) => s + (d.leaks ?? 0), 0) / therapyData.length,
+            bestStreak: 0,
+            dailyData,
+          };
+          // Replace first month (current) with real data, keep mock for older
+          setMonthsData(prev => [currentMonthData, ...prev.slice(1)]);
+        }
+      } catch (e) {
+        console.warn('MonthlyReport: Using mock data', e);
+      }
+    };
+    fetchFromSupabase();
+  }, []);
 
   const currentMonth = monthsData[selectedMonthIdx];
   const obsRate = Math.round((currentMonth.observantNights / currentMonth.totalNights) * 100);

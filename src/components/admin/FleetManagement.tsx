@@ -1,9 +1,10 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Monitor, Search, Filter, AlertTriangle, Package, ChevronDown, ChevronRight,
   Clock, User, MapPin, Wrench, Box, RefreshCw, X, Calendar, Hash
 } from 'lucide-react';
+import { supabase } from '../../supabase/client';
 
 // Types
 type MachineStatus = 'en_stock' | 'installe' | 'a_retourner' | 'en_panne';
@@ -118,10 +119,42 @@ function isOlderThan3Years(dateStr: string): boolean {
 }
 
 export function FleetManagement() {
-  const [machines] = useState<Machine[]>(MOCK_MACHINES);
-  const [stock] = useState<StockItem[]>(MOCK_STOCK);
+  const [machines, setMachines] = useState<Machine[]>(MOCK_MACHINES);
+  const [stock, setStock] = useState<StockItem[]>(MOCK_STOCK);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<MachineStatus | 'all'>('all');
+
+  useEffect(() => {
+    const fetchDevices = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('devices')
+          .select('*')
+          .order('date_achat', { ascending: false });
+        if (!error && data?.length) {
+          const mapped: Machine[] = data.map((d: any) => ({
+            id: d.id,
+            model: d.model || '',
+            serialNumber: d.serial_number || '',
+            status: d.status || 'en_stock',
+            dateAchat: d.date_achat || '',
+            dateInstallation: d.date_installation,
+            patientName: d.patient_name,
+            patientId: d.patient_id,
+            technicianName: d.technician_name,
+            technicianId: d.technician_id,
+            location: d.location,
+            signaled: d.signaled ?? false,
+            history: d.history || [],
+          }));
+          setMachines(mapped);
+        }
+      } catch (e) {
+        console.warn('FleetManagement: Using mock data', e);
+      }
+    };
+    fetchDevices();
+  }, []);
   const [techFilter, setTechFilter] = useState<string>('all');
   const [dateFilter, setDateFilter] = useState<string>('');
   const [expandedMachine, setExpandedMachine] = useState<string | null>(null);

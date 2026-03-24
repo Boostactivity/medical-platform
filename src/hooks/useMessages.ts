@@ -476,32 +476,47 @@ export function useRealtimeMessages(participantId?: string) {
   useEffect(() => {
     const supabase = createClient();
 
-    const channel = supabase
-      .channel('messages-realtime')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'messages',
-        },
-        (payload) => {
+    const setupRealtime = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      const userId = user?.id;
+
+      const channelConfig: any = {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'messages',
+      };
+      // Filter to only receive messages addressed to current user
+      if (userId) {
+        channelConfig.filter = `receiver_id=eq.${userId}`;
+      }
+
+      const channel = supabase
+        .channel('messages-realtime')
+        .on('postgres_changes', channelConfig, (payload) => {
           // Invalider le cache pour rafraichir
           queryClient.invalidateQueries({ queryKey: messageKeys.all });
 
           const msg = payload.new as any;
-          if (msg.sender_id !== 'current-user') {
+          if (msg.sender_id !== userId) {
             toast.info('Nouveau message', {
               description: 'Vous avez recu un nouveau message',
               duration: 4000,
             });
           }
-        }
-      )
-      .subscribe();
+        })
+        .subscribe();
+
+      return channel;
+    };
+
+    let channel: any;
+    setupRealtime().then(ch => { channel = ch; });
 
     return () => {
-      supabase.removeChannel(channel);
+      if (channel) {
+        const supabase = createClient();
+        supabase.removeChannel(channel);
+      }
     };
   }, [participantId, queryClient]);
 }

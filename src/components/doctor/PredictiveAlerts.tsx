@@ -4,8 +4,9 @@
  * Score de risque : faible/moyen/eleve avec explications
  */
 
-import { useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Brain, TrendingDown, TrendingUp, AlertTriangle, CheckCircle, Shield, Wind, Clock, Activity } from 'lucide-react';
+import { supabase } from '../../supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
@@ -190,7 +191,38 @@ function computeGlobalRiskScore(alerts: PredictiveAlert[]): {
 }
 
 export function PredictiveAlerts({ patientId, patientName, last7DaysData }: PredictiveAlertsProps) {
-  const data = last7DaysData || generateMock7DaysData();
+  const [realData, setRealData] = useState<DailyData[] | null>(null);
+
+  useEffect(() => {
+    if (last7DaysData) return;
+    const fetchData = async () => {
+      try {
+        const fourteenDaysAgo = new Date();
+        fourteenDaysAgo.setDate(fourteenDaysAgo.getDate() - 14);
+        const { data: therapyData, error } = await supabase
+          .from('therapy_data')
+          .select('date, usage_hours, ahi, leaks')
+          .eq('patient_id', patientId)
+          .gte('date', fourteenDaysAgo.toISOString().split('T')[0])
+          .order('date', { ascending: true })
+          .limit(14);
+        if (!error && therapyData?.length >= 3) {
+          const mapped: DailyData[] = therapyData.map((d: any) => ({
+            date: d.date,
+            usage: d.usage_hours ?? 0,
+            ahi: d.ahi ?? 0,
+            leaks: d.leaks ?? 0,
+          }));
+          setRealData(mapped);
+        }
+      } catch (e) {
+        console.warn('PredictiveAlerts: Using mock data', e);
+      }
+    };
+    fetchData();
+  }, [patientId, last7DaysData]);
+
+  const data = last7DaysData || realData || generateMock7DaysData();
 
   const alerts = useMemo(() => analyzePatientData(data), [data]);
   const riskScore = useMemo(() => computeGlobalRiskScore(alerts), [alerts]);

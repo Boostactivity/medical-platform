@@ -7,12 +7,13 @@
  * Dashboard admin : NPS global, evolution, verbatims
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Star, MessageSquare, X, ThumbsUp, ThumbsDown, Send, ChevronDown,
   TrendingUp, BarChart3, Users, Award, Filter, Calendar
 } from 'lucide-react';
+import { supabase } from '../../supabase/client';
 
 // ---- Types ----
 
@@ -66,9 +67,24 @@ export function SatisfactionPopup({
   const isNPS = type === 'nps_trimestriel';
   const maxRating = isNPS ? 10 : 5;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (rating === null) return;
-    // In production, this would save to backend
+    // Save to Supabase
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        await supabase.from('satisfaction_surveys').insert({
+          patient_id: user.id,
+          type,
+          rating,
+          comment: comment || null,
+          technician_name: technicianName || null,
+          created_at: new Date().toISOString(),
+        });
+      }
+    } catch (e) {
+      console.warn('SatisfactionSurvey: Failed to save to Supabase', e);
+    }
     setSubmitted(true);
     setTimeout(onClose, 2000);
   };
@@ -202,8 +218,35 @@ export function SatisfactionPopup({
 // ---- Dashboard Admin NPS ----
 
 export function SatisfactionDashboard() {
-  const [ratings] = useState<SatisfactionRating[]>(MOCK_RATINGS);
+  const [ratings, setRatings] = useState<SatisfactionRating[]>(MOCK_RATINGS);
   const [typeFilter, setTypeFilter] = useState<'all' | 'post_contact' | 'nps_trimestriel'>('all');
+
+  useEffect(() => {
+    const fetchRatings = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('satisfaction_surveys')
+          .select('*')
+          .order('created_at', { ascending: false });
+        if (!error && data?.length) {
+          const mapped: SatisfactionRating[] = data.map((r: any) => ({
+            id: r.id,
+            patientId: r.patient_id,
+            patientName: r.patient_name || 'Patient',
+            type: r.type,
+            rating: r.rating,
+            comment: r.comment,
+            date: r.created_at?.split('T')[0] || r.created_at,
+            technicianName: r.technician_name,
+          }));
+          setRatings(mapped);
+        }
+      } catch (e) {
+        console.warn('SatisfactionDashboard: Using mock data', e);
+      }
+    };
+    fetchRatings();
+  }, []);
 
   const filteredRatings = useMemo(() => {
     return ratings.filter(r => typeFilter === 'all' || r.type === typeFilter);

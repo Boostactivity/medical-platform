@@ -4,8 +4,9 @@
  * Placeholder pour integration Jitsi/Daily.co
  */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Video, Calendar, Clock, MessageSquare, Play, Plus, X, Check } from 'lucide-react';
+import { supabase } from '../../supabase/client';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../ui/card';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
@@ -57,12 +58,40 @@ const mockConsultations: Appointment[] = [
 export function Teleconsultation({ patientId, patientName, doctorName = 'Dr. Martin' }: TeleconsultationProps) {
   const [consultations, setConsultations] = useState<Appointment[]>(mockConsultations);
   const [showScheduler, setShowScheduler] = useState(false);
+
+  // Fetch teleconsultation interventions from Supabase
+  useEffect(() => {
+    const fetchConsultations = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('interventions')
+          .select('*')
+          .eq('patient_id', patientId)
+          .eq('type', 'teleconsultation')
+          .order('date', { ascending: false });
+        if (!error && data?.length) {
+          const mapped: Appointment[] = data.map((d: any) => ({
+            id: d.id,
+            date: d.date,
+            time: d.time || '00:00',
+            status: d.status || 'scheduled',
+            notes: d.notes,
+            duration: d.duration,
+          }));
+          setConsultations(mapped);
+        }
+      } catch (e) {
+        console.warn('Teleconsultation: Using mock data', e);
+      }
+    };
+    fetchConsultations();
+  }, [patientId]);
   const [newDate, setNewDate] = useState('');
   const [newTime, setNewTime] = useState('');
   const [postNotes, setPostNotes] = useState<Record<string, string>>({});
   const [editingNotesId, setEditingNotesId] = useState<string | null>(null);
 
-  const handleSchedule = () => {
+  const handleSchedule = async () => {
     if (!newDate || !newTime) {
       toast.error('Veuillez selectionner une date et une heure');
       return;
@@ -79,6 +108,20 @@ export function Teleconsultation({ patientId, patientName, doctorName = 'Dr. Mar
     setShowScheduler(false);
     setNewDate('');
     setNewTime('');
+
+    // Save to Supabase
+    try {
+      await supabase.from('interventions').insert({
+        patient_id: patientId,
+        type: 'teleconsultation',
+        date: newDate,
+        time: newTime,
+        status: 'scheduled',
+      });
+    } catch (e) {
+      console.warn('Teleconsultation: Failed to save to Supabase', e);
+    }
+
     toast.success('Teleconsultation programmee', {
       description: `RDV le ${new Date(newDate).toLocaleDateString('fr-FR')} a ${newTime}`,
     });

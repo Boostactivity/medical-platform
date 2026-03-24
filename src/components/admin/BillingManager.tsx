@@ -5,13 +5,14 @@
  * Dashboard CA mensuel, impayes, a facturer
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'motion/react';
 import {
   CreditCard, Download, Search, Filter, ChevronDown, ChevronUp,
   FileText, AlertTriangle, CheckCircle, Clock, XCircle, TrendingUp,
   Euro, Users, Calendar, BarChart3, ArrowUpRight, ArrowDownRight
 } from 'lucide-react';
+import { supabase } from '../../supabase/client';
 
 // ---- Types ----
 
@@ -137,11 +138,43 @@ function exportToCSV(entries: BillingEntry[], filename: string) {
 // ---- Composant Principal ----
 
 export function BillingManager() {
-  const [billingData] = useState<BillingEntry[]>(generateBillingData);
+  const [billingData, setBillingData] = useState<BillingEntry[]>(generateBillingData);
   const [viewMode, setViewMode] = useState<ViewMode>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<BillingStatus | 'all'>('all');
   const [expandedPatient, setExpandedPatient] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchBilling = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('billing')
+          .select('*')
+          .order('periode', { ascending: false });
+        if (!error && data?.length) {
+          const mapped: BillingEntry[] = data.map((b: any) => ({
+            id: b.id,
+            patientId: b.patient_id,
+            patientName: b.patient_name || '',
+            installDate: b.install_date || '',
+            tarifLPPR: b.tarif_lppr || '',
+            baseMontant: b.base_montant ?? 0,
+            majorations: b.majorations || [],
+            totalMontant: b.total_montant ?? 0,
+            periode: b.periode || '',
+            status: b.status || 'a_facturer',
+            dateFacturation: b.date_facturation,
+            dateRejet: b.date_rejet,
+            motifRejet: b.motif_rejet,
+          }));
+          setBillingData(mapped);
+        }
+      } catch (e) {
+        console.warn('BillingManager: Using mock data', e);
+      }
+    };
+    fetchBilling();
+  }, []);
 
   // Dashboard stats
   const dashStats = useMemo(() => {

@@ -4,60 +4,27 @@
     "slug": "medconnect",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "scheme": "medconnect",
     "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
       "backgroundColor": "#3b82f6"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.medconnect.app",
-      "buildNumber": "1.0.0",
-      "infoPlist": {
-        "NSFaceIDUsageDescription": "MedConnect utilise Face ID pour securiser l'acces a vos donnees medicales.",
-        "NSCameraUsageDescription": "L'appareil photo est utilise pour scanner les codes-barres des appareils PPC."
-      }
+      "bundleIdentifier": "com.medconnect.app"
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#3b82f6"
       },
-      "package": "com.medconnect.app",
-      "versionCode": 1,
-      "permissions": [
-        "USE_BIOMETRIC",
-        "USE_FINGERPRINT",
-        "CAMERA"
-      ]
+      "package": "com.medconnect.app"
     },
     "web": {
-      "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router",
-      "expo-sqlite",
-      [
-        "expo-local-authentication",
-        {
-          "faceIDPermission": "Permettre a MedConnect d'utiliser Face ID."
-        }
-      ],
-      [
-        "expo-notifications",
-        {
-          "icon": "./assets/notification-icon.png",
-          "color": "#3b82f6"
-        }
-      ],
-      "expo-linear-gradient"
+      "expo-router"
     ],
     "experiments": {
       "typedRoutes": true
@@ -65,9 +32,6 @@
     "extra": {
       "router": {
         "origin": false
-      },
-      "eas": {
-        "projectId": "medconnect-app"
       }
     }
   }

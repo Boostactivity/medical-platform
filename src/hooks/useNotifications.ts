@@ -299,16 +299,23 @@ export function useRealtimeNotifications() {
   useEffect(() => {
     const supabase = createClient();
 
-    const channel = supabase
-      .channel('notifications-realtime')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'notifications',
-        },
-        (payload) => {
+    const setupRealtime = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      const userId = user?.id;
+
+      const channelConfig: any = {
+        event: 'INSERT',
+        schema: 'public',
+        table: 'notifications',
+      };
+      // Filter notifications to current user only
+      if (userId) {
+        channelConfig.filter = `user_id=eq.${userId}`;
+      }
+
+      const channel = supabase
+        .channel('notifications-realtime')
+        .on('postgres_changes', channelConfig, (payload) => {
           queryClient.invalidateQueries({
             queryKey: notificationKeys.all,
           });
@@ -325,12 +332,20 @@ export function useRealtimeNotifications() {
             description: notif.message,
             duration: 5000,
           });
-        }
-      )
-      .subscribe();
+        })
+        .subscribe();
+
+      return channel;
+    };
+
+    let channel: any;
+    setupRealtime().then(ch => { channel = ch; });
 
     return () => {
-      supabase.removeChannel(channel);
+      if (channel) {
+        const supabase = createClient();
+        supabase.removeChannel(channel);
+      }
     };
   }, [queryClient]);
 }

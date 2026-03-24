@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { supabase } from '../../supabase/client';
 
 const DAILY_RATING_KEY = 'medconnect_daily_rating';
 
@@ -33,6 +34,22 @@ function hasRatedToday(): boolean {
   return getRatings().some((r) => r.date === today);
 }
 
+async function saveRatingToSupabase(entry: RatingEntry): Promise<boolean> {
+  try {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) return false;
+    const { error } = await supabase.from('therapy_data').upsert({
+      patient_id: user.id,
+      date: entry.date,
+      patient_comfort_rating: entry.stars,
+      patient_feeling: entry.feeling,
+    }, { onConflict: 'patient_id,date' });
+    return !error;
+  } catch {
+    return false;
+  }
+}
+
 function saveRating(entry: RatingEntry): void {
   const ratings = getRatings().filter((r) => r.date !== entry.date);
   ratings.push(entry);
@@ -41,6 +58,8 @@ function saveRating(entry: RatingEntry): void {
   cutoff.setDate(cutoff.getDate() - 90);
   const filtered = ratings.filter((r) => new Date(r.date) >= cutoff);
   localStorage.setItem(DAILY_RATING_KEY, JSON.stringify(filtered));
+  // Also save to Supabase
+  saveRatingToSupabase(entry).catch(() => {});
 }
 
 interface DailyRatingProps {
@@ -55,11 +74,29 @@ export function DailyRating({ onSubmit }: DailyRatingProps) {
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    if (!hasRatedToday()) {
-      // Show after a short delay for smooth entrance
+    const checkRating = async () => {
+      // Check localStorage first
+      if (hasRatedToday()) return;
+      // Also check Supabase
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const today = getTodayKey();
+          const { data } = await supabase
+            .from('therapy_data')
+            .select('patient_comfort_rating')
+            .eq('patient_id', user.id)
+            .eq('date', today)
+            .maybeSingle();
+          if (data?.patient_comfort_rating) return;
+        }
+      } catch {
+        // Fallback to localStorage check only
+      }
       const timer = setTimeout(() => setVisible(true), 1500);
       return () => clearTimeout(timer);
-    }
+    };
+    checkRating();
   }, []);
 
   const handleSubmit = useCallback(() => {

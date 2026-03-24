@@ -5,12 +5,13 @@
  * Catalogue de recompenses, historique des points, barre de progression
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Gift, Star, Trophy, Zap, ShoppingBag, Clock, ChevronRight,
   Award, Target, Heart, Crown, Shield, TrendingUp, CheckCircle
 } from 'lucide-react';
+import { supabase } from '../../supabase/client';
 
 // ---- Types ----
 
@@ -95,13 +96,42 @@ const MOCK_HISTORY: PointHistory[] = [
 
 export function LoyaltyProgram() {
   const [activeTab, setActiveTab] = useState<'overview' | 'rewards' | 'badges' | 'history'>('overview');
+  const [history, setHistory] = useState<PointHistory[]>(MOCK_HISTORY);
+  const [loyaltyBadges, setLoyaltyBadges] = useState<LoyaltyBadge[]>(BADGES);
 
-  const totalPoints = useMemo(() => {
-    return MOCK_HISTORY.reduce((sum, h) => sum + h.points, 0);
+  useEffect(() => {
+    const fetchLoyalty = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+        const { data: transactions, error } = await supabase
+          .from('loyalty_transactions')
+          .select('*')
+          .eq('patient_id', user.id)
+          .order('date', { ascending: false });
+        if (!error && transactions?.length) {
+          const mapped: PointHistory[] = transactions.map((t: any) => ({
+            id: t.id,
+            date: t.date,
+            description: t.description,
+            points: t.points,
+            type: t.points >= 0 ? 'earned' as const : 'spent' as const,
+          }));
+          setHistory(mapped);
+        }
+      } catch (e) {
+        console.warn('LoyaltyProgram: Using mock data', e);
+      }
+    };
+    fetchLoyalty();
   }, []);
 
-  const earnedBadges = BADGES.filter(b => b.earned);
-  const nextBadge = BADGES.find(b => !b.earned);
+  const totalPoints = useMemo(() => {
+    return history.reduce((sum, h) => sum + h.points, 0);
+  }, [history]);
+
+  const earnedBadges = loyaltyBadges.filter(b => b.earned);
+  const nextBadge = loyaltyBadges.find(b => !b.earned);
   const currentStreak = 7; // mock
   const totalObservantNights = 85; // mock
 
@@ -160,7 +190,7 @@ export function LoyaltyProgram() {
           </div>
           <div className="bg-white/10 rounded-lg p-3">
             <p className="text-xs text-purple-200">Badges</p>
-            <p className="text-xl font-bold">{earnedBadges.length}/{BADGES.length}</p>
+            <p className="text-xl font-bold">{earnedBadges.length}/{loyaltyBadges.length}</p>
           </div>
         </div>
 
@@ -341,7 +371,7 @@ export function LoyaltyProgram() {
       {/* ===== BADGES ===== */}
       {activeTab === 'badges' && (
         <div className="grid sm:grid-cols-2 gap-3">
-          {BADGES.map(badge => {
+          {loyaltyBadges.map(badge => {
             const Icon = badge.icon;
             return (
               <motion.div
@@ -383,7 +413,7 @@ export function LoyaltyProgram() {
       {/* ===== HISTORY ===== */}
       {activeTab === 'history' && (
         <div className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100">
-          {MOCK_HISTORY.map(entry => (
+          {history.map(entry => (
             <div key={entry.id} className="flex items-center justify-between p-3">
               <div className="flex items-center gap-3">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${

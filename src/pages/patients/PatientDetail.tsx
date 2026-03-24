@@ -92,7 +92,7 @@ export function PatientDetailPage() {
   // Si patient non trouvé
   if (!patient) {
     return (
-      <DashboardLayout userRole="medecin" userName="Dr. Martin" userEmail="dr.martin@expair.fr">
+      <DashboardLayout userRole="medecin" userName="Dr. Martin" userEmail="dr.martin@medconnect.fr">
         <div className="text-center py-12">
           <AlertCircle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
           <h2 className="text-2xl font-semibold mb-2">Patient non trouvé</h2>
@@ -128,7 +128,7 @@ export function PatientDetailPage() {
   }
 
   return (
-    <DashboardLayout userRole="medecin" userName="Dr. Martin" userEmail="dr.martin@expair.fr">
+    <DashboardLayout userRole="medecin" userName="Dr. Martin" userEmail="dr.martin@medconnect.fr">
       <div className="space-y-6">
         {/* Header avec bouton retour */}
         <div className="flex items-center justify-between">

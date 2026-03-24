@@ -262,10 +262,10 @@ export function NewPatient() {
     <div className="min-h-screen bg-[#F5F5F7]">
       {/* Header */}
       <header className="bg-white border-b border-[#D2D2D7]">
-        <div className="max-w-5xl mx-auto px-6 py-6">
-          <div className="flex items-center justify-between">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <h1 className="text-3xl text-[#1D1D1F] mb-2">Admission d'un nouveau patient</h1>
+              <h1 className="text-2xl sm:text-3xl text-[#1D1D1F] mb-2">Admission d'un nouveau patient</h1>
               <p className="text-sm text-[#86868B]">
                 Formulaire en {steps.length} étapes • Étape {currentStep}/{steps.length}
               </p>
@@ -280,9 +280,9 @@ export function NewPatient() {
         </div>
       </header>
 
-      <div className="max-w-5xl mx-auto px-6 py-8">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stepper */}
-        <div className="bg-white rounded-2xl p-8 border border-[#D2D2D7] mb-8">
+        <div className="bg-white rounded-2xl p-4 sm:p-8 border border-[#D2D2D7] mb-8">
           <div className="flex items-center justify-between">
             {steps.map((step, index) => {
               const Icon = step.icon;
@@ -343,7 +343,7 @@ export function NewPatient() {
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm text-[#86868B] mb-2">
                       Prénom <span className="text-red-500">*</span>
@@ -482,7 +482,7 @@ export function NewPatient() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm text-[#86868B] mb-2">
                       <div className="flex items-center gap-2">
@@ -587,7 +587,7 @@ export function NewPatient() {
                   <label className="block text-sm text-[#86868B] mb-3">
                     Machine PPC <span className="text-red-500">*</span>
                   </label>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {MACHINE_TYPES.map((machine) => (
                       <div
                         key={machine.id}
@@ -620,7 +620,7 @@ export function NewPatient() {
                   <label className="block text-sm text-[#86868B] mb-3">
                     Type de masque <span className="text-red-500">*</span>
                   </label>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {MASK_TYPES.map((mask) => (
                       <div
                         key={mask.id}

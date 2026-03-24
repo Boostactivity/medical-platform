@@ -42,9 +42,9 @@ export function QuiSommesNous() {
             className="text-center max-w-4xl mx-auto"
           >
             <div className="w-20 h-20 bg-gradient-to-br from-[#3b82f6] to-[#5AC8FA] rounded-3xl flex items-center justify-center text-white mx-auto mb-8 shadow-2xl">
-              <span className="text-3xl">E</span>
+              <Users className="w-10 h-10" />
             </div>
-            <h1 className="text-5xl lg:text-6xl text-[#1a2b3c] dark:text-foreground mb-6">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl text-[#1a2b3c] dark:text-foreground mb-6">
               Qui sommes-nous ?
             </h1>
             <p className="text-xl text-[#6b7280] dark:text-muted-foreground">
@@ -110,7 +110,7 @@ export function QuiSommesNous() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white rounded-3xl p-8 shadow-xl text-center"
+                className="bg-white dark:bg-card rounded-3xl p-8 shadow-xl text-center"
               >
                 <div className="w-16 h-16 bg-gradient-to-br from-[#3b82f6] to-[#5AC8FA] rounded-2xl flex items-center justify-center text-white mx-auto mb-6">
                   {value.icon}
@@ -171,7 +171,7 @@ export function QuiSommesNous() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white rounded-3xl p-8 shadow-lg text-center"
+                className="bg-white dark:bg-card rounded-3xl p-8 shadow-lg text-center"
               >
                 <div className="w-20 h-20 bg-gradient-to-br from-[#34C759] to-[#30D158] rounded-2xl flex items-center justify-center text-white mx-auto mb-6">
                   {cert.icon}

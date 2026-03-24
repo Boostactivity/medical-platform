@@ -29,11 +29,10 @@ import { AlertsList } from '../components/dashboard/AlertsList'
 import { mockKPIs, mockIAHHistory, mockAlerts } from '../mocks/patientData'
 
 export function DashboardPage() {
-  const { user } = useAuth()
+  const { user, userRole } = useAuth()
   const navigate = useNavigate()
 
-  // Récupérer le rôle depuis les métadonnées utilisateur
-  const userRole = user?.user_metadata?.role || 'patient'
+  // Utiliser le role résolu par AuthContext (pas user_metadata qui peut être obsolète)
   const userName = user?.user_metadata?.name || user?.email?.split('@')[0] || 'Utilisateur'
   const userEmail = user?.email || ''
 

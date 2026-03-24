@@ -33,9 +33,9 @@ export function Contact() {
   };
 
   return (
-    <div className="bg-white">
+    <div className="bg-white dark:bg-background">
       {/* Hero */}
-      <section className="relative py-20 lg:py-28 bg-[#f8fafc] overflow-hidden">
+      <section className="relative py-20 lg:py-28 bg-[#f8fafc] dark:bg-secondary overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-500 rounded-full blur-3xl"></div>
         </div>
@@ -47,10 +47,10 @@ export function Contact() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <h1 className="text-4xl lg:text-5xl font-light text-[#1a2b3c] mb-6 tracking-tight">
+            <h1 className="text-4xl lg:text-5xl font-light text-[#1a2b3c] dark:text-foreground mb-6 tracking-tight">
               {t('contact.title')}
             </h1>
-            <p className="text-lg text-gray-500 font-light">
+            <p className="text-lg text-gray-500 dark:text-muted-foreground font-light">
               {t('contact.subtitle')}
             </p>
           </motion.div>
@@ -58,13 +58,13 @@ export function Contact() {
       </section>
 
       {/* Contact Info + Form */}
-      <section className="py-20 lg:py-28 bg-white">
+      <section className="py-20 lg:py-28 bg-white dark:bg-background">
         <div className="max-w-6xl mx-auto px-6">
           <div className="grid lg:grid-cols-3 gap-12">
             {/* Contact Info */}
             <motion.div {...fadeInUp} className="lg:col-span-1 space-y-8">
               <div>
-                <h2 className="text-2xl font-light text-[#1a2b3c] mb-8 tracking-tight">{t('contact.coordinates')}</h2>
+                <h2 className="text-2xl font-light text-[#1a2b3c] dark:text-foreground mb-8 tracking-tight">{t('contact.coordinates')}</h2>
 
                 <div className="space-y-6">
                   <div className="flex items-start gap-4">
@@ -72,8 +72,8 @@ export function Contact() {
                       <Phone className="w-5 h-5 text-blue-600" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-medium text-[#1a2b3c] mb-0.5">{t('contact.phone')}</h4>
-                      <p className="text-sm text-gray-500">01 XX XX XX XX</p>
+                      <h4 className="text-sm font-medium text-[#1a2b3c] dark:text-foreground mb-0.5">{t('contact.phone')}</h4>
+                      <p className="text-sm text-gray-500 dark:text-muted-foreground">01 XX XX XX XX</p>
                       <p className="text-xs text-gray-400">{t('contact.phoneHours')}</p>
                     </div>
                   </div>
@@ -83,8 +83,8 @@ export function Contact() {
                       <Mail className="w-5 h-5 text-blue-600" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-medium text-[#1a2b3c] mb-0.5">{t('contact.email')}</h4>
-                      <p className="text-sm text-gray-500">contact@plateforme.fr</p>
+                      <h4 className="text-sm font-medium text-[#1a2b3c] dark:text-foreground mb-0.5">{t('contact.email')}</h4>
+                      <p className="text-sm text-gray-500 dark:text-muted-foreground">contact@plateforme.fr</p>
                       <p className="text-xs text-gray-400">{t('contact.emailResponse')}</p>
                     </div>
                   </div>
@@ -94,17 +94,17 @@ export function Contact() {
                       <MapPin className="w-5 h-5 text-blue-600" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-medium text-[#1a2b3c] mb-0.5">{t('contact.address')}</h4>
-                      <p className="text-sm text-gray-500">{t('contact.addressValue')}</p>
+                      <h4 className="text-sm font-medium text-[#1a2b3c] dark:text-foreground mb-0.5">{t('contact.address')}</h4>
+                      <p className="text-sm text-gray-500 dark:text-muted-foreground">{t('contact.addressValue')}</p>
                       <p className="text-xs text-gray-400">{t('contact.nationalCoverage')}</p>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-[#f8fafc] border border-gray-100 rounded-2xl p-6">
-                <h4 className="text-sm font-medium text-[#1a2b3c] mb-2">{t('contact.emergency')}</h4>
-                <p className="text-xs text-gray-500 mb-4">
+              <div className="bg-[#f8fafc] dark:bg-secondary border border-gray-100 rounded-2xl p-6">
+                <h4 className="text-sm font-medium text-[#1a2b3c] dark:text-foreground mb-2">{t('contact.emergency')}</h4>
+                <p className="text-xs text-gray-500 dark:text-muted-foreground mb-4">
                   {t('contact.emergencyDesc')}
                 </p>
                 <a
@@ -118,17 +118,17 @@ export function Contact() {
 
             {/* Contact Form */}
             <motion.div {...fadeInUp} className="lg:col-span-2">
-              <div className="bg-[#f8fafc] border border-gray-100 rounded-2xl p-8 lg:p-10">
-                <h2 className="text-2xl font-light text-[#1a2b3c] mb-2 tracking-tight">{t('contact.formTitle')}</h2>
-                <p className="text-sm text-gray-500 mb-8">
+              <div className="bg-[#f8fafc] dark:bg-secondary border border-gray-100 rounded-2xl p-8 lg:p-10">
+                <h2 className="text-2xl font-light text-[#1a2b3c] dark:text-foreground mb-2 tracking-tight">{t('contact.formTitle')}</h2>
+                <p className="text-sm text-gray-500 dark:text-muted-foreground mb-8">
                   {t('contact.formSubtitle')}
                 </p>
 
                 {submitted ? (
                   <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-8 text-center">
                     <CheckCircle className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
-                    <h3 className="text-xl font-light text-[#1a2b3c] mb-2">{t('contact.formSuccess')}</h3>
-                    <p className="text-sm text-gray-500">
+                    <h3 className="text-xl font-light text-[#1a2b3c] dark:text-foreground mb-2">{t('contact.formSuccess')}</h3>
+                    <p className="text-sm text-gray-500 dark:text-muted-foreground">
                       {t('contact.formSuccessDesc')}
                     </p>
                   </div>
@@ -136,25 +136,25 @@ export function Contact() {
                   <form onSubmit={handleSubmit} className="space-y-5">
                     <div className="grid md:grid-cols-2 gap-5">
                       <div>
-                        <label className="block text-xs font-medium text-gray-500 mb-1.5">{t('contact.formName')} *</label>
+                        <label className="block text-xs font-medium text-gray-500 dark:text-muted-foreground mb-1.5">{t('contact.formName')} *</label>
                         <input
                           type="text"
                           required
                           value={formData.name}
                           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition-all outline-none"
+                          className="w-full px-4 py-2.5 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-xl text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition-all outline-none"
                           placeholder="Jean Dupont"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-medium text-gray-500 mb-1.5">{t('contact.formEmail')} *</label>
+                        <label className="block text-xs font-medium text-gray-500 dark:text-muted-foreground mb-1.5">{t('contact.formEmail')} *</label>
                         <input
                           type="email"
                           required
                           value={formData.email}
                           onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                          className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition-all outline-none"
+                          className="w-full px-4 py-2.5 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-xl text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition-all outline-none"
                           placeholder="jean.dupont@exemple.fr"
                         />
                       </div>
@@ -162,23 +162,23 @@ export function Contact() {
 
                     <div className="grid md:grid-cols-2 gap-5">
                       <div>
-                        <label className="block text-xs font-medium text-gray-500 mb-1.5">{t('contact.formPhone')} *</label>
+                        <label className="block text-xs font-medium text-gray-500 dark:text-muted-foreground mb-1.5">{t('contact.formPhone')} *</label>
                         <input
                           type="tel"
                           required
                           value={formData.phone}
                           onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition-all outline-none"
+                          className="w-full px-4 py-2.5 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-xl text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition-all outline-none"
                           placeholder="06 XX XX XX XX"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-xs font-medium text-gray-500 mb-1.5">{t('contact.formYouAre')} *</label>
+                        <label className="block text-xs font-medium text-gray-500 dark:text-muted-foreground mb-1.5">{t('contact.formYouAre')} *</label>
                         <select
                           value={formData.type}
                           onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                          className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition-all outline-none"
+                          className="w-full px-4 py-2.5 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-xl text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition-all outline-none"
                         >
                           <option value="patient">{t('contact.formPatient')}</option>
                           <option value="proche">{t('contact.formRelative')}</option>
@@ -189,13 +189,13 @@ export function Contact() {
                     </div>
 
                     <div>
-                      <label className="block text-xs font-medium text-gray-500 mb-1.5">{t('contact.formMessage')} *</label>
+                      <label className="block text-xs font-medium text-gray-500 dark:text-muted-foreground mb-1.5">{t('contact.formMessage')} *</label>
                       <textarea
                         required
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                         rows={5}
-                        className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-xl text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition-all outline-none resize-none"
+                        className="w-full px-4 py-2.5 bg-white dark:bg-card border border-gray-200 dark:border-border rounded-xl text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500/20 transition-all outline-none resize-none"
                         placeholder={t('contact.formMessagePlaceholder')}
                       />
                     </div>
@@ -216,10 +216,10 @@ export function Contact() {
       </section>
 
       {/* Quick Actions */}
-      <section className="py-20 lg:py-28 bg-[#f8fafc]">
+      <section className="py-20 lg:py-28 bg-[#f8fafc] dark:bg-secondary">
         <div className="max-w-6xl mx-auto px-6">
           <motion.div {...fadeInUp} className="text-center mb-12">
-            <h2 className="text-3xl font-light text-[#1a2b3c] tracking-tight">{t('contact.quickActions')}</h2>
+            <h2 className="text-3xl font-light text-[#1a2b3c] dark:text-foreground tracking-tight">{t('contact.quickActions')}</h2>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-6">

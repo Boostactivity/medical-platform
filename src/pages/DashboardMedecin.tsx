@@ -180,10 +180,17 @@ export function DashboardMedecin() {
   
   // Enhanced patient data with status
   const enhancedPatients = patients.map((p: any) => {
-    const last7Days = p.patientData.observance_data.slice(-7);
-    const avgHours = last7Days.reduce((acc: number, day: any) => acc + day.hours_used, 0) / last7Days.length;
-    const compliance = (last7Days.filter((day: any) => day.hours_used >= 4).length / last7Days.length) * 100;
-    const treatmentDays = Math.floor((new Date().getTime() - new Date(p.patientData.treatment_start_date).getTime()) / (1000 * 60 * 60 * 24));
+    const observanceData = p.patientData?.observance_data || [];
+    const last7Days = observanceData.slice(-7);
+    const avgHours = last7Days.length > 0
+      ? last7Days.reduce((acc: number, day: any) => acc + (day.hours_used || 0), 0) / last7Days.length
+      : 0;
+    const compliance = last7Days.length > 0
+      ? (last7Days.filter((day: any) => day.hours_used >= 4).length / last7Days.length) * 100
+      : 0;
+    const treatmentDays = p.patientData?.treatment_start_date
+      ? Math.floor((new Date().getTime() - new Date(p.patientData.treatment_start_date).getTime()) / (1000 * 60 * 60 * 24))
+      : 0;
     
     let status: 'excellent' | 'good' | 'warning' | 'alert' = 'good';
     if (avgHours >= 7) status = 'excellent';

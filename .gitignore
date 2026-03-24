@@ -1,1 +1,8 @@
-node_modules/\nbuild/\ndist/\n.DS_Store\n*.local\n.env\n.env.*\n.vercel
+node_modules/
+build/
+dist/
+.DS_Store
+*.local
+.env
+.env.*
+.vercel

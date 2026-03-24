@@ -140,6 +140,7 @@ export function NotificationBell() {
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="relative p-2 rounded-lg hover:bg-[#F5F5F7] transition-colors"
+        aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} non lues)` : ''}`}
       >
         <Bell className="w-5 h-5 text-[#1D1D1F]" />
         {unreadCount > 0 && (
@@ -183,6 +184,7 @@ export function NotificationBell() {
                   <button
                     onClick={() => setIsOpen(false)}
                     className="p-2 hover:bg-[#F5F5F7] rounded-lg transition-colors"
+                    aria-label="Fermer les notifications"
                   >
                     <X className="w-5 h-5 text-[#86868B]" />
                   </button>

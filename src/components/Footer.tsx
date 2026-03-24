@@ -30,6 +30,7 @@ export function Footer() {
       title: t('footer.company'),
       links: [
         { label: t('nav.whoWeAre'), to: '/qui-sommes-nous' },
+        { label: 'Blog', to: '/blog' },
         { label: t('nav.contact'), to: '/contact' },
       ],
     },

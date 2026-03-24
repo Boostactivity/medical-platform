@@ -1,6 +1,6 @@
 {
-  "name": "MedConnect - Suivi respiratoire",
-  "short_name": "MedConnect",
+  "name": "Plateforme Respiratoire - Suivi respiratoire",
+  "short_name": "Plateforme Respiratoire",
   "description": "Suivez votre traitement d'apnée du sommeil, consultez vos scores et graphiques, et restez en contact avec votre médecin.",
   "start_url": "/",
   "display": "standalone",

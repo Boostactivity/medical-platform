@@ -1,8 +1,8 @@
-// Service Worker MedConnect - Mode Hors-Ligne
+// Service Worker Plateforme - Mode Hors-Ligne
 // Version 1.0.0
 
-const CACHE_VERSION = 'medconnect-v1.0.0';
-const CACHE_NAME = `medconnect-${CACHE_VERSION}`;
+const CACHE_VERSION = 'plateforme-v1.0.0';
+const CACHE_NAME = `plateforme-${CACHE_VERSION}`;
 
 // Assets critiques à mettre en cache immédiatement
 const CRITICAL_ASSETS = [
@@ -276,7 +276,7 @@ function getOfflineHTML() {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>MedConnect - Hors ligne</title>
+      <title>Plateforme - Hors ligne</title>
       <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -386,7 +386,7 @@ self.addEventListener('push', (event) => {
     icon: '/icon-192.png',
     badge: '/icon-72.png',
     vibrate: [200, 100, 200],
-    tag: data.tag || 'expair-notification',
+    tag: data.tag || 'plateforme-notification',
     requireInteraction: data.requireInteraction || false,
     actions: data.actions || []
   };

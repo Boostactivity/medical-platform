@@ -51,7 +51,7 @@ export function ApneeSommeil() {
   return (
     <div className="bg-white dark:bg-background">
       {/* Hero */}
-      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] overflow-hidden">
+      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] dark:from-secondary dark:via-background dark:to-secondary overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 right-10 w-96 h-96 bg-blue-600 rounded-full blur-3xl"></div>
         </div>
@@ -83,7 +83,7 @@ export function ApneeSommeil() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div {...fadeInUp}>
-              <h2 className="text-4xl text-[#1a2b3c] dark:text-foreground mb-6">Un trouble respiratoire nocturne</h2>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-6">Un trouble respiratoire nocturne</h2>
               <p className="text-lg text-gray-500 dark:text-muted-foreground mb-4">
                 L'apnée du sommeil se caractérise par des pauses respiratoires répétées pendant le sommeil. 
                 Ces pauses, appelées "apnées", sont causées par un relâchement des muscles des voies aériennes supérieures.
@@ -120,10 +120,10 @@ export function ApneeSommeil() {
       </section>
 
       {/* Symptoms */}
-      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] dark:from-secondary dark:via-background dark:to-secondary">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-6">
+            <h2 className="text-3xl lg:text-2xl sm:text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-6">
               Quels sont les symptômes ?
             </h2>
             <p className="text-lg text-gray-500 dark:text-muted-foreground max-w-3xl mx-auto">
@@ -170,7 +170,7 @@ export function ApneeSommeil() {
       <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-6">
+            <h2 className="text-3xl lg:text-2xl sm:text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-6">
               Pourquoi se faire traiter ?
             </h2>
             <p className="text-lg text-gray-500 dark:text-muted-foreground max-w-3xl mx-auto">
@@ -215,10 +215,10 @@ export function ApneeSommeil() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] dark:from-secondary dark:via-background dark:to-secondary">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <motion.div {...fadeInUp}>
-            <h2 className="text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-6">
+            <h2 className="text-3xl lg:text-2xl sm:text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-6">
               Prochaine étape : le diagnostic
             </h2>
             <p className="text-lg text-gray-500 dark:text-muted-foreground mb-8">

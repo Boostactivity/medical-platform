@@ -66,7 +66,7 @@ export function ParcoursDiagnostic() {
   return (
     <div className="bg-white dark:bg-background">
       {/* Hero */}
-      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] overflow-hidden">
+      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] dark:from-secondary dark:via-background dark:to-secondary overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 w-96 h-96 bg-[#3b82f6] rounded-full blur-3xl"></div>
         </div>
@@ -172,7 +172,7 @@ export function ParcoursDiagnostic() {
       </section>
 
       {/* Important Info */}
-      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] dark:from-secondary dark:via-background dark:to-secondary">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-8">
             <motion.div {...fadeInUp} className="bg-white dark:bg-card rounded-3xl p-8 shadow-lg">
@@ -213,7 +213,7 @@ export function ParcoursDiagnostic() {
       <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               la plateforme vous accompagne dès le début
             </h2>
             <p className="text-xl text-[#6b7280] dark:text-muted-foreground max-w-3xl mx-auto">
@@ -273,10 +273,10 @@ export function ParcoursDiagnostic() {
       </section>
 
       {/* CTA */}
-      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] dark:from-secondary dark:via-background dark:to-secondary">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <motion.div {...fadeInUp}>
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               Prêt à commencer votre parcours ?
             </h2>
             <p className="text-xl text-[#6b7280] dark:text-muted-foreground mb-8">

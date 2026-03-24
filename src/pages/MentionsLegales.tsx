@@ -14,7 +14,7 @@ export function MentionsLegales() {
   return (
     <div className="bg-white dark:bg-background">
       {/* Hero */}
-      <section className="relative py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
+      <section className="relative py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] dark:from-secondary dark:via-background dark:to-secondary">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

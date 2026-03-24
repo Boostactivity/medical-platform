@@ -252,7 +252,7 @@ export function DashboardMedecin() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8"
         >
-          <h1 className="text-4xl text-foreground mb-2">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl text-foreground mb-2">
             Bonjour {userData?.user?.name} 👨‍⚕️
           </h1>
           <p className="text-xl text-muted-foreground">

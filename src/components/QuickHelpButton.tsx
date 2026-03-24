@@ -14,6 +14,7 @@ export function QuickHelpButton() {
         className="fixed bottom-8 right-8 w-14 h-14 bg-gradient-to-br from-[#007AFF] to-[#5AC8FA] rounded-full shadow-2xl flex items-center justify-center text-white hover:scale-110 transition-transform z-50"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
+        aria-label={isOpen ? "Fermer l'aide" : "Ouvrir l'aide"}
       >
         {isOpen ? <X className="w-6 h-6" /> : <HelpCircle className="w-6 h-6" />}
       </motion.button>

@@ -47,7 +47,7 @@ export function Contact() {
             transition={{ duration: 0.8 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <h1 className="text-4xl lg:text-5xl font-light text-[#1a2b3c] dark:text-foreground mb-6 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl lg:text-5xl font-light text-[#1a2b3c] dark:text-foreground mb-6 tracking-tight">
               {t('contact.title')}
             </h1>
             <p className="text-lg text-gray-500 dark:text-muted-foreground font-light">

@@ -277,7 +277,7 @@ export function DashboardPatient() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-4xl text-[#1a2b3c] mb-2">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl text-[#1a2b3c] mb-2">
                 Bonjour {userData?.user?.name?.split(' ')[0]} 👋
               </h1>
               <p className="text-xl text-gray-500">

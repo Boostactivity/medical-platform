@@ -29,7 +29,7 @@ export function QuiSommesNous() {
   return (
     <div className="bg-white dark:bg-background">
       {/* Hero */}
-      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] overflow-hidden">
+      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] dark:from-secondary dark:via-background dark:to-secondary overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-10 w-96 h-96 bg-[#3b82f6] rounded-full blur-3xl"></div>
         </div>
@@ -60,7 +60,7 @@ export function QuiSommesNous() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div {...fadeInUp}>
-              <h2 className="text-4xl text-[#1a2b3c] dark:text-foreground mb-6">Notre mission</h2>
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-6">Notre mission</h2>
               <p className="text-xl text-[#6b7280] dark:text-muted-foreground mb-6">
                 la plateforme naît d'un constat simple : le système actuel de l'appareillage médical 
                 en France est trop opaque, trop peu centré sur le patient, et basé sur des habitudes 
@@ -93,10 +93,10 @@ export function QuiSommesNous() {
       </section>
 
       {/* Values */}
-      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] dark:from-secondary dark:via-background dark:to-secondary">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">Nos valeurs</h2>
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">Nos valeurs</h2>
             <p className="text-xl text-[#6b7280] dark:text-muted-foreground max-w-3xl mx-auto">
               Les principes qui guident chacune de nos actions au quotidien
             </p>
@@ -127,7 +127,7 @@ export function QuiSommesNous() {
       <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">Notre équipe</h2>
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">Notre équipe</h2>
             <p className="text-xl text-[#6b7280] dark:text-muted-foreground max-w-3xl mx-auto">
               Des professionnels de santé experts et dédiés à votre réussite
             </p>
@@ -153,10 +153,10 @@ export function QuiSommesNous() {
       </section>
 
       {/* Certifications */}
-      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] dark:from-secondary dark:via-background dark:to-secondary">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">Agréments et certifications</h2>
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">Agréments et certifications</h2>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
@@ -188,7 +188,7 @@ export function QuiSommesNous() {
       <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <motion.div {...fadeInUp}>
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               Rejoignez la plateforme
             </h2>
             <p className="text-xl text-[#6b7280] dark:text-muted-foreground mb-8">

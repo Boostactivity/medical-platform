@@ -48,7 +48,7 @@ export function TraitementPPC() {
   return (
     <div className="bg-white dark:bg-background">
       {/* Hero */}
-      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] overflow-hidden">
+      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] dark:from-secondary dark:via-background dark:to-secondary overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute bottom-20 right-10 w-96 h-96 bg-[#5AC8FA] rounded-full blur-3xl"></div>
         </div>
@@ -80,7 +80,7 @@ export function TraitementPPC() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div {...fadeInUp}>
-              <h2 className="text-4xl text-[#1a2b3c] dark:text-foreground mb-6">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-6">
                 Comment fonctionne la PPC ?
               </h2>
               <p className="text-lg text-[#6b7280] dark:text-muted-foreground mb-4">
@@ -127,10 +127,10 @@ export function TraitementPPC() {
       </section>
 
       {/* Benefits */}
-      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] dark:from-secondary dark:via-background dark:to-secondary">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               Les bénéfices du traitement
             </h2>
             <p className="text-xl text-[#6b7280] dark:text-muted-foreground max-w-3xl mx-auto">
@@ -169,7 +169,7 @@ export function TraitementPPC() {
       <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               Le rôle d'la plateforme
             </h2>
             <p className="text-xl text-[#6b7280] dark:text-muted-foreground max-w-3xl mx-auto">
@@ -231,11 +231,11 @@ export function TraitementPPC() {
       </section>
 
       {/* Reimbursement */}
-      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] dark:from-secondary dark:via-background dark:to-secondary">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <motion.div {...fadeInUp} className="text-center mb-12">
-              <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
+              <h2 className="text-2xl sm:text-3xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
                 Prise en charge financière
               </h2>
             </motion.div>
@@ -275,7 +275,7 @@ export function TraitementPPC() {
       <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <motion.div {...fadeInUp}>
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               Prêt à choisir la plateforme ?
             </h2>
             <p className="text-xl text-[#6b7280] dark:text-muted-foreground mb-8">

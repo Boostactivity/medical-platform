@@ -31,7 +31,7 @@ export function EspaceAdmin() {
         <div className="max-w-6xl mx-auto px-6 relative z-10">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center max-w-3xl mx-auto text-white">
             <Shield className="w-12 h-12 mx-auto mb-6 opacity-80" />
-            <h1 className="text-4xl lg:text-5xl font-light mb-4 tracking-tight">{t('espaceAdmin.heroTitle')}</h1>
+            <h1 className="text-2xl sm:text-3xl lg:text-5xl font-light mb-4 tracking-tight">{t('espaceAdmin.heroTitle')}</h1>
             <p className="text-lg opacity-80 font-light">{t('espaceAdmin.heroSubtitle')}</p>
           </motion.div>
         </div>

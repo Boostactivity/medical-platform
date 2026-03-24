@@ -723,4 +723,16 @@ export function NewPatient() {
                     </>
                   ) : (
                     <>
-             
+                      <Check className="w-4 h-4" />
+                      Créer le patient
+                    </>
+                  )}
+                </Button>
+              )}
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}

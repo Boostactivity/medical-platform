@@ -37,7 +37,7 @@ export function FAQ() {
   return (
     <div className="bg-white dark:bg-background">
       {/* Hero */}
-      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#F5F5F7] via-white to-[#F5F5F7] overflow-hidden">
+      <section className="relative py-24 lg:py-32 bg-gradient-to-br from-[#F5F5F7] via-white to-[#F5F5F7] dark:from-secondary dark:via-background dark:to-secondary overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 right-10 w-96 h-96 bg-blue-600 rounded-full blur-3xl"></div>
         </div>
@@ -50,7 +50,7 @@ export function FAQ() {
             className="text-center max-w-4xl mx-auto"
           >
             <HelpCircle className="w-16 h-16 text-blue-600 mx-auto mb-6" />
-            <h1 className="text-4xl lg:text-5xl font-light text-[#1a2b3c] dark:text-foreground mb-6 tracking-tight">
+            <h1 className="text-2xl sm:text-3xl lg:text-5xl font-light text-[#1a2b3c] dark:text-foreground mb-6 tracking-tight">
               {t('faq.title')}
             </h1>
             <p className="text-xl text-gray-500 dark:text-muted-foreground">
@@ -64,7 +64,7 @@ export function FAQ() {
       <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="mb-12">
-            <h2 className="text-4xl text-[#1a2b3c] dark:text-foreground mb-3">{t('faq.patientsTitle')}</h2>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-3">{t('faq.patientsTitle')}</h2>
             <p className="text-lg text-gray-500 dark:text-muted-foreground">
               {t('faq.patientsSubtitle')}
             </p>
@@ -103,10 +103,10 @@ export function FAQ() {
       </section>
 
       {/* FAQs Medecins */}
-      <section className="py-24 bg-gradient-to-br from-[#F5F5F7] via-white to-[#F5F5F7]">
+      <section className="py-24 bg-gradient-to-br from-[#F5F5F7] via-white to-[#F5F5F7] dark:from-secondary dark:via-background dark:to-secondary">
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="mb-12">
-            <h2 className="text-4xl text-[#1a2b3c] dark:text-foreground mb-3">{t('faq.doctorsTitle')}</h2>
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-3">{t('faq.doctorsTitle')}</h2>
             <p className="text-lg text-gray-500 dark:text-muted-foreground">
               {t('faq.doctorsSubtitle')}
             </p>
@@ -148,7 +148,7 @@ export function FAQ() {
       <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center">
           <motion.div {...fadeInUp}>
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               {t('faq.ctaTitle')}
             </h2>
             <p className="text-xl text-gray-500 dark:text-muted-foreground mb-8">

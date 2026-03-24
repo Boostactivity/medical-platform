@@ -93,7 +93,7 @@ export function PourquoiExpAir() {
       <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="max-w-4xl mx-auto">
-            <h2 className="text-4xl text-[#1a2b3c] dark:text-foreground mb-6 text-center">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-6 text-center">
               Le problème du modèle actuel
             </h2>
             <div className="bg-[#f8fafc] dark:bg-secondary rounded-3xl p-12">
@@ -128,10 +128,10 @@ export function PourquoiExpAir() {
       </section>
 
       {/* Our Values */}
-      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] dark:from-secondary dark:via-background dark:to-secondary">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               Nos valeurs fondamentales
             </h2>
             <p className="text-xl text-[#6b7280] dark:text-muted-foreground max-w-3xl mx-auto">
@@ -164,7 +164,7 @@ export function PourquoiExpAir() {
       <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               Ce qui nous différencie
             </h2>
             <p className="text-xl text-[#6b7280] dark:text-muted-foreground max-w-3xl mx-auto">
@@ -194,11 +194,11 @@ export function PourquoiExpAir() {
       </section>
 
       {/* Libre choix */}
-      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc]">
+      <section className="py-24 bg-gradient-to-br from-[#f8fafc] via-white to-[#f8fafc] dark:from-secondary dark:via-background dark:to-secondary">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <motion.div {...fadeInUp}>
-              <h2 className="text-4xl text-[#1a2b3c] dark:text-foreground mb-6">
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl text-[#1a2b3c] dark:text-foreground mb-6">
                 Votre droit au libre choix
               </h2>
               <p className="text-xl text-[#6b7280] dark:text-muted-foreground mb-6">
@@ -247,7 +247,7 @@ export function PourquoiExpAir() {
       <section className="py-24 bg-white dark:bg-background">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <motion.div {...fadeInUp} className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl text-[#1a2b3c] dark:text-foreground mb-6">
               Nos engagements
             </h2>
           </motion.div>
@@ -294,7 +294,7 @@ export function PourquoiExpAir() {
       <section className="py-24 bg-gradient-to-br from-[#3b82f6] to-[#5AC8FA]">
         <div className="max-w-4xl mx-auto px-6 lg:px-8 text-center text-white">
           <motion.div {...fadeInUp}>
-            <h2 className="text-4xl lg:text-5xl mb-6">
+            <h2 className="text-2xl sm:text-3xl lg:text-5xl mb-6">
               Prêt à découvrir la différence ?
             </h2>
             <p className="text-xl opacity-90 mb-8">

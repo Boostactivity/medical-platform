@@ -1,10 +1,12 @@
 /**
  * PAGE DE CONNEXION GÉNÉRIQUE
  * Point d'entrée pour tous les utilisateurs (patient, médecin, admin)
+ * Intègre Pro Santé Connect pour les médecins
  */
 
 import React from 'react';
 import { LoginForm } from '../components/LoginForm';
+import { ProSanteConnect } from '../components/auth/ProSanteConnect';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../components/ui/tabs';
 
@@ -53,7 +55,19 @@ export default function Login() {
                   Suivez vos patients et analysez leurs données cliniques
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
+                {/* Bouton Pro Santé Connect */}
+                <ProSanteConnect compact className="w-full" />
+
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-slate-200"></div>
+                  </div>
+                  <div className="relative flex justify-center text-xs">
+                    <span className="px-3 bg-white text-slate-400">ou connexion classique</span>
+                  </div>
+                </div>
+
                 <LoginForm userType="doctor" redirectTo="/dashboard-medecin" />
               </CardContent>
             </Card>

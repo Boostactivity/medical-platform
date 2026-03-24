@@ -109,6 +109,17 @@ const DropoutPredictor = lazy(() => import('./components/ai/DropoutPredictor').t
 const ConsumablesShop = lazy(() => import('./components/marketplace/ConsumablesShop').then(m => ({ default: m.ConsumablesShop })));
 const APIDocumentation = lazy(() => import('./pages/APIDocumentation').then(m => ({ default: m.APIDocumentation })));
 
+// PHASE 5 : Blog, Simulateur public, Jalons patient, Satisfaction, Bilan mensuel, Fidelite, Facturation, Data Export
+const Blog = lazy(() => import('./pages/Blog').then(m => ({ default: m.Blog })));
+const BlogArticleView = lazy(() => import('./pages/Blog').then(m => ({ default: m.BlogArticleView })));
+const SleepScoreSimulator = lazy(() => import('./components/public/SleepScoreSimulator').then(m => ({ default: m.SleepScoreSimulator })));
+const PatientMilestonesPage = lazy(() => import('./components/patient/PatientMilestones').then(m => ({ default: m.PatientMilestones })));
+const SatisfactionSurvey = lazy(() => import('./components/patient/SatisfactionSurvey').then(m => ({ default: m.SatisfactionDashboard })));
+const MonthlyReport = lazy(() => import('./components/patient/MonthlyReport').then(m => ({ default: m.MonthlyReport })));
+const LoyaltyProgram = lazy(() => import('./components/patient/LoyaltyProgram').then(m => ({ default: m.LoyaltyProgram })));
+const BillingManager = lazy(() => import('./components/admin/BillingManager').then(m => ({ default: m.BillingManager })));
+const DataExport = lazy(() => import('./components/admin/DataExport').then(m => ({ default: m.DataExport })));
+
 // Loading component
 function PageLoader() {
   return (
@@ -356,6 +367,59 @@ export default function App() {
                       }
                     />
                     <Route path="/api-docs" element={<APIDocumentation />} />
+
+                    {/* PHASE 5 : Blog, Simulateur public, Patient features, Admin features */}
+                    <Route path="/blog" element={<Blog />} />
+                    <Route path="/blog/:slug" element={<BlogArticleView />} />
+                    <Route path="/simulateur" element={<SleepScoreSimulator />} />
+                    <Route
+                      path="/mes-jalons"
+                      element={
+                        <ProtectedRoute requiredRole="patient">
+                          <PatientMilestonesPage />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/satisfaction"
+                      element={
+                        <ProtectedRoute allowedRoles={['admin', 'prestataire']}>
+                          <SatisfactionSurvey />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/bilan-mensuel"
+                      element={
+                        <ProtectedRoute requiredRole="patient">
+                          <MonthlyReport />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/fidelite"
+                      element={
+                        <ProtectedRoute requiredRole="patient">
+                          <LoyaltyProgram />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/facturation"
+                      element={
+                        <ProtectedRoute allowedRoles={['admin', 'prestataire']}>
+                          <BillingManager />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/data-export"
+                      element={
+                        <ProtectedRoute requiredRole="admin">
+                          <DataExport />
+                        </ProtectedRoute>
+                      }
+                    />
 
                     {/* 404 */}
                     <Route path="*" element={<NotFound />} />

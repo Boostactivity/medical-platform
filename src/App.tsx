@@ -120,6 +120,9 @@ const LoyaltyProgram = lazy(() => import('./components/patient/LoyaltyProgram').
 const BillingManager = lazy(() => import('./components/admin/BillingManager').then(m => ({ default: m.BillingManager })));
 const DataExport = lazy(() => import('./components/admin/DataExport').then(m => ({ default: m.DataExport })));
 
+// PHASE 6 : Connecteurs PPC/CPAP
+const ConnectorSettings = lazy(() => import('./pages/ConnectorSettings').then(m => ({ default: m.ConnectorSettings })));
+
 // Loading component
 function PageLoader() {
   return (
@@ -417,6 +420,16 @@ export default function App() {
                       element={
                         <ProtectedRoute requiredRole="admin">
                           <DataExport />
+                        </ProtectedRoute>
+                      }
+                    />
+
+                    {/* PHASE 6 : Configuration Connecteurs PPC/CPAP */}
+                    <Route
+                      path="/settings/connectors"
+                      element={
+                        <ProtectedRoute allowedRoles={['admin', 'prestataire']}>
+                          <ConnectorSettings />
                         </ProtectedRoute>
                       }
                     />

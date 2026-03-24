@@ -16,6 +16,7 @@ import {
 // ---- Types ----
 
 type ImportStatus = 'pending' | 'preview' | 'imported' | 'error';
+type FileFormat = 'edf' | 'csv' | 'oscar';
 
 interface ParsedRecord {
   date: string;
@@ -30,17 +31,48 @@ interface ParsedRecord {
 interface ImportSession {
   id: string;
   filename: string;
-  fileType: 'edf' | 'csv';
+  fileType: FileFormat;
   fileSize: number;
   uploadedAt: string;
   status: ImportStatus;
   patientId?: string;
   patientName?: string;
   deviceSerial?: string;
+  detectedManufacturer?: string;
+  detectedModel?: string;
   recordCount: number;
   dateRange?: { from: string; to: string };
   records: ParsedRecord[];
   errorMessage?: string;
+}
+
+// Auto-detection des fabricants depuis le contenu/nom du fichier
+const MANUFACTURER_SIGNATURES: { pattern: RegExp; manufacturer: string; model: string }[] = [
+  { pattern: /AirSense|AirCurve|ResMed|STR\.edf/i, manufacturer: 'ResMed', model: 'AirSense' },
+  { pattern: /DreamStation|Philips|PR_|PDS2/i, manufacturer: 'Philips Respironics', model: 'DreamStation' },
+  { pattern: /prisma|Lowenstein|LSMED/i, manufacturer: 'Lowenstein Medical', model: 'prisma' },
+  { pattern: /SleepStyle|ICON|F&P|FisherPaykel/i, manufacturer: 'Fisher & Paykel', model: 'SleepStyle' },
+  { pattern: /IntelliPAP|SmartLink|DeVilbiss|Blue/i, manufacturer: 'DeVilbiss / Drive Medical', model: 'IntelliPAP' },
+  { pattern: /RESmart|BMC|iCode/i, manufacturer: 'BMC Medical', model: 'RESmart' },
+  { pattern: /Yuwell|Yuyue|YH-/i, manufacturer: 'Yuwell', model: 'YH Series' },
+  { pattern: /Hypnus/i, manufacturer: 'Hypnus', model: 'Hypnus Series' },
+  { pattern: /Transcend|Somnetics/i, manufacturer: 'Somnetics', model: 'Transcend' },
+];
+
+function detectManufacturer(filename: string): { manufacturer: string; model: string } | null {
+  for (const sig of MANUFACTURER_SIGNATURES) {
+    if (sig.pattern.test(filename)) {
+      return { manufacturer: sig.manufacturer, model: sig.model };
+    }
+  }
+  return null;
+}
+
+function detectFileFormat(filename: string): FileFormat {
+  const lower = filename.toLowerCase();
+  if (lower.endsWith('.edf')) return 'edf';
+  if (lower.includes('oscar') || lower.includes('OSCAR')) return 'oscar';
+  return 'csv';
 }
 
 interface PatientOption {
@@ -124,20 +156,26 @@ export default function SDCardImport() {
     if (!file) return;
 
     const ext = file.name.split('.').pop()?.toLowerCase();
-    if (ext !== 'csv' && ext !== 'edf') {
-      alert('Format non supporte. Utilisez .csv ou .edf');
+    if (ext !== 'csv' && ext !== 'edf' && ext !== 'zip' && ext !== 'json') {
+      alert('Format non supporte. Utilisez .edf, .csv, .json (OSCAR) ou .zip');
       return;
     }
+
+    // Detect format and manufacturer
+    const fileFormat = detectFileFormat(file.name);
+    const detected = detectManufacturer(file.name);
 
     // Simulate parsing
     const records = generateMockRecords(21);
     const newImport: ImportSession = {
       id: `imp-${Date.now()}`,
       filename: file.name,
-      fileType: ext as 'csv' | 'edf',
+      fileType: fileFormat,
       fileSize: file.size,
       uploadedAt: new Date().toISOString(),
       status: 'preview',
+      detectedManufacturer: detected?.manufacturer || undefined,
+      detectedModel: detected?.model || undefined,
       recordCount: records.length,
       dateRange: {
         from: records[0].date,
@@ -223,14 +261,15 @@ export default function SDCardImport() {
       >
         <Upload className="w-10 h-10 mx-auto text-muted-foreground mb-3" />
         <p className="font-semibold text-foreground">Cliquez ou deposez un fichier carte SD</p>
-        <p className="text-sm text-muted-foreground mt-1">Formats supportes : .edf (European Data Format), .csv</p>
+        <p className="text-sm text-muted-foreground mt-1">Formats supportes : .edf (European Data Format), .csv, OSCAR export (.json/.zip)</p>
         <p className="text-xs text-muted-foreground mt-1">
-          Les donnees seront parsees : heures utilisation, IAH, fuites, pression
+          Les donnees seront parsees : heures utilisation, IAH, fuites, pression.
+          Le fabricant est auto-detecte depuis le fichier.
         </p>
         <input
           ref={fileInputRef}
           type="file"
-          accept=".edf,.csv"
+          accept=".edf,.csv,.json,.zip"
           className="hidden"
           onChange={handleFileSelect}
         />
@@ -255,11 +294,26 @@ export default function SDCardImport() {
               </button>
             </div>
 
+            {/* Fabricant auto-detecte */}
+            {currentImport.detectedManufacturer && (
+              <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0" />
+                <div>
+                  <p className="text-sm font-medium text-green-800">
+                    Fabricant detecte : {currentImport.detectedManufacturer}
+                  </p>
+                  <p className="text-xs text-green-700">
+                    Modele probable : {currentImport.detectedModel} - Mapping des colonnes automatique
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Info fichier */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-sm">
               <div className="bg-muted/50 rounded-lg p-3">
                 <p className="text-xs text-muted-foreground">Format</p>
-                <p className="font-medium uppercase">{currentImport.fileType}</p>
+                <p className="font-medium uppercase">{currentImport.fileType === 'oscar' ? 'OSCAR Export' : currentImport.fileType}</p>
               </div>
               <div className="bg-muted/50 rounded-lg p-3">
                 <p className="text-xs text-muted-foreground">Taille</p>

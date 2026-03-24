@@ -126,7 +126,7 @@ export function DashboardPage() {
 
               {/* Accès rapides */}
               <div className="space-y-4">
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer border-blue-200 hover:border-blue-400" onClick={() => navigate('/patients')}>
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer border-blue-200 hover:border-blue-400 focus-within:ring-2 focus-within:ring-blue-500/50" onClick={() => navigate('/patients')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate('/patients'); }}>
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                       <span className="flex items-center gap-2">
@@ -152,7 +152,7 @@ export function DashboardPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer border-purple-200 hover:border-purple-400" onClick={() => navigate('/monitoring-dashboard')}>
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer border-purple-200 hover:border-purple-400 focus-within:ring-2 focus-within:ring-purple-500/50" onClick={() => navigate('/monitoring-dashboard')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate('/monitoring-dashboard'); }}>
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                       <span className="flex items-center gap-2">
@@ -178,7 +178,7 @@ export function DashboardPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer border-orange-200 hover:border-orange-400" onClick={() => navigate('/dashboard-finance')}>
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer border-orange-200 hover:border-orange-400 focus-within:ring-2 focus-within:ring-orange-500/50" onClick={() => navigate('/dashboard-finance')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate('/dashboard-finance'); }}>
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                       <span className="flex items-center gap-2">

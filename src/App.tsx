@@ -167,7 +167,7 @@ export default function App() {
             <ScrollToTop />
             <PWABanner />
             <NetworkStatus />
-            <div className="min-h-screen flex flex-col bg-white">
+            <div className="min-h-screen flex flex-col bg-white dark:bg-background">
               <Header />
               <main className="flex-1 pt-16 lg:pt-20">
                 <Suspense fallback={<PageLoader />}>

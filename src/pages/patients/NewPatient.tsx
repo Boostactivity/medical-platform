@@ -592,7 +592,10 @@ export function NewPatient() {
                       <div
                         key={machine.id}
                         onClick={() => setFormData({ ...formData, machine_type: machine.id })}
-                        className={`p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setFormData({ ...formData, machine_type: machine.id }); }}
+                        className={`p-4 border-2 rounded-xl cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50 ${
                           formData.machine_type === machine.id
                             ? 'border-[#007AFF] bg-[#007AFF]/5'
                             : 'border-[#D2D2D7] hover:border-[#007AFF]/50'
@@ -625,7 +628,10 @@ export function NewPatient() {
                       <div
                         key={mask.id}
                         onClick={() => setFormData({ ...formData, mask_type: mask.id })}
-                        className={`p-4 border-2 rounded-xl cursor-pointer transition-all ${
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setFormData({ ...formData, mask_type: mask.id }); }}
+                        className={`p-4 border-2 rounded-xl cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50 ${
                           formData.mask_type === mask.id
                             ? 'border-[#007AFF] bg-[#007AFF]/5'
                             : 'border-[#D2D2D7] hover:border-[#007AFF]/50'
@@ -717,16 +723,4 @@ export function NewPatient() {
                     </>
                   ) : (
                     <>
-                      <Check className="w-4 h-4" />
-                      Créer le patient
-                    </>
-                  )}
-                </Button>
-              )}
-            </div>
-          </motion.div>
-        </AnimatePresence>
-      </div>
-    </div>
-  );
-}
+             

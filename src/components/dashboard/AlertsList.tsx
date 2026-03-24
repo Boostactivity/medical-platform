@@ -114,7 +114,10 @@ export function AlertsList({ alerts, maxItems = 5 }: AlertsListProps) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
                 onClick={() => navigate(`/patients/${alert.patientId}`)}
-                className="group flex items-start gap-4 p-4 rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all cursor-pointer bg-gradient-to-r hover:from-blue-50/50"
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate(`/patients/${alert.patientId}`); }}
+                className="group flex items-start gap-4 p-4 rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all cursor-pointer bg-gradient-to-r hover:from-blue-50/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
               >
                 {/* Indicateur de sévérité */}
                 <div className="flex-shrink-0 mt-1">

@@ -415,7 +415,10 @@ export function Support() {
                 <div
                   key={conv.id}
                   onClick={() => setSelectedConv(conv)}
-                  className={`p-4 border-b border-[#D2D2D7] cursor-pointer transition-colors ${
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedConv(conv); }}
+                  className={`p-4 border-b border-[#D2D2D7] cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50 ${
                     selectedConv?.id === conv.id ? 'bg-[#007AFF]/10' : 'hover:bg-[#F5F5F7]'
                   }`}
                 >

@@ -553,7 +553,7 @@ function BlogList() {
           <BookOpen className="w-4 h-4 text-blue-600" />
           <span className="text-sm text-blue-700 font-medium">Blog sante</span>
         </div>
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-foreground mb-3">
           Fiches pratiques & conseils
         </h1>
         <p className="text-lg text-gray-500 max-w-2xl mx-auto">
@@ -570,7 +570,7 @@ function BlogList() {
             placeholder="Rechercher un article..."
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg bg-white text-gray-900 dark:text-foreground focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           />
         </div>
         <div className="flex flex-wrap gap-2">
@@ -609,7 +609,7 @@ function BlogList() {
               >
                 <Link
                   to={`/blog/${article.slug}`}
-                  className="group block bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-all"
+                  className="group block bg-white dark:bg-card border border-gray-200 dark:border-border rounded-xl overflow-hidden hover:shadow-lg transition-all"
                 >
                   {/* Image placeholder */}
                   <div className={`h-40 bg-gradient-to-br ${article.imageColor} flex items-center justify-center`}>
@@ -624,7 +624,7 @@ function BlogList() {
                         <Clock className="w-3 h-3" /> {article.readTime} min
                       </span>
                     </div>
-                    <h3 className="font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                    <h3 className="font-semibold text-gray-900 dark:text-foreground mb-2 group-hover:text-blue-600 transition-colors">
                       {article.title}
                     </h3>
                     <p className="text-sm text-gray-500 line-clamp-2 mb-3">{article.summary}</p>
@@ -651,8 +651,8 @@ function BlogList() {
 
         {/* Sidebar - Articles populaires */}
         <div className="lg:col-span-1">
-          <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 sticky top-24">
-            <h3 className="font-semibold text-gray-900 flex items-center gap-2 mb-4">
+          <div className="bg-gray-50 dark:bg-secondary border border-gray-200 dark:border-border rounded-xl p-5 sticky top-24">
+            <h3 className="font-semibold text-gray-900 dark:text-foreground flex items-center gap-2 mb-4">
               <TrendingUp className="w-4 h-4 text-blue-600" />
               Articles populaires
             </h3>
@@ -696,7 +696,7 @@ function BlogArticlePage() {
   if (!article) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-20 text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Article introuvable</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-foreground mb-4">Article introuvable</h2>
         <p className="text-gray-500 mb-6">Cet article n'existe pas ou a ete supprime.</p>
         <button
           onClick={() => navigate('/blog')}
@@ -719,7 +719,7 @@ function BlogArticlePage() {
             {/* Back */}
             <button
               onClick={() => navigate('/blog')}
-              className="flex items-center gap-2 text-gray-500 hover:text-gray-900 mb-6 transition-colors"
+              className="flex items-center gap-2 text-gray-500 hover:text-gray-900 dark:text-foreground mb-6 transition-colors"
             >
               <ArrowLeft className="w-4 h-4" />
               Retour au blog
@@ -734,7 +734,7 @@ function BlogArticlePage() {
               {CATEGORY_CONFIG[article.category].label}
             </span>
 
-            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{article.title}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-foreground mb-4">{article.title}</h1>
 
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-8 pb-8 border-b border-gray-200">
               <span className="flex items-center gap-1"><User className="w-4 h-4" /> {article.author}</span>
@@ -747,7 +747,7 @@ function BlogArticlePage() {
             <div className="prose prose-gray max-w-none">
               {article.content.split('\n\n').map((paragraph, idx) => {
                 if (paragraph.startsWith('## ')) {
-                  return <h2 key={idx} className="text-xl font-bold text-gray-900 mt-8 mb-3">{paragraph.replace('## ', '')}</h2>;
+                  return <h2 key={idx} className="text-xl font-bold text-gray-900 dark:text-foreground mt-8 mb-3">{paragraph.replace('## ', '')}</h2>;
                 }
                 if (paragraph.startsWith('### ')) {
                   return <h3 key={idx} className="text-lg font-semibold text-gray-800 mt-6 mb-2">{paragraph.replace('### ', '')}</h3>;
@@ -763,7 +763,7 @@ function BlogArticlePage() {
                           const content = line.replace('- ', '');
                           const boldMatch = content.match(/^\*\*(.*?)\*\*\s*:\s*(.*)/);
                           if (boldMatch) {
-                            return <div key={lIdx} className="flex items-start gap-2 py-0.5"><span className="text-blue-500 mt-1.5">&#8226;</span><span className="text-gray-600"><strong className="text-gray-900">{boldMatch[1]}</strong> : {boldMatch[2]}</span></div>;
+                            return <div key={lIdx} className="flex items-start gap-2 py-0.5"><span className="text-blue-500 mt-1.5">&#8226;</span><span className="text-gray-600"><strong className="text-gray-900 dark:text-foreground">{boldMatch[1]}</strong> : {boldMatch[2]}</span></div>;
                           }
                           return <div key={lIdx} className="flex items-start gap-2 py-0.5"><span className="text-blue-500 mt-1.5">&#8226;</span><span className="text-gray-600">{content}</span></div>;
                         }
@@ -778,7 +778,7 @@ function BlogArticlePage() {
                   <p key={idx} className="text-gray-600 leading-relaxed my-3">
                     {parts.map((part, pIdx) => {
                       if (part.startsWith('**') && part.endsWith('**')) {
-                        return <strong key={pIdx} className="text-gray-900">{part.replace(/\*\*/g, '')}</strong>;
+                        return <strong key={pIdx} className="text-gray-900 dark:text-foreground">{part.replace(/\*\*/g, '')}</strong>;
                       }
                       return <span key={pIdx}>{part}</span>;
                     })}
@@ -790,11 +790,11 @@ function BlogArticlePage() {
             {/* Related articles */}
             {relatedArticles.length > 0 && (
               <div className="mt-12 pt-8 border-t border-gray-200">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">Articles similaires</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-foreground mb-4">Articles similaires</h3>
                 <div className="grid sm:grid-cols-3 gap-4">
                   {relatedArticles.map(a => (
-                    <Link key={a.id} to={`/blog/${a.slug}`} className="group bg-gray-50 border border-gray-200 rounded-xl p-4 hover:shadow-md transition-all">
-                      <p className="font-medium text-sm text-gray-900 group-hover:text-blue-600 transition-colors mb-1">{a.title}</p>
+                    <Link key={a.id} to={`/blog/${a.slug}`} className="group bg-gray-50 dark:bg-secondary border border-gray-200 dark:border-border rounded-xl p-4 hover:shadow-md transition-all">
+                      <p className="font-medium text-sm text-gray-900 dark:text-foreground group-hover:text-blue-600 transition-colors mb-1">{a.title}</p>
                       <p className="text-xs text-gray-400">{a.readTime} min - {new Date(a.date).toLocaleDateString('fr-FR')}</p>
                     </Link>
                   ))}
@@ -806,8 +806,8 @@ function BlogArticlePage() {
 
         {/* Sidebar */}
         <div className="lg:col-span-1">
-          <div className="bg-gray-50 border border-gray-200 rounded-xl p-5 sticky top-24">
-            <h3 className="font-semibold text-gray-900 flex items-center gap-2 mb-4">
+          <div className="bg-gray-50 dark:bg-secondary border border-gray-200 dark:border-border rounded-xl p-5 sticky top-24">
+            <h3 className="font-semibold text-gray-900 dark:text-foreground flex items-center gap-2 mb-4">
               <TrendingUp className="w-4 h-4 text-blue-600" />
               Articles populaires
             </h3>

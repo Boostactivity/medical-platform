@@ -279,13 +279,13 @@ export function APIDocumentation() {
           Toutes les requetes doivent inclure une cle API dans le header <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">Authorization</code>.
           Les cles sont generees depuis le dashboard prestataire dans Parametres &gt; API.
         </p>
-        <CodeBlock code={`curl -X GET "https://api.medconnect.fr/api/v1/patients" \\
+        <CodeBlock code={`curl -X GET "https://api.plateforme.fr/api/v1/patients" \\
   -H "Authorization: Bearer mk_live_abc123def456" \\
   -H "Content-Type: application/json"`} />
         <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
           <div className="bg-muted/50 rounded-lg p-3">
             <p className="text-xs font-medium text-foreground">Base URL</p>
-            <code className="text-xs text-primary font-mono">https://api.medconnect.fr</code>
+            <code className="text-xs text-primary font-mono">https://api.plateforme.fr</code>
           </div>
           <div className="bg-muted/50 rounded-lg p-3">
             <p className="text-xs font-medium text-foreground">Format</p>

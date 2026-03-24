@@ -207,6 +207,7 @@ export function DashboardLayout({
             size="sm"
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="ml-auto"
+            aria-label={sidebarOpen ? 'Réduire la barre latérale' : 'Agrandir la barre latérale'}
           >
             <Menu className="w-5 h-5" />
           </Button>
@@ -279,6 +280,7 @@ export function DashboardLayout({
                 variant="ghost"
                 size="sm"
                 onClick={() => setMobileMenuOpen(false)}
+                aria-label="Fermer le menu"
               >
                 <X className="w-5 h-5" />
               </Button>
@@ -328,8 +330,9 @@ export function DashboardLayout({
           <Button
             variant="ghost"
             size="sm"
-            className="lg:hidden"
+            className="lg:hidden min-h-12 min-w-12"
             onClick={() => setMobileMenuOpen(true)}
+            aria-label="Ouvrir le menu de navigation"
           >
             <Menu className="w-6 h-6" />
           </Button>
@@ -344,7 +347,7 @@ export function DashboardLayout({
           {/* Actions TopBar */}
           <div className="flex items-center gap-3">
             {/* Notifications */}
-            <Button variant="ghost" size="sm" className="relative">
+            <Button variant="ghost" size="sm" className="relative" aria-label="Notifications (3 non lues)">
               <Bell className="w-5 h-5" />
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
                 3
@@ -352,7 +355,7 @@ export function DashboardLayout({
             </Button>
 
             {/* Aide */}
-            <Button variant="ghost" size="sm">
+            <Button variant="ghost" size="sm" aria-label="Aide">
               <HelpCircle className="w-5 h-5" />
             </Button>
 

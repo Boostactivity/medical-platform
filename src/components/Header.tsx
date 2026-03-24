@@ -62,8 +62,8 @@ export function Header() {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-white/90 backdrop-blur-xl border-b border-gray-200/60 shadow-sm'
-          : 'bg-white/60 backdrop-blur-xl'
+          ? 'bg-white/90 dark:bg-background/90 backdrop-blur-xl border-b border-gray-200/60 dark:border-border shadow-sm'
+          : 'bg-white/60 dark:bg-background/60 backdrop-blur-xl'
       }`}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -161,9 +161,9 @@ export function Header() {
               aria-label={mobileMenuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
             >
               <div className="w-5 h-3.5 flex flex-col justify-between">
-                <span className={`w-full h-0.5 bg-[#1a2b3c] transition-all origin-left ${mobileMenuOpen ? 'rotate-45' : ''}`} />
-                <span className={`w-full h-0.5 bg-[#1a2b3c] transition-all ${mobileMenuOpen ? 'opacity-0' : ''}`} />
-                <span className={`w-full h-0.5 bg-[#1a2b3c] transition-all origin-left ${mobileMenuOpen ? '-rotate-45' : ''}`} />
+                <span className={`w-full h-0.5 bg-[#1a2b3c] dark:bg-foreground transition-all origin-left ${mobileMenuOpen ? 'rotate-45' : ''}`} />
+                <span className={`w-full h-0.5 bg-[#1a2b3c] dark:bg-foreground transition-all ${mobileMenuOpen ? 'opacity-0' : ''}`} />
+                <span className={`w-full h-0.5 bg-[#1a2b3c] dark:bg-foreground transition-all origin-left ${mobileMenuOpen ? '-rotate-45' : ''}`} />
               </div>
             </button>
           </div>
@@ -178,7 +178,7 @@ export function Header() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25 }}
-            className="lg:hidden bg-white/95 backdrop-blur-xl border-b border-gray-200/60"
+            className="lg:hidden bg-white/95 dark:bg-background/95 backdrop-blur-xl border-b border-gray-200/60 dark:border-border"
           >
             <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 space-y-1">
               {navLinks.map((link) => (

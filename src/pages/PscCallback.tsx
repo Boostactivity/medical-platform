@@ -124,8 +124,8 @@ export function PscCallback() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0A0E27] via-[#1E3A8A] to-[#0A0E27] flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl shadow-2xl p-8 lg:p-12 max-w-md w-full">
+    <div className="min-h-screen bg-gradient-to-br from-[#0A0E27] via-[#1E3A8A] to-[#0A0E27] flex items-center justify-center px-4 sm:px-6">
+      <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-12 max-w-md w-full">
         {/* Logo Pro Santé Connect */}
         <div className="flex justify-center mb-6">
           <div className="flex items-center justify-center w-20 h-20 bg-[#1E3A8A] rounded-full">

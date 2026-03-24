@@ -171,14 +171,14 @@ export function SetupPrestataire() {
     .some(c => c.status === 'error' && c.details?.includes('auth.users'));
 
   return (
-    <div className="min-h-screen bg-[#F5F5F7] py-12">
-      <div className="max-w-4xl mx-auto px-6">
+    <div className="min-h-screen bg-[#F5F5F7] py-8 sm:py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-[#007AFF] to-[#5AC8FA] rounded-2xl mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-[#007AFF] to-[#5AC8FA] rounded-2xl mb-4" role="img" aria-label="Configuration">
             <span className="text-white text-2xl">⚙️</span>
           </div>
-          <h1 className="text-3xl text-[#1D1D1F] mb-2">Configuration Système Prestataire</h1>
+          <h1 className="text-2xl sm:text-3xl text-[#1D1D1F] mb-2">Configuration Système Prestataire</h1>
           <p className="text-[#86868B]">
             Vérification et création des tables nécessaires
           </p>

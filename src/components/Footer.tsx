@@ -36,7 +36,7 @@ export function Footer() {
   ];
 
   return (
-    <footer className="bg-[#f8fafc] border-t border-gray-100">
+    <footer className="bg-[#f8fafc] dark:bg-secondary border-t border-gray-100 dark:border-border">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-12">
           {/* Brand column */}
@@ -52,7 +52,7 @@ export function Footer() {
 
           {sections.map((section) => (
             <div key={section.title}>
-              <h3 className="text-xs font-medium text-[#1a2b3c] mb-4 uppercase tracking-wider">
+              <h3 className="text-xs font-medium text-[#1a2b3c] dark:text-foreground mb-4 uppercase tracking-wider">
                 {section.title}
               </h3>
               <ul className="space-y-2.5">
@@ -60,7 +60,7 @@ export function Footer() {
                   <li key={link.label}>
                     <Link
                       to={link.to}
-                      className="text-xs text-gray-500 hover:text-blue-600 transition-colors"
+                      className="text-xs text-gray-500 dark:text-muted-foreground hover:text-blue-600 transition-colors"
                     >
                       {link.label}
                     </Link>
@@ -71,7 +71,7 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="pt-6 border-t border-gray-100">
+        <div className="pt-6 border-t border-gray-100 dark:border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-xs text-gray-400">
               &copy; {currentYear} {branding.name}. {t('footer.copyright')}
@@ -79,13 +79,13 @@ export function Footer() {
             <div className="flex items-center gap-6">
               <Link
                 to="/mentions-legales"
-                className="text-xs text-gray-400 hover:text-blue-600 transition-colors"
+                className="text-xs text-gray-400 dark:text-muted-foreground hover:text-blue-600 transition-colors"
               >
                 {t('footer.legal')}
               </Link>
               <Link
                 to="/mentions-legales"
-                className="text-xs text-gray-400 hover:text-blue-600 transition-colors"
+                className="text-xs text-gray-400 dark:text-muted-foreground hover:text-blue-600 transition-colors"
               >
                 {t('footer.privacy')}
               </Link>

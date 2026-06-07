@@ -30,7 +30,9 @@ import { requireTenant, type TenantEnv } from '../middleware/tenant.ts';
 
 const app = new Hono<TenantEnv>();
 
-app.use('*', requireAuth, requireRole('patient'), requireTenant);
+// Scopé /patient/* (pas '*') : monté au préfixe racine, un '*' avalerait
+// les routes des sub-apps montées après (ex. 401 sur /public/agencies).
+app.use('/patient/*', requireAuth, requireRole('patient'), requireTenant);
 
 // ------------------------------------------------------------------
 // Helpers

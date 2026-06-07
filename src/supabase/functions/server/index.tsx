@@ -51,6 +51,10 @@ app.get(`${prefix}/health`, (c) => {
   return c.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
+// /public/* — vitrine ANONYME, monté EN PREMIER : les sub-apps suivantes
+// portent des middlewares use() qui intercepteraient ces chemins.
+app.route(prefix, publicVitrineRoutes);
+
 // ============================================
 // SETUP ROUTE (CREATE TABLES) — admin only
 // ============================================
@@ -91,9 +95,6 @@ app.route(prefix, psdmRoutes);
 // /patient/* (score, observance, gamification, préférences, tickets) — portail patient (chantier 3)
 // Pas de collision : /patient/dashboard reste dans dashboardsRoutes.
 app.route(prefix, patientPortalRoutes);
-
-// /public/* — vitrine anonyme (carte agences) (chantier 4)
-app.route(prefix, publicVitrineRoutes);
 
 // ============================================
 // EXISTING ROUTE MODULES

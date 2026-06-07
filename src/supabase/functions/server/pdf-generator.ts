@@ -78,7 +78,7 @@ export function generateReportHTML(data: ReportData): string {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       font-size: 11pt;
       line-height: 1.5;
-      color: #1D1D1F;
+      color: #1A1A1A;
       background: white;
       padding: 40px;
     }
@@ -100,7 +100,7 @@ export function generateReportHTML(data: ReportData): string {
     
     .report-type {
       text-align: right;
-      color: #86868B;
+      color: #5C5C5C;
     }
     
     .section {
@@ -111,7 +111,7 @@ export function generateReportHTML(data: ReportData): string {
       font-size: 14pt;
       font-weight: 600;
       color: #007AFF;
-      border-bottom: 2px solid #E5E5EA;
+      border-bottom: 2px solid #D9D5CC;
       padding-bottom: 8px;
       margin-bottom: 15px;
     }
@@ -126,18 +126,18 @@ export function generateReportHTML(data: ReportData): string {
     .info-item {
       display: flex;
       padding: 10px;
-      background: #F5F5F7;
+      background: #F2F0EB;
       border-radius: 8px;
     }
     
     .info-label {
       font-weight: 600;
-      color: #86868B;
+      color: #5C5C5C;
       min-width: 120px;
     }
     
     .info-value {
-      color: #1D1D1F;
+      color: #1A1A1A;
     }
     
     .stats-grid {
@@ -175,13 +175,13 @@ export function generateReportHTML(data: ReportData): string {
     th, td {
       padding: 12px;
       text-align: left;
-      border-bottom: 1px solid #E5E5EA;
+      border-bottom: 1px solid #D9D5CC;
     }
     
     th {
-      background: #F5F5F7;
+      background: #F2F0EB;
       font-weight: 600;
-      color: #1D1D1F;
+      color: #1A1A1A;
     }
     
     tr:hover {
@@ -203,7 +203,7 @@ export function generateReportHTML(data: ReportData): string {
     
     .status-warning {
       background: #FFF4CE;
-      color: #FF9500;
+      color: #B34000;
     }
     
     .status-critical {
@@ -212,7 +212,7 @@ export function generateReportHTML(data: ReportData): string {
     }
     
     .clinical-summary {
-      background: #F5F5F7;
+      background: #F2F0EB;
       padding: 20px;
       border-radius: 12px;
       border-left: 4px solid #007AFF;
@@ -221,9 +221,9 @@ export function generateReportHTML(data: ReportData): string {
     .footer {
       margin-top: 50px;
       padding-top: 20px;
-      border-top: 2px solid #E5E5EA;
+      border-top: 2px solid #D9D5CC;
       text-align: center;
-      color: #86868B;
+      color: #5C5C5C;
       font-size: 9pt;
     }
     
@@ -240,9 +240,9 @@ export function generateReportHTML(data: ReportData): string {
 <body>
   <!-- PAGE 1 : EN-TÊTE & RÉSUMÉ -->
   <div class="header">
-    <div class="logo">la plateforme</div>
+    <div class="logo">Medical</div>
     <div class="report-type">
-      <div style="font-weight: bold; color: #1D1D1F;">RAPPORT DE SUIVI PPC</div>
+      <div style="font-weight: bold; color: #1A1A1A;">RAPPORT DE SUIVI PPC</div>
       <div>Période : ${new Date(period.start_date).toLocaleDateString('fr-FR')} - ${new Date(period.end_date).toLocaleDateString('fr-FR')}</div>
       <div>Généré le : ${new Date().toLocaleDateString('fr-FR')}</div>
     </div>
@@ -372,16 +372,16 @@ export function generateReportHTML(data: ReportData): string {
 
   <!-- SIGNATURE -->
   <div class="signature">
-    <div style="margin-bottom: 10px; color: #86868B;">Signature électronique</div>
-    <div style="font-weight: bold; color: #007AFF;">la plateforme</div>
-    <div style="color: #86868B; font-size: 9pt;">Prestataire de santé à domicile agréé</div>
+    <div style="margin-bottom: 10px; color: #5C5C5C;">Signature électronique</div>
+    <div style="font-weight: bold; color: #007AFF;">Medical</div>
+    <div style="color: #5C5C5C; font-size: 9pt;">Prestataire de santé à domicile agréé</div>
   </div>
 
   <!-- FOOTER -->
   <div class="footer">
-    <p>Ce document a été généré automatiquement par la plateforme.</p>
+    <p>Ce document a été généré automatiquement par la plateforme Medical.</p>
     <p>Confidentiel - Usage strictement médical - Ne pas diffuser</p>
-    <p style="margin-top: 10px;">la plateforme - 123 Avenue de la Santé, 75000 Paris - Tél : 01 23 45 67 89</p>
+    <p style="margin-top: 10px;">Medical - 123 Avenue de la Santé, 75000 Paris - Tél : 01 23 45 67 89</p>
   </div>
 </body>
 </html>
@@ -402,7 +402,7 @@ export async function convertHTMLToPDF(html: string): Promise<Uint8Array> {
   
   // Simuler un PDF minimal (header PDF)
   const pdfHeader = '%PDF-1.4\n';
-  const pdfContent = `1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n2 0 obj\n<< /Type /Pages /Count 1 /Kids [3 0 R] >>\nendobj\n3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R >>\nendobj\n4 0 obj\n<< /Length 44 >>\nstream\nBT\n/F1 12 Tf\n100 700 Td\n(Rapport PPC - la plateforme) Tj\nET\nendstream\nendobj\nxref\n0 5\n0000000000 65535 f\n0000000009 00000 n\n0000000058 00000 n\n0000000115 00000 n\n0000000214 00000 n\ntrailer\n<< /Size 5 /Root 1 0 R >>\nstartxref\n308\n%%EOF`;
+  const pdfContent = `1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n2 0 obj\n<< /Type /Pages /Count 1 /Kids [3 0 R] >>\nendobj\n3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R >>\nendobj\n4 0 obj\n<< /Length 44 >>\nstream\nBT\n/F1 12 Tf\n100 700 Td\n(Rapport PPC - Medical) Tj\nET\nendstream\nendobj\nxref\n0 5\n0000000000 65535 f\n0000000009 00000 n\n0000000058 00000 n\n0000000115 00000 n\n0000000214 00000 n\ntrailer\n<< /Size 5 /Root 1 0 R >>\nstartxref\n308\n%%EOF`;
   
   const fullPDF = pdfHeader + pdfContent;
   

@@ -4,7 +4,7 @@
  * Route dynamique : /patients/[id]
  * 
  * Affiche :
- * - Score la plateforme et observance
+ * - Score Medical et observance
  * - Graphiques de télémétrie
  * - Historique des nuits
  * - Alertes et interventions
@@ -14,7 +14,7 @@
 
 import React, { useMemo } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { ArrowLeft, Calendar, Activity, Moon, AlertCircle, TrendingUp, Download, FileText, Upload, Trash2, Brain, Users, Video, StickyNote } from 'lucide-react'
+import { ArrowLeft, Calendar, Activity, Moon, AlertCircle, TrendingUp, Download, FileText, Upload, Trash2 } from 'lucide-react'
 import { DashboardLayout } from '../../components/layouts/DashboardLayout'
 import { Button } from '../../components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../../components/ui/card'
@@ -24,10 +24,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../components/ui/ta
 import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { cn } from '../../components/ui/utils'
 import { PDFReportGenerator } from '../../components/reports/PDFReportGenerator'
-import { PrivateNotes } from '../../components/doctor/PrivateNotes'
-import { Teleconsultation } from '../../components/doctor/Teleconsultation'
-import { CohortComparison } from '../../components/doctor/CohortComparison'
-import { PredictiveAlerts } from '../../components/doctor/PredictiveAlerts'
 import { toast } from 'sonner'
 
 // Données mockées (seront remplacées par API avec l'ID)
@@ -92,14 +88,14 @@ export function PatientDetailPage() {
   // Si patient non trouvé
   if (!patient) {
     return (
-      <DashboardLayout userRole="medecin" userName="Dr. Martin" userEmail="dr.martin@medconnect.fr">
+      <DashboardLayout userRole="medecin" userName="Dr. Martin" userEmail="dr.martin@medical.fr">
         <div className="text-center py-12">
           <AlertCircle className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
           <h2 className="text-2xl font-semibold mb-2">Patient non trouvé</h2>
           <p className="text-muted-foreground mb-6">
             Le patient avec l'ID {id} n'existe pas.
           </p>
-          <Button onClick={() => navigate('/patients')}>
+          <Button onClick={() => navigate('/pro/patients')}>
             <ArrowLeft className="w-4 h-4 mr-2" />
             Retour à la liste
           </Button>
@@ -128,7 +124,7 @@ export function PatientDetailPage() {
   }
 
   return (
-    <DashboardLayout userRole="medecin" userName="Dr. Martin" userEmail="dr.martin@medconnect.fr">
+    <DashboardLayout userRole="medecin" userName="Dr. Martin" userEmail="dr.martin@medical.fr">
       <div className="space-y-6">
         {/* Header avec bouton retour */}
         <div className="flex items-center justify-between">
@@ -136,7 +132,7 @@ export function PatientDetailPage() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => navigate('/patients')}
+              onClick={() => navigate('/pro/patients')}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Retour
@@ -166,7 +162,7 @@ export function PatientDetailPage() {
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Score la plateforme
+                Score Medical
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -239,10 +235,10 @@ export function PatientDetailPage() {
 
         {/* Onglets de données */}
         <Tabs defaultValue="telemetry" className="w-full">
-          <TabsList className="flex w-full flex-wrap gap-1">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="telemetry">
               <Activity className="w-4 h-4 mr-2" />
-              Telemetrie
+              Télémétrie
             </TabsTrigger>
             <TabsTrigger value="nights">
               <Moon className="w-4 h-4 mr-2" />
@@ -251,22 +247,6 @@ export function PatientDetailPage() {
             <TabsTrigger value="documents">
               <FileText className="w-4 h-4 mr-2" />
               Documents
-            </TabsTrigger>
-            <TabsTrigger value="predictive">
-              <Brain className="w-4 h-4 mr-2" />
-              IA Predictive
-            </TabsTrigger>
-            <TabsTrigger value="cohort">
-              <Users className="w-4 h-4 mr-2" />
-              Cohorte
-            </TabsTrigger>
-            <TabsTrigger value="teleconsult">
-              <Video className="w-4 h-4 mr-2" />
-              Teleconsultation
-            </TabsTrigger>
-            <TabsTrigger value="notes">
-              <StickyNote className="w-4 h-4 mr-2" />
-              Notes
             </TabsTrigger>
             <TabsTrigger value="info">
               <Calendar className="w-4 h-4 mr-2" />
@@ -278,7 +258,7 @@ export function PatientDetailPage() {
           <TabsContent value="telemetry" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Évolution du Score la plateforme (30 jours)</CardTitle>
+                <CardTitle>Évolution du Score Medical (30 jours)</CardTitle>
                 <CardDescription>
                   Score global basé sur l'observance, l'AHI et la qualité du traitement
                 </CardDescription>
@@ -321,7 +301,7 @@ export function PatientDetailPage() {
                       <XAxis dataKey="date" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip />
-                      <Line type="monotone" dataKey="ahi" stroke="#34C759" strokeWidth={2} />
+                      <Line type="monotone" dataKey="ahi" stroke="#18753C" strokeWidth={2} />
                     </LineChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -339,7 +319,7 @@ export function PatientDetailPage() {
                       <XAxis dataKey="date" className="text-xs" />
                       <YAxis className="text-xs" />
                       <Tooltip />
-                      <Line type="monotone" dataKey="leaks" stroke="#FF9500" strokeWidth={2} />
+                      <Line type="monotone" dataKey="leaks" stroke="#B34000" strokeWidth={2} />
                     </LineChart>
                   </ResponsiveContainer>
                 </CardContent>
@@ -407,15 +387,13 @@ export function PatientDetailPage() {
                     <PDFReportGenerator
                       patientId={patient.id}
                       patientName={patient.name}
-                      patientAge={patient.age}
-                      patientDevice={patient.device}
                       observanceData={{
                         averageUsage: 7.2,
                         averageAHI: 3.4,
                         averageLeak: 8.5,
                         complianceRate: patient.observance,
                         daysTracked: 27,
-                        expAirScore: patient.score,
+                        medicalScore: patient.score,
                       }}
                     />
                     <Button
@@ -535,48 +513,6 @@ export function PatientDetailPage() {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-
-          {/* Onglet IA Predictive */}
-          <TabsContent value="predictive" className="space-y-4">
-            <PredictiveAlerts
-              patientId={patient.id}
-              patientName={patient.name}
-            />
-          </TabsContent>
-
-          {/* Onglet Cohorte */}
-          <TabsContent value="cohort" className="space-y-4">
-            <CohortComparison
-              patientId={patient.id}
-              patientName={patient.name}
-              patientAge={patient.age}
-              patientBMI={28}
-              patientIAHSeverity="modere"
-              patientMetrics={{
-                observance: patient.observance,
-                ahiResiduel: 3.4,
-                fuites: 8.5,
-                confort: 75,
-                usageMoyen: 7.2,
-              }}
-            />
-          </TabsContent>
-
-          {/* Onglet Teleconsultation */}
-          <TabsContent value="teleconsult" className="space-y-4">
-            <Teleconsultation
-              patientId={patient.id}
-              patientName={patient.name}
-            />
-          </TabsContent>
-
-          {/* Onglet Notes privees */}
-          <TabsContent value="notes" className="space-y-4">
-            <PrivateNotes
-              patientId={patient.id}
-              patientName={patient.name}
-            />
           </TabsContent>
 
           {/* Onglet Informations */}

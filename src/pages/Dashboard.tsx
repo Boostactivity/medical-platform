@@ -29,10 +29,11 @@ import { AlertsList } from '../components/dashboard/AlertsList'
 import { mockKPIs, mockIAHHistory, mockAlerts } from '../mocks/patientData'
 
 export function DashboardPage() {
-  const { user, userRole } = useAuth()
+  const { user } = useAuth()
   const navigate = useNavigate()
 
-  // Utiliser le role résolu par AuthContext (pas user_metadata qui peut être obsolète)
+  // Récupérer le rôle depuis les métadonnées utilisateur
+  const userRole = user?.user_metadata?.role || 'patient'
   const userName = user?.user_metadata?.name || user?.email?.split('@')[0] || 'Utilisateur'
   const userEmail = user?.email || ''
 
@@ -52,7 +53,7 @@ export function DashboardPage() {
           <>
             {/* Header avec date */}
             <div className="mb-8">
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-900 mb-2">
+              <h1 className="text-4xl font-semibold text-gray-900 mb-2">
                 Bonjour, Dr. {userName} 👋
               </h1>
               <p className="text-gray-600 capitalize">
@@ -104,7 +105,7 @@ export function DashboardPage() {
                     value={mockKPIs.scoreGlobal}
                     max={100}
                     label="Score Moyen"
-                    color="#34C759"
+                    color="#18753C"
                     size="lg"
                   />
                   <p className="text-sm text-gray-500 mt-6 text-center max-w-xs">
@@ -126,7 +127,7 @@ export function DashboardPage() {
 
               {/* Accès rapides */}
               <div className="space-y-4">
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer border-blue-200 hover:border-blue-400 focus-within:ring-2 focus-within:ring-blue-500/50" onClick={() => navigate('/patients')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate('/patients'); }}>
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer border-blue-200 hover:border-blue-400" onClick={() => navigate('/pro/patients')}>
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                       <span className="flex items-center gap-2">
@@ -152,7 +153,7 @@ export function DashboardPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer border-purple-200 hover:border-purple-400 focus-within:ring-2 focus-within:ring-purple-500/50" onClick={() => navigate('/monitoring-dashboard')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate('/monitoring-dashboard'); }}>
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer border-purple-200 hover:border-purple-400" onClick={() => navigate('/telemetry')}>
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                       <span className="flex items-center gap-2">
@@ -178,7 +179,7 @@ export function DashboardPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-lg transition-shadow cursor-pointer border-orange-200 hover:border-orange-400 focus-within:ring-2 focus-within:ring-orange-500/50" onClick={() => navigate('/dashboard-finance')} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate('/dashboard-finance'); }}>
+                <Card className="hover:shadow-lg transition-shadow cursor-pointer border-orange-200 hover:border-orange-400" onClick={() => navigate('/pro/finance')}>
                   <CardHeader>
                     <CardTitle className="flex items-center justify-between">
                       <span className="flex items-center gap-2">
@@ -243,11 +244,11 @@ export function DashboardPage() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <Button onClick={() => navigate('/dashboard-patient')}>
+                  <Button onClick={() => navigate('/suivi')}>
                     <Activity className="w-4 h-4 mr-2" />
                     Mon Suivi
                   </Button>
-                  <Button variant="outline" onClick={() => navigate('/my-data')}>
+                  <Button variant="outline" onClick={() => navigate('/documents')}>
                     Mes Documents
                   </Button>
                 </div>
@@ -259,7 +260,7 @@ export function DashboardPage() {
         {userRole === 'admin' && (
           <>
             {/* Dashboard admin */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
               <Card>
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm font-medium text-muted-foreground">

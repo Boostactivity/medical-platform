@@ -19,7 +19,7 @@ export default function NotificationBadge({ count }: NotificationBadgeProps) {
         animate={{ scale: 1 }}
         exit={{ scale: 0 }}
         transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-        className={`absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 flex items-center justify-center bg-[#FF3B30] text-white text-xs rounded-full shadow-lg border-2 border-white ${
+        className={`absolute -top-1 -right-1 min-w-[20px] h-5 px-1.5 flex items-center justify-center bg-[#CE0500] text-white text-xs rounded-full shadow-lg border-2 border-white ${
           count > 0 ? 'animate-pulse' : ''
         }`}
       >

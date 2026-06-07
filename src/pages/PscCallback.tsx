@@ -10,9 +10,11 @@
 
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { toast } from 'sonner';
+import { toast } from 'sonner@2.0.3';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { API_BASE_URL } from '../utils/api';
+import { publicAnonKey } from '../utils/supabase/info';
 
 export function PscCallback() {
   const [searchParams] = useSearchParams();
@@ -35,7 +37,7 @@ export function PscCallback() {
         });
         
         // Rediriger vers login après 5 secondes
-        setTimeout(() => navigate('/espace-medecin'), 5000);
+        setTimeout(() => navigate('/medecin/connexion'), 5000);
         return;
       }
 
@@ -50,7 +52,7 @@ export function PscCallback() {
           description: 'Impossible de créer votre session. Veuillez réessayer.',
         });
         
-        setTimeout(() => navigate('/espace-medecin'), 5000);
+        setTimeout(() => navigate('/medecin/connexion'), 5000);
         return;
       }
 
@@ -58,10 +60,12 @@ export function PscCallback() {
       try {
         setMessage('Validation de votre session PSC...');
         
+        // Appel direct au backend Edge Functions (le same-origin /api/* n'existe pas)
         const response = await fetch(
-          `${window.location.origin}/api/auth/psc/validate-session?token=${sessionToken}`,
+          `${API_BASE_URL}/auth/psc/validate-session?token=${encodeURIComponent(sessionToken)}`,
           {
             method: 'GET',
+            headers: { Authorization: `Bearer ${publicAnonKey}` },
           }
         );
 
@@ -89,7 +93,7 @@ export function PscCallback() {
         });
 
         // Rediriger vers le dashboard médecin
-        setTimeout(() => navigate('/dashboard-medecin'), 1500);
+        setTimeout(() => navigate('/medecin/dashboard'), 1500);
       } catch (error: any) {
         console.error('[PSC Callback] Session validation error:', error);
         setStatus('error');
@@ -98,7 +102,7 @@ export function PscCallback() {
           description: error.message || 'Une erreur est survenue.',
         });
         
-        setTimeout(() => navigate('/espace-medecin'), 5000);
+        setTimeout(() => navigate('/medecin/connexion'), 5000);
       }
     };
 
@@ -124,11 +128,11 @@ export function PscCallback() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0A0E27] via-[#1E3A8A] to-[#0A0E27] flex items-center justify-center px-4 sm:px-6">
-      <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-12 max-w-md w-full">
+    <div className="min-h-screen bg-gradient-to-br from-[#00173D] via-[#003DA3] to-[#00173D] flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl shadow-2xl p-8 lg:p-12 max-w-md w-full">
         {/* Logo Pro Santé Connect */}
         <div className="flex justify-center mb-6">
-          <div className="flex items-center justify-center w-20 h-20 bg-[#1E3A8A] rounded-full">
+          <div className="flex items-center justify-center w-20 h-20 bg-[#003DA3] rounded-full">
             <svg 
               viewBox="0 0 24 24" 
               fill="none" 
@@ -141,13 +145,13 @@ export function PscCallback() {
               />
               <path 
                 d="M12 6L8 8V11.5C8 14.26 9.58 16.87 12 18C14.42 16.87 16 14.26 16 11.5V8L12 6Z" 
-                fill="#1E3A8A"
+                fill="#003DA3"
               />
             </svg>
           </div>
         </div>
 
-        <h2 className="text-2xl text-[#1D1D1F] mb-2 text-center">
+        <h2 className="text-2xl text-[#1A1A1A] mb-2 text-center">
           Pro Santé Connect
         </h2>
 
@@ -180,7 +184,7 @@ export function PscCallback() {
               <div className="text-center">
                 <p className="text-red-600 mb-4">{message}</p>
                 <button
-                  onClick={() => navigate('/espace-medecin')}
+                  onClick={() => navigate('/medecin/connexion')}
                   className="px-6 py-2 bg-[#007AFF] text-white rounded-full hover:bg-[#0051D5] transition-all"
                 >
                   Retour à la connexion
@@ -192,8 +196,8 @@ export function PscCallback() {
 
         {/* Info PSC */}
         {status === 'loading' && (
-          <div className="mt-8 p-4 bg-[#1E3A8A]/10 border border-[#1E3A8A]/30 rounded-xl">
-            <p className="text-xs text-[#1D1D1F] text-center">
+          <div className="mt-8 p-4 bg-[#003DA3]/10 border border-[#003DA3]/30 rounded-xl">
+            <p className="text-xs text-[#1A1A1A] text-center">
               Authentification sécurisée via l'Agence du Numérique en Santé (ANS)
             </p>
           </div>

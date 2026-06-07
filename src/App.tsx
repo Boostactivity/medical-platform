@@ -1,14 +1,10 @@
 import React, { useEffect, useState, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { Toaster } from 'sonner';
+import { BrowserRouter as Router, Routes, Route, Navigate, useParams } from 'react-router-dom';
+import { Toaster } from 'sonner@2.0.3';
 import { createClient } from './utils/supabase/client';
 import { projectId, publicAnonKey } from './utils/supabase/info';
 
-// White-label theme
-import { applyThemeToDOM } from './config/theme';
-import { branding } from './config/branding';
-
-// PILIER 1 - REACTIVITE & FLUIDITE
+// PILIER 1 - RÉACTIVITÉ & FLUIDITÉ
 import { QueryProvider } from './providers/QueryProvider';
 
 // NOUVEAU : Init Sentry
@@ -19,7 +15,8 @@ import { initPWA } from './utils/pwa';
 import { PWABanner, NetworkStatus } from './components/pwa/PWABanner';
 
 // NOUVEAU : Auth Context
-import { AuthProvider } from './contexts/AuthContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { TenantProvider } from './contexts/TenantContext';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 
 // Import des composants globaux
@@ -27,42 +24,35 @@ import { ScrollToTop } from './components/ScrollToTop';
 import { Header } from './components/Header';
 import { Footer } from './components/Footer';
 import { BackToTop } from './components/BackToTop';
-import { QuickHelpButton } from './components/QuickHelpButton';
 
-// NOUVEAU: Configurer la police (via CDN)
-if (typeof document !== 'undefined') {
-  const link = document.createElement('link');
-  link.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap';
-  link.rel = 'stylesheet';
-  document.head.appendChild(link);
-}
-
-// Initialiser Sentry au demarrage de l'app
+// Initialiser Sentry au démarrage de l'app
 initSentry();
 
-// Appliquer le theme white-label
-applyThemeToDOM();
-
-// NOUVEAU : Initialiser PWA au demarrage (desactive dans Figma Make)
+// NOUVEAU : Initialiser PWA au démarrage (désactivé dans Figma Make)
 if (typeof window !== 'undefined') {
-  const isFigma = window.location.hostname.includes('figma.site') ||
+  // Vérifier si on est dans Figma
+  const isFigma = window.location.hostname.includes('figma.site') || 
                   window.location.hostname.includes('figmaiframepreview') ||
                   window.location.hostname.includes('figma.com');
-
-  if (!isFigma) {
+  
+  if (isFigma) {
+    console.log('%c🎨 FIGMA MAKE PREVIEW MODE', 'background: #00D4D4; color: #00173D; font-size: 14px; padding: 8px; border-radius: 4px; font-weight: bold;');
+    console.log('%c⚠️ PWA features are disabled in preview', 'color: #B34000; font-size: 12px;');
+    console.log('%c✅ Deploy to production to test PWA (Service Worker, Offline mode, Installation)', 'color: #18753C; font-size: 12px;');
+  } else {
     initPWA();
   }
 }
 
-// Utiliser le singleton Supabase client
+// Utiliser le singleton Supabase client pour éviter multiple instances
 const supabase = createClient();
 
-// Lazy load pages
+// Lazy load pages for better performance
 const HomePage = lazy(() => import('./pages/HomePage').then(m => ({ default: m.HomePage })));
 const ApneeSommeil = lazy(() => import('./pages/ApneeSommeil').then(m => ({ default: m.ApneeSommeil })));
 const ParcoursDiagnostic = lazy(() => import('./pages/ParcoursDiagnostic').then(m => ({ default: m.ParcoursDiagnostic })));
 const TraitementPPC = lazy(() => import('./pages/TraitementPPC').then(m => ({ default: m.TraitementPPC })));
-const PourquoiExpAir = lazy(() => import('./pages/PourquoiExpAir').then(m => ({ default: m.PourquoiExpAir })));
+const PourquoiMedical = lazy(() => import('./pages/PourquoiMedical').then(m => ({ default: m.PourquoiMedical })));
 const EspacePatient = lazy(() => import('./pages/EspacePatient').then(m => ({ default: m.EspacePatient })));
 const EspaceMedecin = lazy(() => import('./pages/EspaceMedecin').then(m => ({ default: m.EspaceMedecin })));
 const EspaceAdmin = lazy(() => import('./pages/EspaceAdmin').then(m => ({ default: m.EspaceAdmin })));
@@ -73,7 +63,6 @@ const MentionsLegales = lazy(() => import('./pages/MentionsLegales').then(m => (
 const DashboardAdmin = lazy(() => import('./pages/DashboardAdmin').then(m => ({ default: m.DashboardAdmin })));
 const DashboardPatient = lazy(() => import('./pages/DashboardPatient').then(m => ({ default: m.DashboardPatient })));
 const DashboardMedecin = lazy(() => import('./pages/DashboardMedecin').then(m => ({ default: m.DashboardMedecin })));
-const SetupPrestataire = lazy(() => import('./pages/SetupPrestataire').then(m => ({ default: m.SetupPrestataire })));
 const MyData = lazy(() => import('./pages/MyData').then(m => ({ default: m.MyData })));
 const Login = lazy(() => import('./pages/Login'));
 const NotFound = lazy(() => import('./pages/NotFound').then(m => ({ default: m.NotFound })));
@@ -83,7 +72,8 @@ const DashboardFinance = lazy(() => import('./pages/DashboardFinance').then(m =>
 // NOUVEAU : Pages Auth & Routing
 const LoginPage = lazy(() => import('./pages/auth/Login'));
 const ForgotPasswordPage = lazy(() => import('./pages/auth/ForgotPassword'));
-const DashboardPage = lazy(() => import('./pages/Dashboard'));
+// NOTE : pages/Dashboard.tsx conservé (recyclage prévu) mais décâblé —
+// /dashboard est désormais un redirecteur role-based (DashboardRedirect).
 const PatientsListPage = lazy(() => import('./pages/patients/PatientsList'));
 const PatientDetailPage = lazy(() => import('./pages/patients/PatientDetail'));
 
@@ -95,47 +85,68 @@ const Settings = lazy(() => import('./pages/Settings').then(m => ({ default: m.S
 // PHASE 3.8 : Admission & Documents
 const NewPatient = lazy(() => import('./pages/patients/NewPatient').then(m => ({ default: m.NewPatient })));
 
-// Monitoring Dashboard des Alertes
+// NOUVEAU : Monitoring Dashboard des Alertes
 const MonitoringDashboard = lazy(() => import('./components/dashboard/MonitoringDashboard').then(m => ({ default: m.MonitoringDashboard })));
 
-// Page Interventions
+// NOUVEAU : Page Interventions (Historique alertes résolues)
 const Interventions = lazy(() => import('./pages/Interventions').then(m => ({ default: m.Interventions })));
 
-// PHASE 4 : Features avancees differenciantes
-const SleepSimulator = lazy(() => import('./components/patient/SleepSimulator').then(m => ({ default: m.SleepSimulator })));
-const WearableSync = lazy(() => import('./components/integrations/WearableSync').then(m => ({ default: m.WearableSync })));
-const PatientForum = lazy(() => import('./components/community/PatientForum').then(m => ({ default: m.PatientForum })));
-const DropoutPredictor = lazy(() => import('./components/ai/DropoutPredictor').then(m => ({ default: m.DropoutPredictor })));
-const ConsumablesShop = lazy(() => import('./components/marketplace/ConsumablesShop').then(m => ({ default: m.ConsumablesShop })));
-const APIDocumentation = lazy(() => import('./pages/APIDocumentation').then(m => ({ default: m.APIDocumentation })));
-
-// PHASE 5 : Blog, Simulateur public, Jalons patient, Satisfaction, Bilan mensuel, Fidelite, Facturation, Data Export
-const InitSetup = lazy(() => import('./pages/InitSetup').then(m => ({ default: m.InitSetup })));
-const Blog = lazy(() => import('./pages/Blog').then(m => ({ default: m.Blog })));
-const BlogArticleView = lazy(() => import('./pages/Blog').then(m => ({ default: m.BlogArticleView })));
-const SleepScoreSimulator = lazy(() => import('./components/public/SleepScoreSimulator').then(m => ({ default: m.SleepScoreSimulator })));
-const PatientMilestonesPage = lazy(() => import('./components/patient/PatientMilestones').then(m => ({ default: m.PatientMilestones })));
-const SatisfactionSurvey = lazy(() => import('./components/patient/SatisfactionSurvey').then(m => ({ default: m.SatisfactionDashboard })));
-const MonthlyReport = lazy(() => import('./components/patient/MonthlyReport').then(m => ({ default: m.MonthlyReport })));
-const LoyaltyProgram = lazy(() => import('./components/patient/LoyaltyProgram').then(m => ({ default: m.LoyaltyProgram })));
-const BillingManager = lazy(() => import('./components/admin/BillingManager').then(m => ({ default: m.BillingManager })));
-const DataExport = lazy(() => import('./components/admin/DataExport').then(m => ({ default: m.DataExport })));
-
-// PHASE 6 : Connecteurs PPC/CPAP
-const ConnectorSettings = lazy(() => import('./pages/ConnectorSettings').then(m => ({ default: m.ConnectorSettings })));
+// CHANTIER 2 : Back-office PSAD — stock, parc machines, planning, conformité PSDM
+const Stock = lazy(() => import('./pages/pro/Stock').then(m => ({ default: m.Stock })));
+const Parc = lazy(() => import('./pages/pro/Parc').then(m => ({ default: m.Parc })));
+const Planning = lazy(() => import('./pages/pro/Planning').then(m => ({ default: m.Planning })));
+const Conformite = lazy(() => import('./pages/pro/Conformite').then(m => ({ default: m.Conformite })));
 
 // Loading component
 function PageLoader() {
   return (
-    <div className="min-h-screen bg-white flex items-center justify-center">
+    <div className="min-h-screen bg-background flex items-center justify-center">
       <div className="flex flex-col items-center gap-4">
-        <div className="w-16 h-16 bg-gradient-to-br from-[#3b82f6] to-[#8b5cf6] rounded-xl flex items-center justify-center shadow-lg animate-pulse">
-          <span className="text-white font-semibold text-2xl">M</span>
+        <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center shadow-lg animate-pulse">
+          <span className="text-primary-foreground font-semibold text-2xl">M</span>
         </div>
-        <p className="text-[#86868B]">Chargement...</p>
+        <p className="text-muted-foreground">Chargement...</p>
       </div>
     </div>
   );
+}
+
+/**
+ * Redirecteur role-based pour /dashboard :
+ * envoie chaque utilisateur connecté vers le dashboard de SON audience.
+ */
+function DashboardRedirect() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <PageLoader />;
+  }
+
+  if (!user) {
+    return <Navigate to="/auth/login" replace />;
+  }
+
+  const role = user.user_metadata?.role || 'patient';
+
+  switch (role) {
+    case 'doctor':
+      return <Navigate to="/medecin/dashboard" replace />;
+    case 'admin':
+    case 'prestataire':
+      return <Navigate to="/pro/dashboard" replace />;
+    case 'patient':
+    default:
+      return <Navigate to="/patient/dashboard" replace />;
+  }
+}
+
+/**
+ * Redirect de compatibilité avec paramètre dynamique
+ * (React Router v6 ne supporte pas les params dans <Navigate to>).
+ */
+function RedirectWithId({ to }: { to: (id: string) => string }) {
+  const { id } = useParams<{ id: string }>();
+  return <Navigate to={to(id ?? '')} replace />;
 }
 
 export default function App() {
@@ -154,287 +165,210 @@ export default function App() {
               onClick={resetError}
               className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors"
             >
-              Reessayer
+              Réessayer
             </button>
           </div>
         </div>
       )}
       showDialog={false}
     >
+      {/* PILIER 1 - RÉACTIVITÉ & FLUIDITÉ : Wrapping avec QueryProvider */}
       <QueryProvider>
+        <TenantProvider>
         <AuthProvider>
           <Router>
             <ScrollToTop />
+            {/* NOUVEAU : Bannières PWA (Installation + Offline) */}
             <PWABanner />
             <NetworkStatus />
-            <div className="min-h-screen flex flex-col bg-white dark:bg-background">
+            <div className="min-h-screen flex flex-col bg-white">
               <Header />
               <main className="flex-1 pt-16 lg:pt-20">
                 <Suspense fallback={<PageLoader />}>
                   <Routes>
-                    {/* Routes publiques */}
+                    {/* ============ PUBLIC VITRINE (racine) ============ */}
                     <Route path="/" element={<HomePage />} />
                     <Route path="/apnee-sommeil" element={<ApneeSommeil />} />
                     <Route path="/parcours-diagnostic" element={<ParcoursDiagnostic />} />
                     <Route path="/traitement-ppc" element={<TraitementPPC />} />
-                    <Route path="/pourquoi-expair" element={<PourquoiExpAir />} />
-                    <Route path="/pourquoi-nous" element={<PourquoiExpAir />} />
-                    <Route path="/espace-patient" element={<EspacePatient />} />
-                    <Route path="/espace-medecin" element={<EspaceMedecin />} />
-                    <Route path="/espace-admin" element={<EspaceAdmin />} />
+                    <Route path="/pourquoi-medical" element={<PourquoiMedical />} />
                     <Route path="/faq" element={<FAQ />} />
                     <Route path="/qui-sommes-nous" element={<QuiSommesNous />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/mentions-legales" element={<MentionsLegales />} />
+                    <Route path="/psc-callback" element={<PscCallback />} />
 
-                    {/* Routes d'authentification */}
-                    <Route path="/auth/login" element={<LoginPage />} />
-                    <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/init-setup" element={<InitSetup />} />
-
-                    {/* Routes protegees - Dashboard principal */}
+                    {/* ============ AUDIENCE PATIENT ============ */}
+                    <Route path="/patient/connexion" element={<EspacePatient />} />
                     <Route
-                      path="/dashboard"
+                      path="/patient/dashboard"
                       element={
-                        <ProtectedRoute>
-                          <DashboardPage />
-                        </ProtectedRoute>
-                      }
-                    />
-
-                    {/* Routes protegees - Patients (Medecin/Prestataire/Admin) */}
-                    <Route
-                      path="/patients"
-                      element={
-                        <ProtectedRoute allowedRoles={['medecin', 'prestataire', 'admin']}>
-                          <PatientsListPage />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/patients/:id"
-                      element={
-                        <ProtectedRoute allowedRoles={['medecin', 'prestataire', 'admin']}>
-                          <PatientDetailPage />
-                        </ProtectedRoute>
-                      }
-                    />
-
-                    {/* Dashboards par role */}
-                    <Route
-                      path="/dashboard-patient"
-                      element={
-                        <ProtectedRoute requiredRole="patient">
+                        <ProtectedRoute roles={['patient']}>
                           <DashboardPatient />
                         </ProtectedRoute>
                       }
                     />
                     <Route
-                      path="/dashboard-medecin"
+                      path="/patient/mes-donnees"
                       element={
-                        <ProtectedRoute requiredRole="medecin">
+                        <ProtectedRoute roles={['patient']}>
+                          <MyData />
+                        </ProtectedRoute>
+                      }
+                    />
+
+                    {/* ============ AUDIENCE MÉDECIN ============ */}
+                    <Route path="/medecin/connexion" element={<EspaceMedecin />} />
+                    <Route
+                      path="/medecin/dashboard"
+                      element={
+                        <ProtectedRoute roles={['doctor']}>
                           <DashboardMedecin />
                         </ProtectedRoute>
                       }
                     />
+
+                    {/* ============ AUDIENCE PRO (back-office PSAD) ============ */}
+                    <Route path="/pro/connexion" element={<EspaceAdmin />} />
                     <Route
-                      path="/dashboard-admin"
+                      path="/pro/dashboard"
                       element={
-                        <ProtectedRoute requiredRole="admin">
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
                           <DashboardAdmin />
                         </ProtectedRoute>
                       }
                     />
                     <Route
-                      path="/dashboard-finance"
+                      path="/pro/patients"
                       element={
-                        <ProtectedRoute allowedRoles={['admin', 'prestataire']}>
+                        <ProtectedRoute roles={['admin', 'prestataire', 'doctor']}>
+                          <PatientsListPage />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/patients/nouveau"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <NewPatient />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/patients/:id"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire', 'doctor']}>
+                          <PatientDetailPage />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/interventions"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <Interventions />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/stock"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <Stock />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/conformite"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <Conformite />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/parc"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <Parc />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/planning"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <Planning />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/monitoring"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <MonitoringDashboard />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/finance"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
                           <DashboardFinance />
                         </ProtectedRoute>
                       }
                     />
-
-                    {/* Routes Setup et Admin */}
                     <Route
-                      path="/setup-prestataire"
+                      path="/pro/equipe"
                       element={
-                        <ProtectedRoute requiredRole="prestataire">
-                          <SetupPrestataire />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/my-data"
-                      element={
-                        <ProtectedRoute requiredRole="patient">
-                          <MyData />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route path="/psc-callback" element={<PscCallback />} />
-
-                    {/* PHASE 3.5 : Routes Administration & Support */}
-                    <Route
-                      path="/admin-team"
-                      element={
-                        <ProtectedRoute requiredRole="admin">
+                        <ProtectedRoute roles={['admin']}>
                           <AdminTeam />
                         </ProtectedRoute>
                       }
                     />
                     <Route
-                      path="/support"
-                      element={
-                        <ProtectedRoute>
-                          <Support />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/settings"
+                      path="/pro/parametres"
                       element={
                         <ProtectedRoute>
                           <Settings />
                         </ProtectedRoute>
                       }
                     />
-
-                    {/* PHASE 3.8 : Routes Admission & Documents */}
                     <Route
-                      path="/patients/new"
-                      element={
-                        <ProtectedRoute allowedRoles={['medecin', 'prestataire', 'admin']}>
-                          <NewPatient />
-                        </ProtectedRoute>
-                      }
-                    />
-
-                    {/* Monitoring Dashboard des Alertes */}
-                    <Route
-                      path="/monitoring-dashboard"
-                      element={
-                        <ProtectedRoute allowedRoles={['medecin', 'prestataire', 'admin']}>
-                          <MonitoringDashboard />
-                        </ProtectedRoute>
-                      }
-                    />
-
-                    {/* Page Interventions */}
-                    <Route
-                      path="/interventions"
-                      element={
-                        <ProtectedRoute allowedRoles={['prestataire', 'admin']}>
-                          <Interventions />
-                        </ProtectedRoute>
-                      }
-                    />
-
-                    {/* PHASE 4 : Features avancees differenciantes */}
-                    <Route
-                      path="/simulateur-sommeil"
-                      element={
-                        <ProtectedRoute requiredRole="patient">
-                          <SleepSimulator />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/wearables"
-                      element={
-                        <ProtectedRoute requiredRole="patient">
-                          <WearableSync />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/communaute"
+                      path="/pro/support"
                       element={
                         <ProtectedRoute>
-                          <PatientForum />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/risque-decrochage"
-                      element={
-                        <ProtectedRoute allowedRoles={['prestataire', 'admin', 'medecin']}>
-                          <DropoutPredictor />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/consommables"
-                      element={
-                        <ProtectedRoute requiredRole="patient">
-                          <ConsumablesShop />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route path="/api-docs" element={<APIDocumentation />} />
-
-                    {/* PHASE 5 : Blog, Simulateur public, Patient features, Admin features */}
-                    <Route path="/blog" element={<Blog />} />
-                    <Route path="/blog/:slug" element={<BlogArticleView />} />
-                    <Route path="/simulateur" element={<SleepScoreSimulator />} />
-                    <Route
-                      path="/mes-jalons"
-                      element={
-                        <ProtectedRoute requiredRole="patient">
-                          <PatientMilestonesPage />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/satisfaction"
-                      element={
-                        <ProtectedRoute allowedRoles={['admin', 'prestataire']}>
-                          <SatisfactionSurvey />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/bilan-mensuel"
-                      element={
-                        <ProtectedRoute requiredRole="patient">
-                          <MonthlyReport />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/fidelite"
-                      element={
-                        <ProtectedRoute requiredRole="patient">
-                          <LoyaltyProgram />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/facturation"
-                      element={
-                        <ProtectedRoute allowedRoles={['admin', 'prestataire']}>
-                          <BillingManager />
-                        </ProtectedRoute>
-                      }
-                    />
-                    <Route
-                      path="/data-export"
-                      element={
-                        <ProtectedRoute requiredRole="admin">
-                          <DataExport />
+                          <Support />
                         </ProtectedRoute>
                       }
                     />
 
-                    {/* PHASE 6 : Configuration Connecteurs PPC/CPAP */}
-                    <Route
-                      path="/settings/connectors"
-                      element={
-                        <ProtectedRoute allowedRoles={['admin', 'prestataire']}>
-                          <ConnectorSettings />
-                        </ProtectedRoute>
-                      }
-                    />
+                    {/* ============ AUDIENCE TECHNICIEN (réservé) ============ */}
+                    {/* Pas encore de pages — préfixe /technicien/ réservé */}
+
+                    {/* ============ ROUTES GÉNÉRIQUES ============ */}
+                    <Route path="/auth/login" element={<LoginPage />} />
+                    <Route path="/auth/forgot-password" element={<ForgotPasswordPage />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/dashboard" element={<DashboardRedirect />} />
+
+                    {/* ============ REDIRECTS DE COMPATIBILITÉ (anciens chemins) ============ */}
+                    <Route path="/espace-patient" element={<Navigate to="/patient/connexion" replace />} />
+                    <Route path="/espace-medecin" element={<Navigate to="/medecin/connexion" replace />} />
+                    <Route path="/espace-admin" element={<Navigate to="/pro/connexion" replace />} />
+                    <Route path="/dashboard-patient" element={<Navigate to="/patient/dashboard" replace />} />
+                    <Route path="/dashboard-medecin" element={<Navigate to="/medecin/dashboard" replace />} />
+                    <Route path="/dashboard-admin" element={<Navigate to="/pro/dashboard" replace />} />
+                    <Route path="/dashboard-finance" element={<Navigate to="/pro/finance" replace />} />
+                    <Route path="/patients" element={<Navigate to="/pro/patients" replace />} />
+                    <Route path="/patients/new" element={<Navigate to="/pro/patients/nouveau" replace />} />
+                    <Route path="/patients/:id" element={<RedirectWithId to={(id) => `/pro/patients/${id}`} />} />
+                    <Route path="/interventions" element={<Navigate to="/pro/interventions" replace />} />
+                    <Route path="/monitoring-dashboard" element={<Navigate to="/pro/monitoring" replace />} />
+                    <Route path="/admin-team" element={<Navigate to="/pro/equipe" replace />} />
+                    <Route path="/settings" element={<Navigate to="/pro/parametres" replace />} />
+                    <Route path="/support" element={<Navigate to="/pro/support" replace />} />
+                    <Route path="/my-data" element={<Navigate to="/patient/mes-donnees" replace />} />
 
                     {/* 404 */}
                     <Route path="*" element={<NotFound />} />
@@ -443,11 +377,11 @@ export default function App() {
               </main>
               <Footer />
               <BackToTop />
-              <QuickHelpButton />
               <Toaster position="top-right" richColors />
             </div>
           </Router>
         </AuthProvider>
+        </TenantProvider>
       </QueryProvider>
     </SentryErrorBoundary>
   );

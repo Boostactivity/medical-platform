@@ -24,8 +24,8 @@ export function BadgeCard({ badge, index = 0 }: BadgeCardProps) {
       transition={{ delay: index * 0.1 }}
       className={`relative rounded-3xl p-6 ${
         badge.unlocked
-          ? 'bg-gradient-to-br from-[#FFD60A]/20 to-[#FF9500]/20 border-2 border-[#FFD60A]/50'
-          : 'bg-[#F5F5F7] border-2 border-transparent'
+          ? 'bg-gradient-to-br from-[#B34000]/20 to-[#B34000]/20 border-2 border-[#B34000]/50'
+          : 'bg-[#F2F0EB] border-2 border-transparent'
       }`}
     >
       {/* Unlocked badge indicator */}
@@ -34,7 +34,7 @@ export function BadgeCard({ badge, index = 0 }: BadgeCardProps) {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: index * 0.1 + 0.3, type: 'spring', stiffness: 200 }}
-          className="absolute -top-2 -right-2 w-8 h-8 bg-[#FFD60A] rounded-full flex items-center justify-center shadow-lg"
+          className="absolute -top-2 -right-2 w-8 h-8 bg-[#B34000] rounded-full flex items-center justify-center shadow-lg"
         >
           <span className="text-sm">✓</span>
         </motion.div>
@@ -44,8 +44,8 @@ export function BadgeCard({ badge, index = 0 }: BadgeCardProps) {
       <div
         className={`w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-4 ${
           badge.unlocked
-            ? 'bg-gradient-to-br from-[#FFD60A] to-[#FF9500] shadow-lg'
-            : 'bg-[#E5E5EA]'
+            ? 'bg-gradient-to-br from-[#B34000] to-[#B34000] shadow-lg'
+            : 'bg-[#D9D5CC]'
         }`}
       >
         <span className={badge.unlocked ? '' : 'opacity-30'}>{badge.icon}</span>
@@ -53,15 +53,15 @@ export function BadgeCard({ badge, index = 0 }: BadgeCardProps) {
 
       {/* Content */}
       <div>
-        <h4 className={`text-lg mb-1 ${badge.unlocked ? 'text-[#1D1D1F]' : 'text-[#86868B]'}`}>
+        <h4 className={`text-lg mb-1 ${badge.unlocked ? 'text-[#1A1A1A]' : 'text-[#5C5C5C]'}`}>
           {badge.name}
         </h4>
-        <p className="text-sm text-[#86868B] mb-3 line-clamp-2">{badge.description}</p>
+        <p className="text-sm text-[#5C5C5C] mb-3 line-clamp-2">{badge.description}</p>
 
         {/* Progress or unlocked date */}
         {badge.unlocked ? (
           badge.unlockedAt && (
-            <div className="text-xs text-[#86868B]">
+            <div className="text-xs text-[#5C5C5C]">
               Débloqué le {new Date(badge.unlockedAt).toLocaleDateString('fr-FR')}
             </div>
           )
@@ -69,7 +69,7 @@ export function BadgeCard({ badge, index = 0 }: BadgeCardProps) {
           <>
             {badge.progress !== undefined && (
               <div className="mb-2">
-                <div className="h-2 bg-[#E5E5EA] rounded-full overflow-hidden">
+                <div className="h-2 bg-[#D9D5CC] rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${badge.progress}%` }}
@@ -77,11 +77,11 @@ export function BadgeCard({ badge, index = 0 }: BadgeCardProps) {
                     className="h-full bg-gradient-to-r from-[#007AFF] to-[#5AC8FA]"
                   />
                 </div>
-                <div className="text-xs text-[#86868B] mt-1">{badge.progress}% complété</div>
+                <div className="text-xs text-[#5C5C5C] mt-1">{badge.progress}% complété</div>
               </div>
             )}
             {badge.requirement && (
-              <div className="text-xs text-[#86868B] italic">{badge.requirement}</div>
+              <div className="text-xs text-[#5C5C5C] italic">{badge.requirement}</div>
             )}
           </>
         )}
@@ -102,8 +102,8 @@ export function BadgeList({ badges }: BadgeListProps) {
     <div className="bg-white rounded-3xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-2xl text-[#1D1D1F] mb-1">Mes récompenses</h3>
-          <p className="text-sm text-[#86868B]">
+          <h3 className="text-2xl text-[#1A1A1A] mb-1">Mes récompenses</h3>
+          <p className="text-sm text-[#5C5C5C]">
             {unlockedCount} sur {badges.length} badges débloqués
           </p>
         </div>

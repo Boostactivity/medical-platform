@@ -1,95 +1,125 @@
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================================
+   DESIGN SYSTEM "GOLDILOCKS" — Medical (télésuivi PPC)
+   Source de vérité : research/12_PATTERNS_DESIGN_TON_BRANDING_SANTE.md
+   - Ancrage    : bleu Medical #007AFF (choix Adel 07/06/2026 — identité plateforme)
+   - Accent     : terracotta #C45D40 (chaleur, différenciation vs bleu pharmacie)
+   - Neutres    : blancs chauds #FAFAF7 (jamais gris béton / hôpital triste)
+   - Sémantique : alignée DSFR (succès/alerte/danger apaisés)
+   - Typo       : Source Serif 4 (display) + Inter (UI/body) + JetBrains Mono (data)
+   - Règle dure : surfaces patient ≥ 16px, contraste AA renforcé
+   ============================================================ */
+
 :root {
-  --font-size: 17px;
-  --background: #fafbfc;
-  --foreground: #1a2b3c;
-  --card: #ffffff;
-  --card-foreground: #1a2b3c;
-  --popover: #ffffff;
-  --popover-foreground: #1a2b3c;
+  --font-size: 16px;
 
-  /* Bleu medical apaisant - Confiance & Professionnalisme */
-  --primary: #2563eb;
-  --primary-light: #3b82f6;
-  --primary-foreground: #ffffff;
+  /* Familles */
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
 
-  /* Vert sante - Guerison & Espoir */
-  --success: #059669;
-  --success-light: #10b981;
+  /* Neutres chauds */
+  --background: #FAFAF7;
+  --foreground: #1A1A1A;
+  --card: #FFFFFF;
+  --card-foreground: #1A1A1A;
+  --popover: #FFFFFF;
+  --popover-foreground: #1A1A1A;
 
-  /* Violet sommeil - Repos & Detente */
-  --sleep: #7c3aed;
-  --sleep-light: #8b5cf6;
+  /* Ancrage bleu Medical */
+  --primary: #007AFF;
+  --primary-foreground: #FFFFFF;
 
-  /* Neutres chaleureux */
-  --secondary: #f8f9fb;
-  --secondary-foreground: #1a2b3c;
-  --muted: #f1f5f9;
-  --muted-foreground: #64748b;
-  --accent: #e0f2fe;
-  --accent-foreground: #1a2b3c;
+  /* Accent chaud terracotta — CTAs, jamais en masse */
+  --accent: #C45D40;
+  --accent-foreground: #FFFFFF;
 
-  /* Etats */
-  --destructive: #dc2626;
-  --destructive-foreground: #ffffff;
-  --warning: #f59e0b;
+  /* Surfaces secondaires */
+  --secondary: #F2F0EB;
+  --secondary-foreground: #1A1A1A;
+  --muted: #F2F0EB;
+  --muted-foreground: #5C5C5C;
 
-  --border: rgba(148, 163, 184, 0.15);
+  /* Sémantique (DSFR-align — danger réel uniquement pour le rouge) */
+  --success: #18753C;
+  --warning: #B34000;
+  --destructive: #CE0500;
+  --destructive-foreground: #FFFFFF;
+  --info: #007AFF;
+
+  /* Bordures & inputs */
+  --border: #E8E5DE;
   --input: transparent;
-  --input-background: #f8f9fb;
-  --switch-background: #cbd5e1;
-  --font-weight-semibold: 600;
-  --font-weight-medium: 500;
+  --input-background: #F2F0EB;
+  --switch-background: #D9D5CC;
+  --ring: #007AFF;
+
+  /* Poids (lisibilité 50-70 ans : jamais de light) */
   --font-weight-normal: 400;
-  --ring: #2563eb;
+  --font-weight-medium: 500;
 
-  /* Charts - palette medicale */
-  --chart-1: #2563eb;
-  --chart-2: #7c3aed;
-  --chart-3: #059669;
-  --chart-4: #0891b2;
-  --chart-5: #8b5cf6;
+  /* Data viz — palette dérivée, tabular nums obligatoires */
+  --chart-1: #007AFF;
+  --chart-2: #C45D40;
+  --chart-3: #18753C;
+  --chart-4: #5AC8FA;
+  --chart-5: #B34000;
 
-  --radius: 1.125rem;
-  --sidebar: #ffffff;
-  --sidebar-foreground: #1a2b3c;
-  --sidebar-primary: #2563eb;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f1f5f9;
-  --sidebar-accent-foreground: #1a2b3c;
-  --sidebar-border: rgba(148, 163, 184, 0.15);
-  --sidebar-ring: #2563eb;
+  --radius: 0.75rem;
+
+  /* Sidebar / navigation */
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #1A1A1A;
+  --sidebar-primary: #007AFF;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #F2F0EB;
+  --sidebar-accent-foreground: #1A1A1A;
+  --sidebar-border: #E8E5DE;
+  --sidebar-ring: #007AFF;
 }
 
+/* Mode sombre — option (jamais défaut). Bleu éclairci pour contraste AA. */
 .dark {
-  --background: #000000;
-  --foreground: #f5f5f7;
-  --card: #1c1c1e;
-  --card-foreground: #f5f5f7;
-  --popover: #1c1c1e;
-  --popover-foreground: #f5f5f7;
-  --primary: #0a84ff;
-  --primary-foreground: #ffffff;
-  --secondary: #1c1c1e;
-  --secondary-foreground: #f5f5f7;
-  --muted: #2c2c2e;
-  --muted-foreground: #98989d;
-  --accent: #2c2c2e;
-  --accent-foreground: #f5f5f7;
-  --destructive: #ff453a;
-  --destructive-foreground: #ffffff;
-  --border: rgba(255,255,255,0.1);
-  --input: #1c1c1e;
-  --ring: #0a84ff;
-  --sidebar: #1c1c1e;
-  --sidebar-foreground: #f5f5f7;
-  --sidebar-primary: #0a84ff;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #2c2c2e;
-  --sidebar-accent-foreground: #f5f5f7;
-  --sidebar-border: rgba(255,255,255,0.1);
-  --sidebar-ring: #0a84ff;
+  --background: #14181E;
+  --foreground: #F5F4F1;
+  --card: #1B2129;
+  --card-foreground: #F5F4F1;
+  --popover: #1B2129;
+  --popover-foreground: #F5F4F1;
+  --primary: #66AFFF;
+  --primary-foreground: #14181E;
+  --accent: #D98B6F;
+  --accent-foreground: #14181E;
+  --secondary: #242B35;
+  --secondary-foreground: #F5F4F1;
+  --muted: #242B35;
+  --muted-foreground: #A8A49C;
+  --success: #4CAF6E;
+  --warning: #E0814D;
+  --destructive: #F0635A;
+  --destructive-foreground: #14181E;
+  --info: #5AC8FA;
+  --border: #2E3641;
+  --input: #242B35;
+  --input-background: #242B35;
+  --switch-background: #3A4250;
+  --ring: #66AFFF;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --chart-1: #66AFFF;
+  --chart-2: #D98B6F;
+  --chart-3: #4CAF6E;
+  --chart-4: #5AC8FA;
+  --chart-5: #E0814D;
+  --sidebar: #1B2129;
+  --sidebar-foreground: #F5F4F1;
+  --sidebar-primary: #66AFFF;
+  --sidebar-primary-foreground: #14181E;
+  --sidebar-accent: #242B35;
+  --sidebar-accent-foreground: #F5F4F1;
+  --sidebar-border: #2E3641;
+  --sidebar-ring: #66AFFF;
 }
 
 @theme inline {
@@ -109,6 +139,9 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-input-background: var(--input-background);
@@ -131,133 +164,148 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border outline-ring/50;
   }
 
   body {
     @apply bg-background text-foreground;
   }
-
-  button, a, [role="button"] {
-    cursor: pointer;
-  }
-
-  button:disabled, a:disabled {
-    cursor: not-allowed;
-  }
 }
 
+/* ============================================================
+   Typographie de base — échelle mobile-first
+   Display 48/36/28 · H1 32 · H2 24 · H3 20 · Body 18/16/14
+   Headlines en Source Serif 4 (signature "publication scientifique")
+   Body en Inter 400 — jamais de 300 (audience 50-70 ans)
+   ============================================================ */
 @layer base {
   :where(:not(:has([class*=' text-']), :not(:has([class^='text-'])))) {
     h1 {
-      font-size: 4.5rem;
-      font-weight: 300;
-      line-height: 1.05;
-      letter-spacing: -0.02em;
+      font-family: var(--font-display);
+      font-size: 2rem; /* 32px */
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
     }
 
     h2 {
-      font-size: 3rem;
-      font-weight: 300;
-      line-height: 1.08;
-      letter-spacing: -0.015em;
+      font-family: var(--font-display);
+      font-size: 1.5rem; /* 24px */
+      font-weight: 600;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
     }
 
     h3 {
-      font-size: 2.25rem;
-      font-weight: 400;
-      line-height: 1.11;
-      letter-spacing: -0.01em;
+      font-size: 1.25rem; /* 20px */
+      font-weight: 600;
+      line-height: 1.4;
     }
 
     h4 {
-      font-size: 1.75rem;
-      font-weight: 400;
-      line-height: 1.14;
-      letter-spacing: -0.005em;
-    }
-
-    h5 {
-      font-size: 1.5rem;
-      font-weight: 400;
-      line-height: 1.17;
-    }
-
-    h6 {
-      font-size: 1.25rem;
+      font-size: 1rem;
       font-weight: 500;
-      line-height: 1.2;
+      line-height: 1.4;
     }
 
     p {
-      font-size: 1.0625rem;
+      font-size: 1rem; /* 16px — minimum patient */
       font-weight: 400;
-      line-height: 1.47;
-      letter-spacing: -0.01em;
+      line-height: 1.6;
     }
 
     label {
       font-size: 1rem;
-      font-weight: 400;
-      line-height: 1.42;
+      font-weight: 500;
+      line-height: 1.4;
     }
 
     button {
-      font-size: 1.0625rem;
-      font-weight: 400;
-      line-height: 1.2;
-      letter-spacing: -0.01em;
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.4;
     }
 
-    input, textarea {
-      font-size: 1.0625rem;
+    input {
+      font-size: 1rem;
       font-weight: 400;
-      line-height: 1.2;
-      letter-spacing: -0.01em;
+      line-height: 1.5;
     }
   }
 }
 
 html {
   font-size: var(--font-size);
+  scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  overflow-x: hidden;
+  font-family: var(--font-body);
+  font-weight: 400;
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
+/* Display : classes utilitaires pour les heros / titres marketing */
+.text-display-xl {
+  font-family: var(--font-display);
+  font-size: 3rem; /* 48px */
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
 }
 
-/* Custom scrollbar */
+.text-display-lg {
+  font-family: var(--font-display);
+  font-size: 2.25rem; /* 36px */
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+.text-display-md {
+  font-family: var(--font-display);
+  font-size: 1.75rem; /* 28px */
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Data viz / scores / codes LPPR : mono + tabular nums obligatoire */
+.font-data {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Scrollbar neutre (le bleu vif partout = anti-pattern) */
 ::-webkit-scrollbar {
   width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: var(--background);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  background: #C9C5BB;
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.3);
+  background: #A8A49C;
 }
 
-/* PWA Animations (from M2) */
+/* PWA Animations */
 @keyframes slideDown {
   from {
     transform: translateY(-100%);

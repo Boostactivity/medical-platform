@@ -1,93 +1,95 @@
 /**
- * DESIGN SYSTEM - COULEURS
+ * DESIGN SYSTEM "GOLDILOCKS" - COULEURS
  * Package partagé entre Web & Mobile (futur monorepo)
- * 
- * Palette Apple-inspired : Bleu nuit + Turquoise + Lavande
+ *
+ * Source de vérité : research/12_PATTERNS_DESIGN_TON_BRANDING_SANTE.md
+ * Ancrage bleu profond + accent terracotta + neutres chauds.
+ * Sémantique alignée DSFR. Jamais de gris béton / bleu pharmacie.
  */
 
 export const colors = {
-  // Primary - Bleu Nuit
+  // Primary - Bleu Medical #007AFF (choix Adel 07/06/2026 — identité de la plateforme)
   primary: {
-    50: '#E6F0FF',
-    100: '#CCDEFF',
-    200: '#99BEFF',
-    300: '#669DFF',
-    400: '#337DFF',
+    50: '#E5F2FF',
+    100: '#CCE4FF',
+    200: '#99CAFF',
+    300: '#66AFFF',
+    400: '#3395FF',
     500: '#007AFF', // Main
-    600: '#0062CC',
-    700: '#004999',
-    800: '#003166',
-    900: '#001833',
+    600: '#0051D5',
+    700: '#003DA3',
+    800: '#002A70',
+    900: '#00173D',
   },
 
-  // Secondary - Turquoise
+  // Secondary - Bleu ciel : états informatifs, gradients de soutien
   secondary: {
-    50: '#E6F9FA',
-    100: '#CCF3F5',
-    200: '#99E7EB',
-    300: '#66DBE1',
-    400: '#33CFD7',
-    500: '#00C3CD', // Main
-    600: '#009CA4',
-    700: '#00757B',
-    800: '#004E52',
-    900: '#002729',
+    50: '#EBF8FE',
+    100: '#D6F1FE',
+    200: '#ADE3FD',
+    300: '#84D6FB',
+    400: '#5AC8FA',
+    500: '#32B3EF', // Main
+    600: '#1E93C9',
+    700: '#1573A0',
+    800: '#0D5277',
+    900: '#06324D',
   },
 
-  // Accent - Lavande
+  // Accent - Terracotta (chaleur, CTAs — jamais en masse)
   accent: {
-    50: '#F3EFFF',
-    100: '#E7DFFF',
-    200: '#CFBFFF',
-    300: '#B79FFF',
-    400: '#9F7FFF',
-    500: '#875FFF', // Main
-    600: '#6C4CCC',
-    700: '#513999',
-    800: '#362666',
-    900: '#1B1333',
+    50: '#FAF0EC',
+    100: '#F3DCD4',
+    200: '#E7B9A9',
+    300: '#DB967E',
+    400: '#CF7353',
+    500: '#C45D40', // Main
+    600: '#A34D35',
+    700: '#823D2A',
+    800: '#622E20',
+    900: '#411F15',
   },
 
-  // Neutrals - Gris Apple
+  // Neutrals - Blancs chauds (anti "hôpital triste")
   neutral: {
-    50: '#FAFAFA',
-    100: '#F5F5F7',
-    200: '#E8E8ED',
-    300: '#D2D2D7',
-    400: '#AEAEB2',
-    500: '#86868B',
-    600: '#6E6E73',
-    700: '#48484A',
-    800: '#2C2C2E',
-    900: '#1C1C1E',
+    50: '#FAFAF7',
+    100: '#F2F0EB',
+    200: '#E8E5DE',
+    300: '#D9D5CC',
+    400: '#C9C5BB',
+    500: '#A8A49C',
+    600: '#7D7A73',
+    700: '#5C5C5C',
+    800: '#3A3936',
+    900: '#1A1A1A',
   },
 
-  // Semantic Colors
-  success: '#34C759',
-  warning: '#FF9500',
-  error: '#FF3B30',
+  // Semantic Colors (DSFR-align)
+  success: '#18753C',
+  warning: '#B34000',
+  error: '#CE0500',
   info: '#007AFF',
 
   // Medical Specific
   medical: {
-    iah: '#FF3B30',      // Rouge pour IAH critique
-    observance: '#34C759', // Vert pour bonne observance
-    alert: '#FF9500',     // Orange pour alertes
-    device: '#5AC8FA',    // Cyan pour appareil connecté
+    iah: '#CE0500',        // Rouge — IAH critique (danger réel uniquement)
+    observance: '#18753C', // Vert apaisé — bonne observance
+    alert: '#B34000',      // Orange profond — alertes (pas alarmiste)
+    device: '#007AFF',     // Bleu info — appareil connecté
   },
 
   // Backgrounds
   background: {
     primary: '#FFFFFF',
-    secondary: '#F5F5F7',
-    tertiary: '#E8E8ED',
+    secondary: '#FAFAF7',
+    tertiary: '#F2F0EB',
   },
 
   // Text
   text: {
-    primary: '#1C1C1E',
-    secondary: '#86868B',
-    tertiary: '#AEAEB2',
+    primary: '#1A1A1A',
+    secondary: '#5C5C5C',
+    tertiary: '#A8A49C',
     inverse: '#FFFFFF',
   },
 } as const;

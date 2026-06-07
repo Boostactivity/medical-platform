@@ -3,14 +3,9 @@
  * Détection automatique + Workflow + Priorisation + Assignment
  */
 
-import { createClient } from 'jsr:@supabase/supabase-js@2';
+import { supabase } from './lib/supabase.ts';
 import type { StandardizedSleepData } from './universal-adapter.ts';
-import type { ExpAirScore } from './scoring-engine.ts';
-
-const supabase = createClient(
-  Deno.env.get('SUPABASE_URL') ?? '',
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-);
+import type { MedicalScore } from './scoring-engine.ts';
 
 /**
  * TYPES D'ALERTES
@@ -81,7 +76,7 @@ export interface SmartAlert {
  */
 export async function analyzeAndCreateAlerts(
   sleepData: StandardizedSleepData,
-  score: ExpAirScore
+  score: MedicalScore
 ): Promise<SmartAlert[]> {
   const alerts: SmartAlert[] = [];
   
@@ -371,7 +366,7 @@ function checkPressureAlerts(data: StandardizedSleepData): SmartAlert[] {
 /**
  * RÈGLE 6 : ALERTES SCORE
  */
-function checkScoreAlerts(score: ExpAirScore): SmartAlert[] {
+function checkScoreAlerts(score: MedicalScore): SmartAlert[] {
   const alerts: SmartAlert[] = [];
   
   // Alerte si score en baisse significative

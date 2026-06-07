@@ -7,10 +7,10 @@ interface AssistanceCardProps {
 
 export function AssistanceCard({ onContact }: AssistanceCardProps) {
   const issues = [
-    { icon: '😷', label: 'Gêne masque', color: '#FF9500' },
-    { icon: '😮‍💨', label: "Sensation d'étouffement", color: '#FF3B30' },
+    { icon: '😷', label: 'Gêne masque', color: '#B34000' },
+    { icon: '😮‍💨', label: "Sensation d'étouffement", color: '#CE0500' },
     { icon: '🔊', label: 'Bruit machine', color: '#007AFF' },
-    { icon: '⚠️', label: 'Panne technique', color: '#86868B' },
+    { icon: '⚠️', label: 'Panne technique', color: '#5C5C5C' },
   ];
 
   const resources = [
@@ -24,13 +24,13 @@ export function AssistanceCard({ onContact }: AssistanceCardProps) {
       icon: <BookOpen className="w-5 h-5" />,
       title: 'Guides pratiques',
       description: 'Entretien et nettoyage',
-      color: '#34C759',
+      color: '#18753C',
     },
     {
       icon: <Phone className="w-5 h-5" />,
       title: 'Assistance 24/7',
       description: 'Urgence technique',
-      color: '#FF9500',
+      color: '#B34000',
     },
   ];
 
@@ -41,14 +41,14 @@ export function AssistanceCard({ onContact }: AssistanceCardProps) {
           <MessageCircle className="w-6 h-6 text-[#007AFF]" />
         </div>
         <div>
-          <h3 className="text-xl text-[#1D1D1F]">Besoin d'aide ?</h3>
-          <p className="text-sm text-[#86868B]">Nous sommes là pour vous</p>
+          <h3 className="text-xl text-[#1A1A1A]">Besoin d'aide ?</h3>
+          <p className="text-sm text-[#5C5C5C]">Nous sommes là pour vous</p>
         </div>
       </div>
 
       {/* Quick issue buttons */}
       <div className="mb-6">
-        <p className="text-sm text-[#86868B] mb-3">J'ai un problème avec :</p>
+        <p className="text-sm text-[#5C5C5C] mb-3">J'ai un problème avec :</p>
         <div className="grid grid-cols-2 gap-2">
           {issues.map((issue, index) => (
             <motion.button
@@ -57,17 +57,17 @@ export function AssistanceCard({ onContact }: AssistanceCardProps) {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.05 }}
               onClick={onContact}
-              className="flex items-center gap-2 px-4 py-3 bg-[#F5F5F7] rounded-xl hover:bg-[#EBEBED] transition-all text-left"
+              className="flex items-center gap-2 px-4 py-3 bg-[#F2F0EB] rounded-xl hover:bg-[#E8E5DE] transition-all text-left"
             >
               <span className="text-xl">{issue.icon}</span>
-              <span className="text-sm text-[#1D1D1F]">{issue.label}</span>
+              <span className="text-sm text-[#1A1A1A]">{issue.label}</span>
             </motion.button>
           ))}
         </div>
       </div>
 
       {/* Divider */}
-      <div className="h-px bg-[#E5E5EA] my-6"></div>
+      <div className="h-px bg-[#D9D5CC] my-6"></div>
 
       {/* Resources */}
       <div className="space-y-3">
@@ -77,7 +77,7 @@ export function AssistanceCard({ onContact }: AssistanceCardProps) {
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 + index * 0.1 }}
-            className="w-full flex items-center gap-4 p-4 bg-[#F5F5F7] rounded-xl hover:bg-[#EBEBED] transition-all group"
+            className="w-full flex items-center gap-4 p-4 bg-[#F2F0EB] rounded-xl hover:bg-[#E8E5DE] transition-all group"
           >
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center text-white transition-transform group-hover:scale-110"
@@ -86,10 +86,10 @@ export function AssistanceCard({ onContact }: AssistanceCardProps) {
               {resource.icon}
             </div>
             <div className="flex-1 text-left">
-              <div className="text-sm text-[#1D1D1F] mb-1">{resource.title}</div>
-              <div className="text-xs text-[#86868B]">{resource.description}</div>
+              <div className="text-sm text-[#1A1A1A] mb-1">{resource.title}</div>
+              <div className="text-xs text-[#5C5C5C]">{resource.description}</div>
             </div>
-            <div className="text-[#86868B] group-hover:translate-x-1 transition-transform">→</div>
+            <div className="text-[#5C5C5C] group-hover:translate-x-1 transition-transform">→</div>
           </motion.button>
         ))}
       </div>
@@ -99,12 +99,12 @@ export function AssistanceCard({ onContact }: AssistanceCardProps) {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className="mt-6 p-4 bg-gradient-to-r from-[#FF9500]/10 to-[#FF3B30]/10 rounded-xl border border-[#FF9500]/20"
+        className="mt-6 p-4 bg-gradient-to-r from-[#B34000]/10 to-[#CE0500]/10 rounded-xl border border-[#B34000]/20"
       >
         <div className="flex items-start gap-3">
-          <AlertCircle className="w-5 h-5 text-[#FF9500] flex-shrink-0 mt-0.5" />
+          <AlertCircle className="w-5 h-5 text-[#B34000] flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm text-[#1D1D1F] mb-2">
+            <p className="text-sm text-[#1A1A1A] mb-2">
               <strong>Urgence ?</strong> Contactez-nous immédiatement
             </p>
             <a

@@ -16,7 +16,7 @@ import {
   Wind,
   Activity
 } from 'lucide-react';
-import { projectId, publicAnonKey } from '../../utils/supabase/info';
+import { apiPublic } from '../../utils/api';
 
 interface SmartAlert {
   id: string;
@@ -52,19 +52,8 @@ export function SmartAlertsQueue() {
   const loadAlerts = async () => {
     try {
       setLoading(true);
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-50732e52/prestataire/alerts/iot`,
-        {
-          headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setAlerts(data.alerts || []);
-      }
+      const data = await apiPublic('/prestataire/alerts/iot');
+      setAlerts(data.alerts || []);
     } catch (error) {
       console.error('Error loading alerts:', error);
     } finally {

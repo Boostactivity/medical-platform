@@ -3,15 +3,10 @@
  */
 
 import type { Hono } from 'npm:hono';
-import { createClient } from 'jsr:@supabase/supabase-js@2';
+import { supabase } from './lib/supabase.ts';
 import { parseUniversalData, saveSleepData, detectFileFormat } from './universal-adapter.ts';
-import { calculateExpAirScore, saveExpAirScore, getScoreHistory } from './scoring-engine.ts';
+import { calculateMedicalScore, saveMedicalScore, getScoreHistory } from './scoring-engine.ts';
 import { analyzeAndCreateAlerts } from './smart-alerts-engine.ts';
-
-const supabase = createClient(
-  Deno.env.get('SUPABASE_URL') ?? '',
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-);
 
 export function registerIotRoutes(app: any, prefix: string) {
   // ============================================
@@ -52,8 +47,8 @@ export function registerIotRoutes(app: any, prefix: string) {
       const scores = [];
       for (const session of parsedData) {
         const previousScores = await getScoreHistory(patientId, 30);
-        const score = calculateExpAirScore(session, previousScores);
-        await saveExpAirScore(score);
+        const score = calculateMedicalScore(session, previousScores);
+        await saveMedicalScore(score);
         scores.push(score);
       }
       console.log(`[IOT UPLOAD] Calculated ${scores.length} scores`);

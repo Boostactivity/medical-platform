@@ -113,7 +113,7 @@ export function PatientsListPage() {
   }
 
   return (
-    <DashboardLayout userRole="medecin" userName="Dr. Martin" userEmail="dr.martin@medconnect.fr">
+    <DashboardLayout userRole="medecin" userName="Dr. Martin" userEmail="dr.martin@medical.fr">
       <div className="space-y-6">
         {/* Header */}
         <div>
@@ -226,7 +226,7 @@ export function PatientsListPage() {
             return (
               <Link
                 key={patient.id}
-                to={`/patients/${patient.id}`}
+                to={`/pro/patients/${patient.id}`}
                 className="block group"
               >
                 <Card className="hover:shadow-lg hover:border-primary/50 transition-all duration-200">
@@ -258,7 +258,7 @@ export function PatientsListPage() {
                           )}>
                             {patient.score}
                           </p>
-                          <p className="text-xs text-muted-foreground">Score la plateforme</p>
+                          <p className="text-xs text-muted-foreground">Score Medical</p>
                         </div>
                         <div className="text-center">
                           <p className={cn(

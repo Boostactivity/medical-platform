@@ -247,7 +247,7 @@ export function NewPatient() {
 
       // Rediriger vers le détail du patient
       setTimeout(() => {
-        navigate(`/patients/${newPatientId}`);
+        navigate(`/pro/patients/${newPatientId}`);
       }, 1500);
 
     } catch (error: any) {
@@ -259,14 +259,14 @@ export function NewPatient() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F7]">
+    <div className="min-h-screen bg-[#F2F0EB]">
       {/* Header */}
-      <header className="bg-white border-b border-[#D2D2D7]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <header className="bg-white border-b border-[#D9D5CC]">
+        <div className="max-w-5xl mx-auto px-6 py-6">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl sm:text-3xl text-[#1D1D1F] mb-2">Admission d'un nouveau patient</h1>
-              <p className="text-sm text-[#86868B]">
+              <h1 className="text-3xl text-[#1A1A1A] mb-2">Admission d'un nouveau patient</h1>
+              <p className="text-sm text-[#5C5C5C]">
                 Formulaire en {steps.length} étapes • Étape {currentStep}/{steps.length}
               </p>
             </div>
@@ -280,9 +280,9 @@ export function NewPatient() {
         </div>
       </header>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-5xl mx-auto px-6 py-8">
         {/* Stepper */}
-        <div className="bg-white rounded-2xl p-4 sm:p-8 border border-[#D2D2D7] mb-8">
+        <div className="bg-white rounded-2xl p-8 border border-[#D9D5CC] mb-8">
           <div className="flex items-center justify-between">
             {steps.map((step, index) => {
               const Icon = step.icon;
@@ -294,10 +294,10 @@ export function NewPatient() {
                   <div className="flex flex-col items-center flex-1">
                     <div className={`w-16 h-16 rounded-2xl flex items-center justify-center mb-3 transition-all ${
                       isCompleted 
-                        ? 'bg-[#34C759] text-white' 
+                        ? 'bg-[#18753C] text-white' 
                         : isActive
                         ? 'bg-[#007AFF] text-white'
-                        : 'bg-[#F5F5F7] text-[#86868B]'
+                        : 'bg-[#F2F0EB] text-[#5C5C5C]'
                     }`}>
                       {isCompleted ? (
                         <Check className="w-8 h-8" />
@@ -306,16 +306,16 @@ export function NewPatient() {
                       )}
                     </div>
                     <h3 className={`text-sm mb-1 ${
-                      isActive ? 'text-[#007AFF]' : 'text-[#86868B]'
+                      isActive ? 'text-[#007AFF]' : 'text-[#5C5C5C]'
                     }`}>
                       {step.title}
                     </h3>
-                    <p className="text-xs text-[#86868B]">{step.desc}</p>
+                    <p className="text-xs text-[#5C5C5C]">{step.desc}</p>
                   </div>
                   
                   {index < steps.length - 1 && (
                     <div className={`h-0.5 w-full mx-4 transition-all ${
-                      isCompleted ? 'bg-[#34C759]' : 'bg-[#D2D2D7]'
+                      isCompleted ? 'bg-[#18753C]' : 'bg-[#D9D5CC]'
                     }`} />
                   )}
                 </div>
@@ -331,21 +331,21 @@ export function NewPatient() {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            className="bg-white rounded-2xl p-8 border border-[#D2D2D7]"
+            className="bg-white rounded-2xl p-8 border border-[#D9D5CC]"
           >
             {/* ÉTAPE 1 - IDENTITÉ */}
             {currentStep === 1 && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl text-[#1D1D1F] mb-2">Informations personnelles</h2>
-                  <p className="text-sm text-[#86868B]">
+                  <h2 className="text-2xl text-[#1A1A1A] mb-2">Informations personnelles</h2>
+                  <p className="text-sm text-[#5C5C5C]">
                     Renseignez les informations d'identité du patient
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm text-[#86868B] mb-2">
+                    <label className="block text-sm text-[#5C5C5C] mb-2">
                       Prénom <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -353,13 +353,13 @@ export function NewPatient() {
                       value={formData.first_name}
                       onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
                       placeholder="Jean"
-                      className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+                      className="w-full px-4 py-3 border border-[#D9D5CC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm text-[#86868B] mb-2">
+                    <label className="block text-sm text-[#5C5C5C] mb-2">
                       Nom <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -367,13 +367,13 @@ export function NewPatient() {
                       value={formData.last_name}
                       onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
                       placeholder="Dupont"
-                      className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+                      className="w-full px-4 py-3 border border-[#D9D5CC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm text-[#86868B] mb-2">
+                    <label className="block text-sm text-[#5C5C5C] mb-2">
                       <div className="flex items-center gap-2">
                         <CreditCard className="w-4 h-4" />
                         Numéro de Sécurité Sociale (NIR) <span className="text-red-500">*</span>
@@ -385,14 +385,14 @@ export function NewPatient() {
                       onChange={(e) => setFormData({ ...formData, nir: e.target.value.replace(/\D/g, '').slice(0, 15) })}
                       placeholder="123456789012345"
                       maxLength={15}
-                      className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF] font-mono"
+                      className="w-full px-4 py-3 border border-[#D9D5CC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF] font-mono"
                       required
                     />
-                    <p className="text-xs text-[#86868B] mt-1">15 chiffres</p>
+                    <p className="text-xs text-[#5C5C5C] mt-1">15 chiffres</p>
                   </div>
 
                   <div>
-                    <label className="block text-sm text-[#86868B] mb-2">
+                    <label className="block text-sm text-[#5C5C5C] mb-2">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-4 h-4" />
                         Date de naissance <span className="text-red-500">*</span>
@@ -402,13 +402,13 @@ export function NewPatient() {
                       type="date"
                       value={formData.birth_date}
                       onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
-                      className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+                      className="w-full px-4 py-3 border border-[#D9D5CC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm text-[#86868B] mb-2">
+                    <label className="block text-sm text-[#5C5C5C] mb-2">
                       <div className="flex items-center gap-2">
                         <Mail className="w-4 h-4" />
                         Email <span className="text-red-500">*</span>
@@ -419,13 +419,13 @@ export function NewPatient() {
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       placeholder="jean.dupont@email.fr"
-                      className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+                      className="w-full px-4 py-3 border border-[#D9D5CC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm text-[#86868B] mb-2">
+                    <label className="block text-sm text-[#5C5C5C] mb-2">
                       <div className="flex items-center gap-2">
                         <Phone className="w-4 h-4" />
                         Téléphone <span className="text-red-500">*</span>
@@ -436,14 +436,14 @@ export function NewPatient() {
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="06 12 34 56 78"
-                      className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+                      className="w-full px-4 py-3 border border-[#D9D5CC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
                       required
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm text-[#86868B] mb-2">
+                  <label className="block text-sm text-[#5C5C5C] mb-2">
                     Adresse complète
                   </label>
                   <textarea
@@ -451,7 +451,7 @@ export function NewPatient() {
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                     placeholder="123 Rue de la Santé, 75014 Paris"
                     rows={3}
-                    className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+                    className="w-full px-4 py-3 border border-[#D9D5CC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
                   />
                 </div>
               </div>
@@ -461,8 +461,8 @@ export function NewPatient() {
             {currentStep === 2 && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl text-[#1D1D1F] mb-2">Informations médicales</h2>
-                  <p className="text-sm text-[#86868B]">
+                  <h2 className="text-2xl text-[#1A1A1A] mb-2">Informations médicales</h2>
+                  <p className="text-sm text-[#5C5C5C]">
                     Médecin prescripteur et ordonnance obligatoire
                   </p>
                 </div>
@@ -482,9 +482,9 @@ export function NewPatient() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="grid grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-sm text-[#86868B] mb-2">
+                    <label className="block text-sm text-[#5C5C5C] mb-2">
                       <div className="flex items-center gap-2">
                         <Stethoscope className="w-4 h-4" />
                         Médecin prescripteur <span className="text-red-500">*</span>
@@ -495,13 +495,13 @@ export function NewPatient() {
                       value={formData.prescribing_doctor}
                       onChange={(e) => setFormData({ ...formData, prescribing_doctor: e.target.value })}
                       placeholder="Dr. Sophie Martin"
-                      className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+                      className="w-full px-4 py-3 border border-[#D9D5CC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm text-[#86868B] mb-2">
+                    <label className="block text-sm text-[#5C5C5C] mb-2">
                       Panel Code <span className="text-red-500">*</span>
                     </label>
                     <input
@@ -509,24 +509,24 @@ export function NewPatient() {
                       value={formData.panel_code}
                       onChange={(e) => setFormData({ ...formData, panel_code: e.target.value })}
                       placeholder="PANEL_001"
-                      className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+                      className="w-full px-4 py-3 border border-[#D9D5CC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
                       required
                     />
-                    <p className="text-xs text-[#86868B] mt-1">
+                    <p className="text-xs text-[#5C5C5C] mt-1">
                       Code de segmentation pour ce médecin
                     </p>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm text-[#86868B] mb-3">
+                  <label className="block text-sm text-[#5C5C5C] mb-3">
                     <div className="flex items-center gap-2">
                       <FileText className="w-4 h-4" />
                       Ordonnance médicale <span className="text-red-500">*</span>
                     </div>
                   </label>
                   
-                  <div className="border-2 border-dashed border-[#D2D2D7] rounded-2xl p-8 text-center hover:border-[#007AFF] transition-colors">
+                  <div className="border-2 border-dashed border-[#D9D5CC] rounded-2xl p-8 text-center hover:border-[#007AFF] transition-colors">
                     <input
                       type="file"
                       accept=".pdf,.jpg,.jpeg,.png"
@@ -541,10 +541,10 @@ export function NewPatient() {
                             <Check className="w-8 h-8 text-green-600" />
                           </div>
                           <div>
-                            <p className="text-sm text-[#1D1D1F] font-semibold">
+                            <p className="text-sm text-[#1A1A1A] font-semibold">
                               {formData.ordonnance_file.name}
                             </p>
-                            <p className="text-xs text-[#86868B] mt-1">
+                            <p className="text-xs text-[#5C5C5C] mt-1">
                               {(formData.ordonnance_file.size / 1024).toFixed(1)} KB
                             </p>
                           </div>
@@ -558,10 +558,10 @@ export function NewPatient() {
                             <Upload className="w-8 h-8 text-[#007AFF]" />
                           </div>
                           <div>
-                            <p className="text-sm text-[#1D1D1F] font-semibold mb-1">
+                            <p className="text-sm text-[#1A1A1A] font-semibold mb-1">
                               Cliquez pour télécharger l'ordonnance
                             </p>
-                            <p className="text-xs text-[#86868B]">
+                            <p className="text-xs text-[#5C5C5C]">
                               PDF, JPG ou PNG • Max 10 MB
                             </p>
                           </div>
@@ -577,32 +577,29 @@ export function NewPatient() {
             {currentStep === 3 && (
               <div className="space-y-6">
                 <div>
-                  <h2 className="text-2xl text-[#1D1D1F] mb-2">Équipement médical</h2>
-                  <p className="text-sm text-[#86868B]">
+                  <h2 className="text-2xl text-[#1A1A1A] mb-2">Équipement médical</h2>
+                  <p className="text-sm text-[#5C5C5C]">
                     Sélectionnez la machine PPC et le type de masque
                   </p>
                 </div>
 
                 <div>
-                  <label className="block text-sm text-[#86868B] mb-3">
+                  <label className="block text-sm text-[#5C5C5C] mb-3">
                     Machine PPC <span className="text-red-500">*</span>
                   </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4">
                     {MACHINE_TYPES.map((machine) => (
                       <div
                         key={machine.id}
                         onClick={() => setFormData({ ...formData, machine_type: machine.id })}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setFormData({ ...formData, machine_type: machine.id }); }}
-                        className={`p-4 border-2 rounded-xl cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50 ${
+                        className={`p-4 border-2 rounded-xl cursor-pointer transition-all ${
                           formData.machine_type === machine.id
                             ? 'border-[#007AFF] bg-[#007AFF]/5'
-                            : 'border-[#D2D2D7] hover:border-[#007AFF]/50'
+                            : 'border-[#D9D5CC] hover:border-[#007AFF]/50'
                         }`}
                       >
                         <div className="flex items-center justify-between mb-2">
-                          <h3 className="text-sm font-semibold text-[#1D1D1F]">
+                          <h3 className="text-sm font-semibold text-[#1A1A1A]">
                             {machine.name}
                           </h3>
                           {formData.machine_type === machine.id && (
@@ -620,25 +617,22 @@ export function NewPatient() {
                 </div>
 
                 <div>
-                  <label className="block text-sm text-[#86868B] mb-3">
+                  <label className="block text-sm text-[#5C5C5C] mb-3">
                     Type de masque <span className="text-red-500">*</span>
                   </label>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-4">
                     {MASK_TYPES.map((mask) => (
                       <div
                         key={mask.id}
                         onClick={() => setFormData({ ...formData, mask_type: mask.id })}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setFormData({ ...formData, mask_type: mask.id }); }}
-                        className={`p-4 border-2 rounded-xl cursor-pointer transition-all focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50 ${
+                        className={`p-4 border-2 rounded-xl cursor-pointer transition-all ${
                           formData.mask_type === mask.id
                             ? 'border-[#007AFF] bg-[#007AFF]/5'
-                            : 'border-[#D2D2D7] hover:border-[#007AFF]/50'
+                            : 'border-[#D9D5CC] hover:border-[#007AFF]/50'
                         }`}
                       >
                         <div className="flex items-center justify-between mb-2">
-                          <h3 className="text-sm font-semibold text-[#1D1D1F]">
+                          <h3 className="text-sm font-semibold text-[#1A1A1A]">
                             {mask.name}
                           </h3>
                           {formData.mask_type === mask.id && (
@@ -647,14 +641,14 @@ export function NewPatient() {
                             </div>
                           )}
                         </div>
-                        <p className="text-xs text-[#86868B]">{mask.desc}</p>
+                        <p className="text-xs text-[#5C5C5C]">{mask.desc}</p>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm text-[#86868B] mb-2">
+                  <label className="block text-sm text-[#5C5C5C] mb-2">
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4" />
                       Date d'installation prévue <span className="text-red-500">*</span>
@@ -664,7 +658,7 @@ export function NewPatient() {
                     type="date"
                     value={formData.installation_date}
                     onChange={(e) => setFormData({ ...formData, installation_date: e.target.value })}
-                    className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+                    className="w-full px-4 py-3 border border-[#D9D5CC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
                     required
                   />
                 </div>
@@ -688,7 +682,7 @@ export function NewPatient() {
             )}
 
             {/* Navigation Buttons */}
-            <div className="flex items-center justify-between pt-8 border-t border-[#D2D2D7] mt-8">
+            <div className="flex items-center justify-between pt-8 border-t border-[#D9D5CC] mt-8">
               {currentStep > 1 ? (
                 <Button
                   onClick={handlePrevious}
@@ -714,7 +708,7 @@ export function NewPatient() {
                 <Button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="bg-[#34C759] hover:bg-[#2FB34A] gap-2 ml-auto"
+                  className="bg-[#18753C] hover:bg-[#18753C] gap-2 ml-auto"
                 >
                   {loading ? (
                     <>

@@ -63,42 +63,42 @@ function InviteModal({ isOpen, onClose, onSubmit }: InviteModalProps) {
             <UserPlus className="w-6 h-6 text-[#007AFF]" />
           </div>
           <div>
-            <h2 className="text-2xl text-[#1D1D1F]">Inviter un membre</h2>
-            <p className="text-sm text-[#86868B]">Ajouter un nouveau membre à l'équipe</p>
+            <h2 className="text-2xl text-[#1A1A1A]">Inviter un membre</h2>
+            <p className="text-sm text-[#5C5C5C]">Ajouter un nouveau membre à l'équipe</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm text-[#86868B] mb-2">Email professionnel</label>
+            <label className="block text-sm text-[#5C5C5C] mb-2">Email professionnel</label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="exemple@plateforme.fr"
-              className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+              placeholder="exemple@medical.fr"
+              className="w-full px-4 py-3 border border-[#D9D5CC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm text-[#86868B] mb-2">Nom complet</label>
+            <label className="block text-sm text-[#5C5C5C] mb-2">Nom complet</label>
             <input
               type="text"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="Dr. Jean Dupont"
-              className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+              className="w-full px-4 py-3 border border-[#D9D5CC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm text-[#86868B] mb-2">Rôle</label>
+            <label className="block text-sm text-[#5C5C5C] mb-2">Rôle</label>
             <select
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+              className="w-full px-4 py-3 border border-[#D9D5CC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
             >
               <option value="medecin">👨‍⚕️ Médecin</option>
               <option value="technicien">🔧 Technicien</option>
@@ -109,15 +109,15 @@ function InviteModal({ isOpen, onClose, onSubmit }: InviteModalProps) {
 
           {role === 'medecin' && (
             <div>
-              <label className="block text-sm text-[#86868B] mb-2">Panel Code (optionnel)</label>
+              <label className="block text-sm text-[#5C5C5C] mb-2">Panel Code (optionnel)</label>
               <input
                 type="text"
                 value={panelCode}
                 onChange={(e) => setPanelCode(e.target.value)}
                 placeholder="PANEL_001"
-                className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+                className="w-full px-4 py-3 border border-[#D9D5CC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
               />
-              <p className="text-xs text-[#86868B] mt-1">Code unique pour segmenter les patients</p>
+              <p className="text-xs text-[#5C5C5C] mt-1">Code unique pour segmenter les patients</p>
             </div>
           )}
 
@@ -195,7 +195,7 @@ export function AdminTeam() {
 
       // Créer l'utilisateur via Auth Admin
       // Note: En production, il faudrait un endpoint backend sécurisé
-      const tempPassword = 'medco' + Math.random().toString(36).slice(-8);
+      const tempPassword = 'medical' + Math.random().toString(36).slice(-8);
       
       // Pour cette démo, on ajoute directement dans profiles avec statut pending
       const newId = crypto.randomUUID();
@@ -286,14 +286,14 @@ export function AdminTeam() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F7]">
+    <div className="min-h-screen bg-[#F2F0EB]">
       {/* Header */}
-      <header className="bg-white border-b border-[#D2D2D7]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <header className="bg-white border-b border-[#D9D5CC]">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl sm:text-3xl text-[#1D1D1F] mb-2">Gestion de l'équipe</h1>
-              <p className="text-sm text-[#86868B]">
+              <h1 className="text-3xl text-[#1A1A1A] mb-2">Gestion de l'équipe</h1>
+              <p className="text-sm text-[#5C5C5C]">
                 {stats.total} membres • {stats.medecins} médecins • {stats.techniciens} techniciens
               </p>
             </div>
@@ -318,63 +318,63 @@ export function AdminTeam() {
         </div>
       </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-2xl p-6 border border-[#D2D2D7]"
+            className="bg-white rounded-2xl p-6 border border-[#D9D5CC]"
           >
             <div className="flex items-center gap-3 mb-2">
               <Users className="w-5 h-5 text-[#007AFF]" />
-              <span className="text-sm text-[#86868B]">Total</span>
+              <span className="text-sm text-[#5C5C5C]">Total</span>
             </div>
-            <p className="text-3xl text-[#1D1D1F]">{stats.total}</p>
+            <p className="text-3xl text-[#1A1A1A]">{stats.total}</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="bg-white rounded-2xl p-6 border border-[#D2D2D7]"
+            className="bg-white rounded-2xl p-6 border border-[#D9D5CC]"
           >
             <div className="flex items-center gap-3 mb-2">
-              <Shield className="w-5 h-5 text-[#34C759]" />
-              <span className="text-sm text-[#86868B]">Médecins</span>
+              <Shield className="w-5 h-5 text-[#18753C]" />
+              <span className="text-sm text-[#5C5C5C]">Médecins</span>
             </div>
-            <p className="text-3xl text-[#1D1D1F]">{stats.medecins}</p>
+            <p className="text-3xl text-[#1A1A1A]">{stats.medecins}</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-white rounded-2xl p-6 border border-[#D2D2D7]"
+            className="bg-white rounded-2xl p-6 border border-[#D9D5CC]"
           >
             <div className="flex items-center gap-3 mb-2">
-              <Shield className="w-5 h-5 text-[#FF9500]" />
-              <span className="text-sm text-[#86868B]">Techniciens</span>
+              <Shield className="w-5 h-5 text-[#B34000]" />
+              <span className="text-sm text-[#5C5C5C]">Techniciens</span>
             </div>
-            <p className="text-3xl text-[#1D1D1F]">{stats.techniciens}</p>
+            <p className="text-3xl text-[#1A1A1A]">{stats.techniciens}</p>
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="bg-white rounded-2xl p-6 border border-[#D2D2D7]"
+            className="bg-white rounded-2xl p-6 border border-[#D9D5CC]"
           >
             <div className="flex items-center gap-3 mb-2">
-              <AlertCircle className="w-5 h-5 text-[#FF3B30]" />
-              <span className="text-sm text-[#86868B]">En attente</span>
+              <AlertCircle className="w-5 h-5 text-[#CE0500]" />
+              <span className="text-sm text-[#5C5C5C]">En attente</span>
             </div>
-            <p className="text-3xl text-[#1D1D1F]">{stats.pending}</p>
+            <p className="text-3xl text-[#1A1A1A]">{stats.pending}</p>
           </motion.div>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-2xl p-4 border border-[#D2D2D7] mb-6">
+        <div className="bg-white rounded-2xl p-4 border border-[#D9D5CC] mb-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1">
               <input
@@ -382,18 +382,18 @@ export function AdminTeam() {
                 placeholder="🔍 Rechercher un membre..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-4 py-3 border border-[#D2D2D7] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+                className="w-full px-4 py-3 border border-[#D9D5CC] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
               />
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex gap-2">
               {['all', 'medecin', 'technicien', 'prestataire', 'admin'].map((role) => (
                 <button
                   key={role}
                   onClick={() => setFilterRole(role)}
-                  className={`px-3 sm:px-4 py-2 sm:py-3 rounded-xl text-xs sm:text-sm transition-all ${
+                  className={`px-4 py-3 rounded-xl text-sm transition-all ${
                     filterRole === role
                       ? 'bg-[#007AFF] text-white'
-                      : 'bg-[#F5F5F7] text-[#86868B] hover:bg-[#E5E5E7]'
+                      : 'bg-[#F2F0EB] text-[#5C5C5C] hover:bg-[#E8E5DE]'
                   }`}
                 >
                   {role === 'all' ? 'Tous' : role.charAt(0).toUpperCase() + role.slice(1)}
@@ -404,43 +404,43 @@ export function AdminTeam() {
         </div>
 
         {/* Team List */}
-        <div className="bg-white rounded-2xl border border-[#D2D2D7] overflow-hidden">
+        <div className="bg-white rounded-2xl border border-[#D9D5CC] overflow-hidden">
           {loading ? (
             <div className="p-12 text-center">
               <RefreshCw className="w-8 h-8 text-[#007AFF] animate-spin mx-auto mb-4" />
-              <p className="text-[#86868B]">Chargement de l'équipe...</p>
+              <p className="text-[#5C5C5C]">Chargement de l'équipe...</p>
             </div>
           ) : filteredMembers.length === 0 ? (
             <div className="p-12 text-center">
-              <Users className="w-12 h-12 text-[#86868B] mx-auto mb-4" />
-              <p className="text-[#86868B]">Aucun membre trouvé</p>
+              <Users className="w-12 h-12 text-[#5C5C5C] mx-auto mb-4" />
+              <p className="text-[#5C5C5C]">Aucun membre trouvé</p>
             </div>
           ) : (
-            <div className="divide-y divide-[#D2D2D7]">
+            <div className="divide-y divide-[#D9D5CC]">
               {filteredMembers.map((member, index) => (
                 <motion.div
                   key={member.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: index * 0.05 }}
-                  className="p-6 hover:bg-[#F5F5F7] transition-colors"
+                  className="p-6 hover:bg-[#F2F0EB] transition-colors"
                 >
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 flex-1 min-w-0">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#007AFF] to-[#5856D6] flex items-center justify-center text-white">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4 flex-1">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#007AFF] to-[#007AFF] flex items-center justify-center text-white">
                         {member.full_name?.charAt(0)?.toUpperCase() || '?'}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-1">
-                          <h3 className="text-[#1D1D1F]">
+                          <h3 className="text-[#1A1A1A]">
                             {member.full_name || 'Sans nom'}
                           </h3>
                           {getRoleBadge(member.role)}
                           {getStatusBadge(member.status)}
                         </div>
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[#86868B]">
-                          <span className="flex items-center gap-1 truncate max-w-[200px]">
-                            <Mail className="w-4 h-4 flex-shrink-0" />
+                        <div className="flex items-center gap-4 text-sm text-[#5C5C5C]">
+                          <span className="flex items-center gap-1">
+                            <Mail className="w-4 h-4" />
                             {member.email}
                           </span>
                           {member.panel_code && (

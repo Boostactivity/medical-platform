@@ -1,21 +1,16 @@
 /**
- * SCORING ENGINE - Algorithme la plateforme Score (0-100)
+ * SCORING ENGINE - Algorithme Medical Score (0-100)
  * Calcul automatique du score de qualité de traitement
  */
 
-import { createClient } from 'jsr:@supabase/supabase-js@2';
+import { supabase } from './lib/supabase.ts';
 import type { StandardizedSleepData } from './universal-adapter.ts';
-
-const supabase = createClient(
-  Deno.env.get('SUPABASE_URL') ?? '',
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-);
 
 /**
  * STRUCTURE DU SCORE EXP'AIR
  * Total: 100 points répartis sur 6 critères
  */
-export interface ExpAirScore {
+export interface MedicalScore {
   // Score global
   total_score: number; // 0-100
   grade: 'A+' | 'A' | 'B' | 'C' | 'D' | 'F';
@@ -48,10 +43,10 @@ interface CriteriaScore {
 /**
  * CALCUL DU SCORE GLOBAL
  */
-export function calculateExpAirScore(
+export function calculateMedicalScore(
   data: StandardizedSleepData,
-  previousScores?: ExpAirScore[]
-): ExpAirScore {
+  previousScores?: MedicalScore[]
+): MedicalScore {
   // 1. USAGE (30 points) - Critère le plus important
   const usageScore = calculateUsageScore(data.usage_hours);
   
@@ -316,7 +311,7 @@ function calculatePressureScore(
  * CRITÈRE 6 : CONSISTENCY (5 points)
  * Régularité sur les 7 derniers jours
  */
-function calculateConsistencyScore(previousScores?: ExpAirScore[]): CriteriaScore {
+function calculateConsistencyScore(previousScores?: MedicalScore[]): CriteriaScore {
   const maxScore = 5;
   
   if (!previousScores || previousScores.length < 3) {
@@ -371,7 +366,7 @@ function calculateConsistencyScore(previousScores?: ExpAirScore[]): CriteriaScor
 /**
  * CALCUL DU GRADE (A+ à F)
  */
-function calculateGrade(score: number): ExpAirScore['grade'] {
+function calculateGrade(score: number): MedicalScore['grade'] {
   if (score >= 95) return 'A+';
   if (score >= 85) return 'A';
   if (score >= 70) return 'B';
@@ -385,7 +380,7 @@ function calculateGrade(score: number): ExpAirScore['grade'] {
  */
 function calculateTrend(
   currentScore: number,
-  previousScores?: ExpAirScore[]
+  previousScores?: MedicalScore[]
 ): 'improving' | 'stable' | 'declining' {
   if (!previousScores || previousScores.length === 0) {
     return 'stable';
@@ -405,7 +400,7 @@ function calculateTrend(
 /**
  * SAUVEGARDE DU SCORE DANS LA BASE
  */
-export async function saveExpAirScore(score: ExpAirScore): Promise<void> {
+export async function saveMedicalScore(score: MedicalScore): Promise<void> {
   const { error } = await supabase
     .from('patient_stats')
     .upsert({
@@ -429,7 +424,7 @@ export async function saveExpAirScore(score: ExpAirScore): Promise<void> {
 export async function getScoreHistory(
   patientId: string,
   days: number = 30
-): Promise<ExpAirScore[]> {
+): Promise<MedicalScore[]> {
   const { data, error } = await supabase
     .from('patient_stats')
     .select('*')

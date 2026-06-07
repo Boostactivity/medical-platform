@@ -74,15 +74,15 @@ export function DeviceStatus({ userId }: { userId: string }) {
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="bg-gradient-to-br from-[#FF9500]/10 to-[#FF3B30]/10 rounded-3xl p-8 border-2 border-[#FF9500]/30"
+        className="bg-gradient-to-br from-[#B34000]/10 to-[#CE0500]/10 rounded-3xl p-8 border-2 border-[#B34000]/30"
       >
         <div className="flex items-start gap-4 mb-6">
-          <div className="w-16 h-16 bg-gradient-to-br from-[#FF9500] to-[#FF3B30] rounded-2xl flex items-center justify-center flex-shrink-0">
+          <div className="w-16 h-16 bg-gradient-to-br from-[#B34000] to-[#CE0500] rounded-2xl flex items-center justify-center flex-shrink-0">
             <AlertCircle className="w-8 h-8 text-white" />
           </div>
           <div>
-            <h3 className="text-xl text-[#1D1D1F] mb-2">Aucun appareil connecté</h3>
-            <p className="text-[#86868B]">
+            <h3 className="text-xl text-[#1A1A1A] mb-2">Aucun appareil connecté</h3>
+            <p className="text-[#5C5C5C]">
               Liez votre machine PPC pour commencer le suivi automatique de vos nuits.
             </p>
           </div>
@@ -118,21 +118,21 @@ export function DeviceStatus({ userId }: { userId: string }) {
             <Cpu className="w-8 h-8 text-white" />
           </div>
           <div>
-            <h3 className="text-xl text-[#1D1D1F]">{device.manufacturer}</h3>
-            <p className="text-[#86868B]">{device.model}</p>
+            <h3 className="text-xl text-[#1A1A1A]">{device.manufacturer}</h3>
+            <p className="text-[#5C5C5C]">{device.model}</p>
           </div>
         </div>
         
         {/* Sync Status */}
         {syncStatus ? (
-          <div className="flex items-center gap-2 px-4 py-2 bg-[#34C759]/10 rounded-full">
-            <Wifi className="w-5 h-5 text-[#34C759]" />
-            <span className="text-sm text-[#34C759]">Synchronisé</span>
+          <div className="flex items-center gap-2 px-4 py-2 bg-[#18753C]/10 rounded-full">
+            <Wifi className="w-5 h-5 text-[#18753C]" />
+            <span className="text-sm text-[#18753C]">Synchronisé</span>
           </div>
         ) : (
-          <div className="flex items-center gap-2 px-4 py-2 bg-[#FF9500]/10 rounded-full">
-            <WifiOff className="w-5 h-5 text-[#FF9500]" />
-            <span className="text-sm text-[#FF9500]">Hors ligne</span>
+          <div className="flex items-center gap-2 px-4 py-2 bg-[#B34000]/10 rounded-full">
+            <WifiOff className="w-5 h-5 text-[#B34000]" />
+            <span className="text-sm text-[#B34000]">Hors ligne</span>
           </div>
         )}
       </div>
@@ -140,26 +140,26 @@ export function DeviceStatus({ userId }: { userId: string }) {
       {/* Device Info Grid */}
       <div className="grid grid-cols-2 gap-4 mb-6">
         <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4">
-          <div className="text-sm text-[#86868B] mb-1">Numéro de série</div>
-          <div className="text-[#1D1D1F] font-mono text-sm">{device.serial_number}</div>
+          <div className="text-sm text-[#5C5C5C] mb-1">Numéro de série</div>
+          <div className="text-[#1A1A1A] font-mono text-sm">{device.serial_number}</div>
         </div>
         
         <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4">
-          <div className="text-sm text-[#86868B] mb-1">Firmware</div>
-          <div className="text-[#1D1D1F]">{device.firmware_version || 'N/A'}</div>
+          <div className="text-sm text-[#5C5C5C] mb-1">Firmware</div>
+          <div className="text-[#1A1A1A]">{device.firmware_version || 'N/A'}</div>
         </div>
         
         <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4">
-          <div className="text-sm text-[#86868B] mb-1">En service depuis</div>
-          <div className="text-[#1D1D1F] flex items-center gap-2">
+          <div className="text-sm text-[#5C5C5C] mb-1">En service depuis</div>
+          <div className="text-[#1A1A1A] flex items-center gap-2">
             <Calendar className="w-4 h-4" />
             {daysSinceInstall} jours
           </div>
         </div>
         
         <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4">
-          <div className="text-sm text-[#86868B] mb-1">Connectivité</div>
-          <div className="text-[#1D1D1F] capitalize">
+          <div className="text-sm text-[#5C5C5C] mb-1">Connectivité</div>
+          <div className="text-[#1A1A1A] capitalize">
             {device.connectivity_type === 'wifi' && '📡 Wi-Fi'}
             {device.connectivity_type === 'bluetooth' && '📱 Bluetooth'}
             {device.connectivity_type === 'sd_card' && '💾 Carte SD'}
@@ -172,25 +172,25 @@ export function DeviceStatus({ userId }: { userId: string }) {
       {/* Pressure Settings (if available) */}
       {assignment.pressure_settings && (
         <div className="bg-white/50 backdrop-blur-sm rounded-xl p-4 mb-6">
-          <div className="text-sm text-[#86868B] mb-2">Réglages de pression</div>
+          <div className="text-sm text-[#5C5C5C] mb-2">Réglages de pression</div>
           <div className="flex items-center gap-4">
             <div>
-              <span className="text-xs text-[#86868B]">Min</span>
-              <div className="text-[#1D1D1F] font-semibold">
+              <span className="text-xs text-[#5C5C5C]">Min</span>
+              <div className="text-[#1A1A1A] font-semibold">
                 {assignment.pressure_settings.min_pressure} cmH₂O
               </div>
             </div>
-            <div className="w-px h-8 bg-[#86868B]/30"></div>
+            <div className="w-px h-8 bg-[#5C5C5C]/30"></div>
             <div>
-              <span className="text-xs text-[#86868B]">Max</span>
-              <div className="text-[#1D1D1F] font-semibold">
+              <span className="text-xs text-[#5C5C5C]">Max</span>
+              <div className="text-[#1A1A1A] font-semibold">
                 {assignment.pressure_settings.max_pressure} cmH₂O
               </div>
             </div>
-            <div className="w-px h-8 bg-[#86868B]/30"></div>
+            <div className="w-px h-8 bg-[#5C5C5C]/30"></div>
             <div>
-              <span className="text-xs text-[#86868B]">Mode</span>
-              <div className="text-[#1D1D1F] font-semibold capitalize">
+              <span className="text-xs text-[#5C5C5C]">Mode</span>
+              <div className="text-[#1A1A1A] font-semibold capitalize">
                 {assignment.pressure_settings.mode}
               </div>
             </div>
@@ -201,8 +201,8 @@ export function DeviceStatus({ userId }: { userId: string }) {
       {/* Installation Notes */}
       {assignment.installation_notes && (
         <div className="bg-[#007AFF]/5 rounded-xl p-4 border border-[#007AFF]/20">
-          <div className="text-sm text-[#86868B] mb-1">Notes d'installation</div>
-          <p className="text-[#1D1D1F] text-sm">{assignment.installation_notes}</p>
+          <div className="text-sm text-[#5C5C5C] mb-1">Notes d'installation</div>
+          <p className="text-[#1A1A1A] text-sm">{assignment.installation_notes}</p>
         </div>
       )}
 

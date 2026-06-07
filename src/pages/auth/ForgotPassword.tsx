@@ -37,7 +37,7 @@ export function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F5F5F7] via-white to-[#F5F5F7] flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#F2F0EB] via-white to-[#F2F0EB] flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Logo & Header */}
         <div className="text-center mb-8">
@@ -46,16 +46,16 @@ export function ForgotPasswordPage() {
               <span className="text-white font-semibold text-3xl">E</span>
             </div>
           </Link>
-          <h1 className="text-3xl font-semibold text-[#1D1D1F] mb-2">
+          <h1 className="text-3xl font-semibold text-[#1A1A1A] mb-2">
             Mot de passe oublié
           </h1>
-          <p className="text-[#86868B]">
+          <p className="text-[#5C5C5C]">
             Entrez votre email pour réinitialiser votre mot de passe
           </p>
         </div>
 
         {/* Card de récupération */}
-        <Card className="border-[#D2D2D7] shadow-xl">
+        <Card className="border-[#D9D5CC] shadow-xl">
           <CardHeader>
             <CardTitle>Réinitialisation</CardTitle>
             <CardDescription>
@@ -92,7 +92,7 @@ export function ForgotPasswordPage() {
                 <div className="space-y-2">
                   <Label htmlFor="email">Adresse email</Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#86868B]" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5C5C5C]" />
                     <Input
                       id="email"
                       type="email"
@@ -140,7 +140,7 @@ export function ForgotPasswordPage() {
 
         {/* Footer Info */}
         <div className="mt-8 text-center">
-          <p className="text-xs text-[#86868B]">
+          <p className="text-xs text-[#5C5C5C]">
             Besoin d'aide ?{' '}
             <Link to="/contact" className="text-[#007AFF] hover:underline">
               Contactez notre support

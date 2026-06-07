@@ -20,7 +20,7 @@ export function LoadingSpinner({
   const spinner = (
     <div className="flex flex-col items-center gap-4">
       <motion.div
-        className={`${sizes[size]} border-4 border-[#E5E5EA] border-t-[#007AFF] rounded-full`}
+        className={`${sizes[size]} border-4 border-[#D9D5CC] border-t-[#007AFF] rounded-full`}
         animate={{ rotate: 360 }}
         transition={{
           duration: 1,
@@ -33,7 +33,7 @@ export function LoadingSpinner({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="text-[#86868B]"
+          className="text-[#5C5C5C]"
         >
           {message}
         </motion.p>

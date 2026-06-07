@@ -70,18 +70,18 @@ export function VirtualizedPatientList({
   return (
     <div className="flex flex-col h-full">
       {/* Header avec recherche */}
-      <div className="p-4 border-b border-[#D2D2D7] bg-white sticky top-0 z-10">
+      <div className="p-4 border-b border-[#D9D5CC] bg-white sticky top-0 z-10">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#86868B]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5C5C5C]" />
           <input
             type="text"
             placeholder="Rechercher un patient..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border border-[#D2D2D7] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#007AFF] focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 border border-[#D9D5CC] rounded-lg focus:outline-none focus:ring-2 focus:ring-[#007AFF] focus:border-transparent"
           />
         </div>
-        <div className="mt-2 flex items-center justify-between text-sm text-[#86868B]">
+        <div className="mt-2 flex items-center justify-between text-sm text-[#5C5C5C]">
           <span>
             {filteredPatients.length} patient{filteredPatients.length > 1 ? 's' : ''}
             {searchQuery && ` (${patients.length} au total)`}
@@ -101,10 +101,10 @@ export function VirtualizedPatientList({
       >
         {filteredPatients.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center p-8">
-            <Users className="w-16 h-16 text-[#86868B] opacity-30 mb-4" />
-            <p className="text-[#86868B] mb-2">Aucun patient trouvé</p>
+            <Users className="w-16 h-16 text-[#5C5C5C] opacity-30 mb-4" />
+            <p className="text-[#5C5C5C] mb-2">Aucun patient trouvé</p>
             {searchQuery && (
-              <p className="text-xs text-[#86868B]">
+              <p className="text-xs text-[#5C5C5C]">
                 Essayez une autre recherche
               </p>
             )}
@@ -136,13 +136,13 @@ export function VirtualizedPatientList({
                 >
                   <div
                     onClick={() => onPatientClick?.(patient)}
-                    className="h-full mx-4 mb-2 p-4 bg-white border border-[#D2D2D7] rounded-lg hover:border-[#007AFF] hover:shadow-md transition-all cursor-pointer"
+                    className="h-full mx-4 mb-2 p-4 bg-white border border-[#D9D5CC] rounded-lg hover:border-[#007AFF] hover:shadow-md transition-all cursor-pointer"
                   >
                     <div className="flex items-center justify-between h-full">
                       {/* Info patient */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="font-medium text-[#1D1D1F] truncate">
+                          <h3 className="font-medium text-[#1A1A1A] truncate">
                             {patient.name}
                           </h3>
                           {patient.alert_count && patient.alert_count > 0 && (
@@ -152,7 +152,7 @@ export function VirtualizedPatientList({
                             </div>
                           )}
                         </div>
-                        <div className="flex items-center gap-4 text-xs text-[#86868B]">
+                        <div className="flex items-center gap-4 text-xs text-[#5C5C5C]">
                           {patient.panel_code && (
                             <span>Panel: {patient.panel_code}</span>
                           )}
@@ -175,7 +175,7 @@ export function VirtualizedPatientList({
                                 {patient.observance_7j.toFixed(0)}%
                               </span>
                             </div>
-                            <span className="text-xs text-[#86868B]">Observance</span>
+                            <span className="text-xs text-[#5C5C5C]">Observance</span>
                           </div>
                         )}
 
@@ -189,7 +189,7 @@ export function VirtualizedPatientList({
                             }`}>
                               {patient.iah_moyen.toFixed(1)}
                             </span>
-                            <span className="text-xs text-[#86868B]">IAH</span>
+                            <span className="text-xs text-[#5C5C5C]">IAH</span>
                           </div>
                         )}
                       </div>
@@ -204,7 +204,7 @@ export function VirtualizedPatientList({
 
       {/* Footer stats */}
       {filteredPatients.length > 10 && (
-        <div className="p-3 border-t border-[#D2D2D7] bg-[#F5F5F7] text-center text-xs text-[#86868B]">
+        <div className="p-3 border-t border-[#D9D5CC] bg-[#F2F0EB] text-center text-xs text-[#5C5C5C]">
           💡 Virtualisation activée - Scroll fluide même avec {filteredPatients.length.toLocaleString('fr-FR')} patients
         </div>
       )}

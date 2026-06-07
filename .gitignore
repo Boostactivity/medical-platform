@@ -6,5 +6,4 @@ dist/
 .env
 .env.*
 .vercel
-
-.vercel
+.gstack/

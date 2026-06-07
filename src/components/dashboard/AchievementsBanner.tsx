@@ -72,7 +72,7 @@ export function AchievementsBanner({ userId }: { userId: string }) {
       title: 'Série en cours',
       value: `${stats.current_streak_days}`,
       unit: stats.current_streak_days > 1 ? 'jours' : 'jour',
-      color: 'from-[#FF9500] to-[#FF3B30]',
+      color: 'from-[#B34000] to-[#CE0500]',
       unlocked: stats.current_streak_days >= 1,
       nextMilestone: stats.current_streak_days < 7 ? 7 : stats.current_streak_days < 30 ? 30 : 90,
     },
@@ -81,7 +81,7 @@ export function AchievementsBanner({ userId }: { userId: string }) {
       title: 'Record personnel',
       value: `${stats.longest_streak_days}`,
       unit: stats.longest_streak_days > 1 ? 'jours' : 'jour',
-      color: 'from-[#34C759] to-[#30D158]',
+      color: 'from-[#18753C] to-[#18753C]',
       unlocked: stats.longest_streak_days >= 7,
       badge: stats.longest_streak_days >= 30 ? '🏆' : stats.longest_streak_days >= 14 ? '🥈' : stats.longest_streak_days >= 7 ? '🥉' : null,
     },
@@ -99,7 +99,7 @@ export function AchievementsBanner({ userId }: { userId: string }) {
       title: 'Niveau',
       value: `${stats.level}`,
       unit: '',
-      color: 'from-[#AF52DE] to-[#BF5AF2]',
+      color: 'from-[#007AFF] to-[#007AFF]',
       unlocked: stats.level >= 1,
       progress: xpProgress,
       progressLabel: `${stats.xp_points % 200}/${xpForNextLevel} XP`,
@@ -194,7 +194,7 @@ export function AchievementsBanner({ userId }: { userId: string }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}
-        className="bg-gradient-to-r from-[#F5F5F7] to-white rounded-2xl p-6 border border-gray-200"
+        className="bg-gradient-to-r from-[#F2F0EB] to-white rounded-2xl p-6 border border-gray-200"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -202,8 +202,8 @@ export function AchievementsBanner({ userId }: { userId: string }) {
               <Target className="w-6 h-6 text-white" />
             </div>
             <div>
-              <div className="text-sm text-[#86868B]">Progression globale</div>
-              <div className="text-2xl text-[#1D1D1F] font-bold">
+              <div className="text-sm text-[#5C5C5C]">Progression globale</div>
+              <div className="text-2xl text-[#1A1A1A] font-bold">
                 {stats.total_nights_tracked} nuits suivies
               </div>
             </div>
@@ -212,17 +212,17 @@ export function AchievementsBanner({ userId }: { userId: string }) {
           <div className="flex items-center gap-6">
             <div className="text-center">
               <div className="text-2xl font-bold text-[#007AFF]">{stats.xp_points}</div>
-              <div className="text-xs text-[#86868B]">XP Total</div>
+              <div className="text-xs text-[#5C5C5C]">XP Total</div>
             </div>
             <div className="w-px h-12 bg-gray-300"></div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-[#34C759]">
+              <div className="text-2xl font-bold text-[#18753C]">
                 {stats.perfect_nights_count > 0
                   ? Math.round((stats.perfect_nights_count / stats.total_nights_tracked) * 100)
                   : 0}
                 %
               </div>
-              <div className="text-xs text-[#86868B]">Taux de réussite</div>
+              <div className="text-xs text-[#5C5C5C]">Taux de réussite</div>
             </div>
           </div>
         </div>
@@ -231,7 +231,7 @@ export function AchievementsBanner({ userId }: { userId: string }) {
         {stats.current_streak_days > 0 && stats.current_streak_days < 30 && (
           <div className="mt-4 pt-4 border-t border-gray-200">
             <div className="flex items-center justify-between text-sm mb-2">
-              <span className="text-[#86868B]">
+              <span className="text-[#5C5C5C]">
                 Prochain badge : Série de {stats.current_streak_days < 7 ? '7' : '30'} jours
               </span>
               <span className="text-[#007AFF] font-semibold">

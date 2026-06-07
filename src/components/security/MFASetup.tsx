@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '../../utils/supabase/client';
 import { Shield, Smartphone, Key, CheckCircle, AlertCircle, Copy, Check } from 'lucide-react';
-import { toast } from 'sonner';
+import { toast } from 'sonner@2.0.3';
 
 const supabase = createClient();
 

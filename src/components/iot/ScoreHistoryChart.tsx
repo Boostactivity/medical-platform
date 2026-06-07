@@ -1,5 +1,5 @@
 /**
- * Graphique historique scores la plateforme
+ * Graphique historique scores Medical
  * Courbe 30 derniers jours avec trend
  */
 
@@ -80,19 +80,19 @@ export function ScoreHistoryChart({ scores }: ScoreHistoryChartProps) {
         <AreaChart data={chartData}>
           <defs>
             <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3}/>
-              <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+              <stop offset="5%" stopColor="#007AFF" stopOpacity={0.3}/>
+              <stop offset="95%" stopColor="#007AFF" stopOpacity={0}/>
             </linearGradient>
           </defs>
           <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
           <XAxis 
             dataKey="date" 
-            stroke="#9ca3af"
+            stroke="#A8A49C"
             style={{ fontSize: '12px' }}
           />
           <YAxis 
             domain={[0, 100]}
-            stroke="#9ca3af"
+            stroke="#A8A49C"
             style={{ fontSize: '12px' }}
           />
           <Tooltip content={<CustomTooltip />} />
@@ -111,10 +111,10 @@ export function ScoreHistoryChart({ scores }: ScoreHistoryChartProps) {
           <Area 
             type="monotone" 
             dataKey="score" 
-            stroke="#3b82f6" 
+            stroke="#007AFF" 
             strokeWidth={3}
             fill="url(#colorScore)"
-            dot={{ fill: '#3b82f6', r: 4 }}
+            dot={{ fill: '#007AFF', r: 4 }}
             activeDot={{ r: 6 }}
           />
         </AreaChart>

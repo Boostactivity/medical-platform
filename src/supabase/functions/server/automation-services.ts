@@ -1,5 +1,5 @@
 /**
- * Services d'Automatisation - la plateforme
+ * Services d'Automatisation - Medical
  * 
  * Combine tous les services d'automatisation en un seul fichier
  * pour éviter les problèmes de sous-dossiers avec Supabase Edge Functions
@@ -105,7 +105,7 @@ export class SleepScoreCalculator {
       const { data: unscoredNights, error: fetchError } = await this.supabase
         .from('sleep_data')
         .select('*')
-        .is('expair_score', null)
+        .is('medical_score', null)
         .order('date', { ascending: false })
         .limit(1000);
 
@@ -136,7 +136,7 @@ export class SleepScoreCalculator {
           const { error: updateError } = await this.supabase
             .from('sleep_data')
             .update({
-              expair_score: result.score,
+              medical_score: result.score,
               quality_level: result.quality_level,
               updated_at: new Date().toISOString(),
             })
@@ -190,7 +190,7 @@ export class SleepScoreCalculator {
       const { error: updateError } = await this.supabase
         .from('sleep_data')
         .update({
-          expair_score: result.score,
+          medical_score: result.score,
           quality_level: result.quality_level,
           updated_at: new Date().toISOString(),
         })
@@ -232,14 +232,14 @@ export class SleepScoreCalculator {
         };
       }
 
-      const totalScore = nights.reduce((sum, n) => sum + (n.expair_score || 0), 0);
+      const totalScore = nights.reduce((sum, n) => sum + (n.medical_score || 0), 0);
       const averageScore = totalScore / nights.length;
 
       const distribution = {
-        excellent: nights.filter(n => (n.expair_score || 0) >= 85).length,
-        good: nights.filter(n => (n.expair_score || 0) >= 70 && (n.expair_score || 0) < 85).length,
-        average: nights.filter(n => (n.expair_score || 0) >= 50 && (n.expair_score || 0) < 70).length,
-        poor: nights.filter(n => (n.expair_score || 0) < 50).length,
+        excellent: nights.filter(n => (n.medical_score || 0) >= 85).length,
+        good: nights.filter(n => (n.medical_score || 0) >= 70 && (n.medical_score || 0) < 85).length,
+        average: nights.filter(n => (n.medical_score || 0) >= 50 && (n.medical_score || 0) < 70).length,
+        poor: nights.filter(n => (n.medical_score || 0) < 50).length,
       };
 
       return {
@@ -262,8 +262,8 @@ export class SleepScoreCalculator {
 
     const recent = nights.slice(0, 7);
     const older = nights.slice(-7);
-    const recentAvg = recent.reduce((sum, n) => sum + (n.expair_score || 0), 0) / recent.length;
-    const olderAvg = older.reduce((sum, n) => sum + (n.expair_score || 0), 0) / older.length;
+    const recentAvg = recent.reduce((sum, n) => sum + (n.medical_score || 0), 0) / recent.length;
+    const olderAvg = older.reduce((sum, n) => sum + (n.medical_score || 0), 0) / older.length;
     const diff = recentAvg - olderAvg;
 
     if (diff > 5) return 'improving';
@@ -569,8 +569,8 @@ export class NotificationService {
     this.twilioAuthToken = Deno.env.get('TWILIO_AUTH_TOKEN') || '';
     this.twilioPhoneNumber = Deno.env.get('TWILIO_PHONE_NUMBER') || '';
     this.sendgridApiKey = Deno.env.get('SENDGRID_API_KEY') || '';
-    this.sendgridFromEmail = Deno.env.get('SENDGRID_FROM_EMAIL') || 'noreply@plateforme.fr';
-    this.sendgridFromName = Deno.env.get('SENDGRID_FROM_NAME') || "la plateforme";
+    this.sendgridFromEmail = Deno.env.get('SENDGRID_FROM_EMAIL') || 'noreply@medical-sante.fr';
+    this.sendgridFromName = Deno.env.get('SENDGRID_FROM_NAME') || "Medical";
   }
 
   async sendSMS(payload: SMSPayload): Promise<NotificationResult> {

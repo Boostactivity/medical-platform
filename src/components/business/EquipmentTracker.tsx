@@ -16,7 +16,7 @@ import {
   Clock,
   Wrench
 } from 'lucide-react';
-import { projectId, publicAnonKey } from '../../utils/supabase/info';
+import { apiPublic } from '../../utils/api';
 
 interface Equipment {
   id: string;
@@ -56,19 +56,7 @@ export function EquipmentTracker({ patientId, showActions = false }: EquipmentTr
     setError(null);
 
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-50732e52/business/patient/${patientId}/equipment`,
-        {
-          headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      if (!response.ok) throw new Error('Erreur réseau');
-
-      const data = await response.json();
+      const data = await apiPublic(`/business/patient/${patientId}/equipment`);
       setEquipment(data.equipment || []);
     } catch (err: any) {
       console.error('Error fetching equipment:', err);
@@ -80,22 +68,13 @@ export function EquipmentTracker({ patientId, showActions = false }: EquipmentTr
 
   const handleRenewal = async (equipmentId: string) => {
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-50732e52/business/equipment/renew`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            equipment_id: equipmentId,
-            renewal_date: new Date().toISOString().split('T')[0],
-          }),
-        }
-      );
-
-      if (!response.ok) throw new Error('Erreur lors du renouvellement');
+      await apiPublic('/business/equipment/renew', {
+        method: 'POST',
+        body: {
+          equipment_id: equipmentId,
+          renewal_date: new Date().toISOString().split('T')[0],
+        },
+      });
 
       // Refresh data
       fetchEquipment();

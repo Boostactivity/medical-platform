@@ -123,20 +123,20 @@ export function IAHChart({ data, title = 'Évolution IAH Moyen' }: IAHChartProps
             <LineChart data={data}>
               <defs>
                 <linearGradient id="colorIAH" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.1} />
-                  <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
+                  <stop offset="5%" stopColor="#007AFF" stopOpacity={0.1} />
+                  <stop offset="95%" stopColor="#007AFF" stopOpacity={0} />
                 </linearGradient>
               </defs>
               <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" vertical={false} />
               <XAxis
                 dataKey="date"
                 tickFormatter={formatDate}
-                stroke="#9CA3AF"
+                stroke="#A8A49C"
                 style={{ fontSize: '12px' }}
                 tickLine={false}
               />
               <YAxis
-                stroke="#9CA3AF"
+                stroke="#A8A49C"
                 style={{ fontSize: '12px' }}
                 tickLine={false}
                 axisLine={false}
@@ -146,9 +146,9 @@ export function IAHChart({ data, title = 'Évolution IAH Moyen' }: IAHChartProps
               <Line
                 type="monotone"
                 dataKey="iah_moyen"
-                stroke="#3B82F6"
+                stroke="#007AFF"
                 strokeWidth={3}
-                dot={{ fill: '#3B82F6', strokeWidth: 2, r: 4 }}
+                dot={{ fill: '#007AFF', strokeWidth: 2, r: 4 }}
                 activeDot={{ r: 6 }}
               />
             </LineChart>

@@ -33,11 +33,11 @@ export function NightTimeline({
   
   const getEventColor = (type: string, severity?: string) => {
     if (type === 'leak' || type === 'alarm') {
-      if (severity === 'high') return '#FF3B30';
-      if (severity === 'medium') return '#FF9500';
-      return '#FFD60A';
+      if (severity === 'high') return '#CE0500';
+      if (severity === 'medium') return '#B34000';
+      return '#B34000';
     }
-    if (type === 'wake') return '#86868B';
+    if (type === 'wake') return '#5C5C5C';
     return '#5AC8FA';
   };
 
@@ -45,21 +45,21 @@ export function NightTimeline({
     <div className="bg-white rounded-3xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-xl text-[#1D1D1F] mb-1">Ma Nuit</h3>
-          <p className="text-sm text-[#86868B]">
+          <h3 className="text-xl text-[#1A1A1A] mb-1">Ma Nuit</h3>
+          <p className="text-sm text-[#5C5C5C]">
             {startTime} - {endTime} · {totalHours.toFixed(1)}h de traitement
           </p>
         </div>
-        <div className="flex items-center gap-2 px-4 py-2 bg-[#34C759]/10 rounded-full">
-          <div className="w-2 h-2 bg-[#34C759] rounded-full animate-pulse"></div>
-          <span className="text-sm text-[#34C759]">Données synchronisées</span>
+        <div className="flex items-center gap-2 px-4 py-2 bg-[#18753C]/10 rounded-full">
+          <div className="w-2 h-2 bg-[#18753C] rounded-full animate-pulse"></div>
+          <span className="text-sm text-[#18753C]">Données synchronisées</span>
         </div>
       </div>
 
       {/* Timeline bar */}
       <div className="relative">
         {/* Background bar */}
-        <div className="h-12 bg-gradient-to-r from-[#1A1D2E]/10 via-[#5AC8FA]/20 to-[#1A1D2E]/10 rounded-full relative overflow-hidden">
+        <div className="h-12 bg-gradient-to-r from-[#1A1A1A]/10 via-[#5AC8FA]/20 to-[#1A1A1A]/10 rounded-full relative overflow-hidden">
           {/* Treatment period */}
           <motion.div
             initial={{ width: 0 }}
@@ -71,10 +71,10 @@ export function NightTimeline({
 
         {/* Time markers */}
         <div className="flex justify-between mt-3 px-2">
-          <span className="text-xs text-[#86868B]">{startTime}</span>
-          <span className="text-xs text-[#86868B]">00:00</span>
-          <span className="text-xs text-[#86868B]">06:00</span>
-          <span className="text-xs text-[#86868B]">{endTime}</span>
+          <span className="text-xs text-[#5C5C5C]">{startTime}</span>
+          <span className="text-xs text-[#5C5C5C]">00:00</span>
+          <span className="text-xs text-[#5C5C5C]">06:00</span>
+          <span className="text-xs text-[#5C5C5C]">{endTime}</span>
         </div>
 
         {/* Events */}
@@ -85,14 +85,14 @@ export function NightTimeline({
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 + index * 0.1 }}
-              className="flex items-center gap-2 px-3 py-2 bg-[#F5F5F7] rounded-xl"
+              className="flex items-center gap-2 px-3 py-2 bg-[#F2F0EB] rounded-xl"
             >
               <div style={{ color: getEventColor(event.type, event.severity) }}>
                 {getEventIcon(event.type)}
               </div>
               <div>
-                <div className="text-xs text-[#1D1D1F]">{event.time}</div>
-                <div className="text-xs text-[#86868B] capitalize">{event.type}</div>
+                <div className="text-xs text-[#1A1A1A]">{event.time}</div>
+                <div className="text-xs text-[#5C5C5C] capitalize">{event.type}</div>
               </div>
             </motion.div>
           ))}
@@ -103,18 +103,18 @@ export function NightTimeline({
       <div className="grid grid-cols-3 gap-4 mt-6">
         {[
           { label: 'Temps de port', value: `${totalHours.toFixed(1)}h`, color: '#007AFF' },
-          { label: 'Fuites', value: 'Faibles', color: '#34C759' },
-          { label: 'Événements', value: events.filter(e => e.type === 'alarm').length, color: '#FF9500' },
+          { label: 'Fuites', value: 'Faibles', color: '#18753C' },
+          { label: 'Événements', value: events.filter(e => e.type === 'alarm').length, color: '#B34000' },
         ].map((stat, index) => (
           <motion.div
             key={stat.label}
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.8 + index * 0.1 }}
-            className="text-center p-3 bg-[#F5F5F7] rounded-2xl"
+            className="text-center p-3 bg-[#F2F0EB] rounded-2xl"
           >
-            <div className="text-2xl text-[#1D1D1F] mb-1">{stat.value}</div>
-            <div className="text-xs text-[#86868B]">{stat.label}</div>
+            <div className="text-2xl text-[#1A1A1A] mb-1">{stat.value}</div>
+            <div className="text-xs text-[#5C5C5C]">{stat.label}</div>
           </motion.div>
         ))}
       </div>

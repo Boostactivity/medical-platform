@@ -102,16 +102,16 @@ export function CreateInterventionModal({ isOpen, onClose, onSubmit, alert, pati
               <div className="sticky top-0 bg-white border-b border-gray-200 px-8 py-6 rounded-t-3xl">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-2xl text-[#1D1D1F]">Créer une intervention</h2>
-                    <p className="text-sm text-[#86868B] mt-1">
+                    <h2 className="text-2xl text-[#1A1A1A]">Créer une intervention</h2>
+                    <p className="text-sm text-[#5C5C5C] mt-1">
                       Planifier une intervention technique
                     </p>
                   </div>
                   <button
                     onClick={onClose}
-                    className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#F5F5F7] transition-colors"
+                    className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#F2F0EB] transition-colors"
                   >
-                    <X className="w-6 h-6 text-[#86868B]" />
+                    <X className="w-6 h-6 text-[#5C5C5C]" />
                   </button>
                 </div>
               </div>
@@ -120,17 +120,17 @@ export function CreateInterventionModal({ isOpen, onClose, onSubmit, alert, pati
               <form onSubmit={handleSubmit} className="p-8 space-y-6">
                 {/* Alert context */}
                 {alert && (
-                  <div className="bg-[#FF9500]/10 border border-[#FF9500]/30 rounded-2xl p-4">
-                    <p className="text-sm text-[#1D1D1F]">
+                  <div className="bg-[#B34000]/10 border border-[#B34000]/30 rounded-2xl p-4">
+                    <p className="text-sm text-[#1A1A1A]">
                       <strong>Intervention créée depuis l'alerte :</strong>
                     </p>
-                    <p className="text-sm text-[#86868B] mt-1">{alert.message}</p>
+                    <p className="text-sm text-[#5C5C5C] mt-1">{alert.message}</p>
                   </div>
                 )}
 
                 {/* Type d'intervention */}
                 <div>
-                  <label className="block text-[#1D1D1F] mb-3">Type d'intervention *</label>
+                  <label className="block text-[#1A1A1A] mb-3">Type d'intervention *</label>
                   <div className="grid grid-cols-2 gap-3">
                     {interventionTypes.map((type) => (
                       <button
@@ -139,11 +139,11 @@ export function CreateInterventionModal({ isOpen, onClose, onSubmit, alert, pati
                         onClick={() => setFormData({ ...formData, type: type.value as any })}
                         className={`p-4 rounded-xl border-2 transition-all text-left ${
                           formData.type === type.value
-                            ? 'border-[#FF9500] bg-[#FF9500]/10'
-                            : 'border-gray-200 hover:border-[#FF9500]/50'
+                            ? 'border-[#B34000] bg-[#B34000]/10'
+                            : 'border-gray-200 hover:border-[#B34000]/50'
                         }`}
                       >
-                        <div className="text-sm text-[#1D1D1F]">{type.label}</div>
+                        <div className="text-sm text-[#1A1A1A]">{type.label}</div>
                       </button>
                     ))}
                   </div>
@@ -151,12 +151,12 @@ export function CreateInterventionModal({ isOpen, onClose, onSubmit, alert, pati
 
                 {/* Patient */}
                 <div>
-                  <label className="block text-[#1D1D1F] mb-2">Patient *</label>
+                  <label className="block text-[#1A1A1A] mb-2">Patient *</label>
                   <input
                     type="text"
                     value={formData.patientName}
                     onChange={(e) => setFormData({ ...formData, patientName: e.target.value })}
-                    className="w-full px-4 py-3 bg-[#F5F5F7] border-2 border-transparent rounded-xl focus:border-[#FF9500] focus:bg-white transition-all outline-none"
+                    className="w-full px-4 py-3 bg-[#F2F0EB] border-2 border-transparent rounded-xl focus:border-[#B34000] focus:bg-white transition-all outline-none"
                     placeholder="Nom du patient"
                     required
                   />
@@ -164,7 +164,7 @@ export function CreateInterventionModal({ isOpen, onClose, onSubmit, alert, pati
 
                 {/* Technicien */}
                 <div>
-                  <label className="block text-[#1D1D1F] mb-3">Technicien assigné *</label>
+                  <label className="block text-[#1A1A1A] mb-3">Technicien assigné *</label>
                   <div className="space-y-2">
                     {technicians.map((tech) => (
                       <button
@@ -174,19 +174,19 @@ export function CreateInterventionModal({ isOpen, onClose, onSubmit, alert, pati
                         disabled={!tech.available}
                         className={`w-full p-4 rounded-xl border-2 transition-all text-left flex items-center justify-between ${
                           formData.technicianName === tech.name
-                            ? 'border-[#FF9500] bg-[#FF9500]/10'
+                            ? 'border-[#B34000] bg-[#B34000]/10'
                             : tech.available
-                            ? 'border-gray-200 hover:border-[#FF9500]/50'
+                            ? 'border-gray-200 hover:border-[#B34000]/50'
                             : 'border-gray-200 opacity-50 cursor-not-allowed'
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-gradient-to-br from-[#FF9500] to-[#FF6B00] rounded-full flex items-center justify-center text-white">
+                          <div className="w-10 h-10 bg-gradient-to-br from-[#B34000] to-[#B34000] rounded-full flex items-center justify-center text-white">
                             {tech.name.charAt(0)}
                           </div>
                           <div>
-                            <div className="text-[#1D1D1F]">{tech.name}</div>
-                            <div className="text-xs text-[#86868B]">
+                            <div className="text-[#1A1A1A]">{tech.name}</div>
+                            <div className="text-xs text-[#5C5C5C]">
                               {tech.available ? 'Disponible' : 'Indisponible'}
                             </div>
                           </div>
@@ -194,7 +194,7 @@ export function CreateInterventionModal({ isOpen, onClose, onSubmit, alert, pati
                         {tech.available && (
                           <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
                             formData.technicianName === tech.name
-                              ? 'border-[#FF9500] bg-[#FF9500]'
+                              ? 'border-[#B34000] bg-[#B34000]'
                               : 'border-gray-300'
                           }`}>
                             {formData.technicianName === tech.name && (
@@ -209,7 +209,7 @@ export function CreateInterventionModal({ isOpen, onClose, onSubmit, alert, pati
 
                 {/* Date */}
                 <div>
-                  <label className="block text-[#1D1D1F] mb-2">
+                  <label className="block text-[#1A1A1A] mb-2">
                     <Calendar className="w-4 h-4 inline mr-2" />
                     Date de l'intervention *
                   </label>
@@ -217,7 +217,7 @@ export function CreateInterventionModal({ isOpen, onClose, onSubmit, alert, pati
                     type="date"
                     value={formData.date}
                     onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                    className="w-full px-4 py-3 bg-[#F5F5F7] border-2 border-transparent rounded-xl focus:border-[#FF9500] focus:bg-white transition-all outline-none"
+                    className="w-full px-4 py-3 bg-[#F2F0EB] border-2 border-transparent rounded-xl focus:border-[#B34000] focus:bg-white transition-all outline-none"
                     required
                   />
                 </div>
@@ -225,7 +225,7 @@ export function CreateInterventionModal({ isOpen, onClose, onSubmit, alert, pati
                 {/* Matériel nécessaire */}
                 {formData.type !== 'phone_support' && (
                   <div>
-                    <label className="block text-[#1D1D1F] mb-2">
+                    <label className="block text-[#1A1A1A] mb-2">
                       <Package className="w-4 h-4 inline mr-2" />
                       Matériel nécessaire
                     </label>
@@ -233,7 +233,7 @@ export function CreateInterventionModal({ isOpen, onClose, onSubmit, alert, pati
                       type="text"
                       value={formData.material}
                       onChange={(e) => setFormData({ ...formData, material: e.target.value })}
-                      className="w-full px-4 py-3 bg-[#F5F5F7] border-2 border-transparent rounded-xl focus:border-[#FF9500] focus:bg-white transition-all outline-none"
+                      className="w-full px-4 py-3 bg-[#F2F0EB] border-2 border-transparent rounded-xl focus:border-[#B34000] focus:bg-white transition-all outline-none"
                       placeholder="Ex: Masque nasal taille M, filtres..."
                     />
                   </div>
@@ -241,14 +241,14 @@ export function CreateInterventionModal({ isOpen, onClose, onSubmit, alert, pati
 
                 {/* Notes */}
                 <div>
-                  <label className="block text-[#1D1D1F] mb-2">
+                  <label className="block text-[#1A1A1A] mb-2">
                     <FileText className="w-4 h-4 inline mr-2" />
                     Notes
                   </label>
                   <textarea
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                    className="w-full px-4 py-3 bg-[#F5F5F7] border-2 border-transparent rounded-xl focus:border-[#FF9500] focus:bg-white transition-all outline-none resize-none"
+                    className="w-full px-4 py-3 bg-[#F2F0EB] border-2 border-transparent rounded-xl focus:border-[#B34000] focus:bg-white transition-all outline-none resize-none"
                     rows={4}
                     placeholder="Informations complémentaires, instructions spéciales..."
                   />
@@ -259,13 +259,13 @@ export function CreateInterventionModal({ isOpen, onClose, onSubmit, alert, pati
                   <button
                     type="button"
                     onClick={onClose}
-                    className="flex-1 px-6 py-4 bg-[#F5F5F7] text-[#1D1D1F] rounded-full hover:bg-[#E5E5EA] transition-all"
+                    className="flex-1 px-6 py-4 bg-[#F2F0EB] text-[#1A1A1A] rounded-full hover:bg-[#D9D5CC] transition-all"
                   >
                     Annuler
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 px-6 py-4 bg-[#FF9500] text-white rounded-full hover:bg-[#E68A00] transition-all shadow-lg"
+                    className="flex-1 px-6 py-4 bg-[#B34000] text-white rounded-full hover:bg-[#8F3300] transition-all shadow-lg"
                   >
                     Créer l'intervention
                   </button>

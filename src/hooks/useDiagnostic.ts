@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
+import { apiCall, ApiError } from '../utils/api';
 
 interface DiagnosticResult {
   token: {
@@ -59,62 +59,30 @@ export const useDiagnostic = () => {
         return;
       }
 
-      const API_BASE = `https://${projectId}.supabase.co/functions/v1/make-server-50732e52`;
-
       // Test alerts endpoint
       try {
-        const alertsResponse = await fetch(`${API_BASE}/prestataire/alerts`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (alertsResponse.ok) {
-          const data = await alertsResponse.json();
-          diagnosticResult.api.alerts = 'success';
-          console.log('[DIAGNOSTIC] ✅ Alerts API working:', data);
-        } else {
-          const error = await alertsResponse.json().catch(() => ({}));
-          diagnosticResult.api.alerts = 'error';
-          diagnosticResult.api.alertsError = error.error || `HTTP ${alertsResponse.status}`;
-          console.error('[DIAGNOSTIC] ❌ Alerts API error:', {
-            status: alertsResponse.status,
-            error,
-          });
-        }
+        const data = await apiCall('/prestataire/alerts', { token });
+        diagnosticResult.api.alerts = 'success';
+        console.log('[DIAGNOSTIC] ✅ Alerts API working:', data);
       } catch (err: any) {
         diagnosticResult.api.alerts = 'error';
-        diagnosticResult.api.alertsError = err.message;
-        console.error('[DIAGNOSTIC] ❌ Alerts API exception:', err);
+        diagnosticResult.api.alertsError = err instanceof ApiError
+          ? (err.payload?.error || `HTTP ${err.status}`)
+          : err.message;
+        console.error('[DIAGNOSTIC] ❌ Alerts API error:', err);
       }
 
       // Test interventions endpoint
       try {
-        const interventionsResponse = await fetch(`${API_BASE}/prestataire/interventions?status=all`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (interventionsResponse.ok) {
-          const data = await interventionsResponse.json();
-          diagnosticResult.api.interventions = 'success';
-          console.log('[DIAGNOSTIC] ✅ Interventions API working:', data);
-        } else {
-          const error = await interventionsResponse.json().catch(() => ({}));
-          diagnosticResult.api.interventions = 'error';
-          diagnosticResult.api.interventionsError = error.error || `HTTP ${interventionsResponse.status}`;
-          console.error('[DIAGNOSTIC] ❌ Interventions API error:', {
-            status: interventionsResponse.status,
-            error,
-          });
-        }
+        const data = await apiCall('/prestataire/interventions?status=all', { token });
+        diagnosticResult.api.interventions = 'success';
+        console.log('[DIAGNOSTIC] ✅ Interventions API working:', data);
       } catch (err: any) {
         diagnosticResult.api.interventions = 'error';
-        diagnosticResult.api.interventionsError = err.message;
-        console.error('[DIAGNOSTIC] ❌ Interventions API exception:', err);
+        diagnosticResult.api.interventionsError = err instanceof ApiError
+          ? (err.payload?.error || `HTTP ${err.status}`)
+          : err.message;
+        console.error('[DIAGNOSTIC] ❌ Interventions API error:', err);
       }
 
       setResult(diagnosticResult);

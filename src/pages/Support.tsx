@@ -48,161 +48,14 @@ interface Conversation {
   created_at: string;
 }
 
-// Mock Data
-const MOCK_CONVERSATIONS: Conversation[] = [
-  {
-    id: 'conv-1',
-    patient_id: 'p1',
-    patient_name: 'Jean Dupont',
-    subject: 'Problème de fuite sur le masque',
-    status: 'open',
-    priority: 'high',
-    last_message: 'Le masque fuit toujours malgré les ajustements...',
-    last_message_at: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-    unread_count: 2,
-    created_at: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
-    messages: [
-      {
-        id: 'm1',
-        sender: 'patient',
-        content: 'Bonjour, j\'ai un problème avec mon masque depuis hier soir. Il fuit beaucoup.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 3).toISOString(),
-        read: true,
-      },
-      {
-        id: 'm2',
-        sender: 'support',
-        content: 'Bonjour M. Dupont, merci pour votre message. Pouvez-vous me préciser à quel endroit le masque fuit ?',
-        timestamp: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
-        read: true,
-      },
-      {
-        id: 'm3',
-        sender: 'patient',
-        content: 'Principalement au niveau du nez. J\'ai essayé de resserrer les sangles mais ça n\'a pas aidé.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
-        read: true,
-      },
-      {
-        id: 'm4',
-        sender: 'patient',
-        content: 'Le masque fuit toujours malgré les ajustements...',
-        timestamp: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-        read: false,
-      },
-    ],
-  },
-  {
-    id: 'conv-2',
-    patient_id: 'p2',
-    patient_name: 'Marie Martin',
-    subject: 'Question sur le nettoyage',
-    status: 'pending',
-    priority: 'low',
-    last_message: 'D\'accord, merci pour ces précisions !',
-    last_message_at: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-    unread_count: 0,
-    created_at: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
-    messages: [
-      {
-        id: 'm5',
-        sender: 'patient',
-        content: 'Bonjour, à quelle fréquence dois-je nettoyer mon masque ?',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 5).toISOString(),
-        read: true,
-      },
-      {
-        id: 'm6',
-        sender: 'support',
-        content: 'Bonjour Mme Martin ! Il est recommandé de nettoyer le masque chaque jour avec de l\'eau tiède et du savon doux.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 4).toISOString(),
-        read: true,
-      },
-      {
-        id: 'm7',
-        sender: 'patient',
-        content: 'D\'accord, merci pour ces précisions !',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
-        read: true,
-      },
-    ],
-  },
-  {
-    id: 'conv-3',
-    patient_id: 'p3',
-    patient_name: 'Pierre Dubois',
-    subject: 'Renouvellement de consommables',
-    status: 'open',
-    priority: 'medium',
-    last_message: 'Quand puis-je recevoir mon nouveau filtre ?',
-    last_message_at: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
-    unread_count: 1,
-    created_at: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-    messages: [
-      {
-        id: 'm8',
-        sender: 'patient',
-        content: 'Bonjour, je souhaiterais renouveler mes filtres.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
-        read: true,
-      },
-      {
-        id: 'm9',
-        sender: 'support',
-        content: 'Bonjour M. Dubois, nous préparons votre commande de filtres. Livraison prévue sous 48h.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 20).toISOString(),
-        read: true,
-      },
-      {
-        id: 'm10',
-        sender: 'patient',
-        content: 'Quand puis-je recevoir mon nouveau filtre ?',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
-        read: false,
-      },
-    ],
-  },
-  {
-    id: 'conv-4',
-    patient_id: 'p4',
-    patient_name: 'Sophie Bernard',
-    subject: 'Problème technique avec l\'appareil',
-    status: 'resolved',
-    priority: 'high',
-    last_message: 'Merci beaucoup pour votre aide !',
-    last_message_at: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
-    unread_count: 0,
-    created_at: new Date(Date.now() - 1000 * 60 * 60 * 72).toISOString(),
-    messages: [
-      {
-        id: 'm11',
-        sender: 'patient',
-        content: 'Mon appareil ne démarre plus depuis ce matin.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 72).toISOString(),
-        read: true,
-      },
-      {
-        id: 'm12',
-        sender: 'support',
-        content: 'Bonjour Mme Bernard, je vais programmer une intervention technique pour demain matin.',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 70).toISOString(),
-        read: true,
-      },
-      {
-        id: 'm13',
-        sender: 'patient',
-        content: 'Merci beaucoup pour votre aide !',
-        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 48).toISOString(),
-        read: true,
-      },
-    ],
-  },
-];
+// Messagerie support : branchee sur la table messages (chantier communication).
+// Tant que le backend messagerie n'est pas livre, la page affiche un etat vide honnete.
+const INITIAL_CONVERSATIONS: Conversation[] = [];
 
 export function Support() {
   const navigate = useNavigate();
-  const [conversations, setConversations] = useState<Conversation[]>(MOCK_CONVERSATIONS);
-  const [selectedConv, setSelectedConv] = useState<Conversation | null>(MOCK_CONVERSATIONS[0]);
+  const [conversations, setConversations] = useState<Conversation[]>(INITIAL_CONVERSATIONS);
+  const [selectedConv, setSelectedConv] = useState<Conversation | null>(null);
   const [messageInput, setMessageInput] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState<string>('all');
@@ -315,14 +168,14 @@ export function Support() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F7]">
+    <div className="min-h-screen bg-[#F2F0EB]">
       {/* Header */}
-      <header className="bg-white border-b border-[#D2D2D7]">
+      <header className="bg-white border-b border-[#D9D5CC]">
         <div className="max-w-[1600px] mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl sm:text-3xl text-[#1D1D1F] mb-2">Centre de Support</h1>
-              <p className="text-sm text-[#86868B]">
+              <h1 className="text-3xl text-[#1A1A1A] mb-2">Centre de Support</h1>
+              <p className="text-sm text-[#5C5C5C]">
                 {stats.open} conversations ouvertes • {stats.unread} messages non lus
               </p>
             </div>
@@ -335,61 +188,61 @@ export function Support() {
         </div>
       </header>
 
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-[1600px] mx-auto px-6 py-8">
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-white rounded-2xl p-4 border border-[#D2D2D7]">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <div className="bg-white rounded-2xl p-4 border border-[#D9D5CC]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-[#86868B] mb-1">Total</p>
-                <p className="text-2xl text-[#1D1D1F]">{stats.total}</p>
+                <p className="text-sm text-[#5C5C5C] mb-1">Total</p>
+                <p className="text-2xl text-[#1A1A1A]">{stats.total}</p>
               </div>
               <MessageCircle className="w-8 h-8 text-[#007AFF] opacity-20" />
             </div>
           </div>
-          <div className="bg-white rounded-2xl p-4 border border-[#D2D2D7]">
+          <div className="bg-white rounded-2xl p-4 border border-[#D9D5CC]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-[#86868B] mb-1">Ouverts</p>
+                <p className="text-sm text-[#5C5C5C] mb-1">Ouverts</p>
                 <p className="text-2xl text-[#007AFF]">{stats.open}</p>
               </div>
               <AlertCircle className="w-8 h-8 text-[#007AFF] opacity-20" />
             </div>
           </div>
-          <div className="bg-white rounded-2xl p-4 border border-[#D2D2D7]">
+          <div className="bg-white rounded-2xl p-4 border border-[#D9D5CC]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-[#86868B] mb-1">En attente</p>
-                <p className="text-2xl text-[#FF9500]">{stats.pending}</p>
+                <p className="text-sm text-[#5C5C5C] mb-1">En attente</p>
+                <p className="text-2xl text-[#B34000]">{stats.pending}</p>
               </div>
-              <Clock className="w-8 h-8 text-[#FF9500] opacity-20" />
+              <Clock className="w-8 h-8 text-[#B34000] opacity-20" />
             </div>
           </div>
-          <div className="bg-white rounded-2xl p-4 border border-[#D2D2D7]">
+          <div className="bg-white rounded-2xl p-4 border border-[#D9D5CC]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-[#86868B] mb-1">Résolus</p>
-                <p className="text-2xl text-[#34C759]">{stats.resolved}</p>
+                <p className="text-sm text-[#5C5C5C] mb-1">Résolus</p>
+                <p className="text-2xl text-[#18753C]">{stats.resolved}</p>
               </div>
-              <CheckCircle className="w-8 h-8 text-[#34C759] opacity-20" />
+              <CheckCircle className="w-8 h-8 text-[#18753C] opacity-20" />
             </div>
           </div>
         </div>
 
         {/* Main Layout: List + Chat */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:h-[calc(100vh-300px)]">
+        <div className="grid grid-cols-12 gap-6 h-[calc(100vh-300px)]">
           {/* Conversations List */}
-          <div className="lg:col-span-4 bg-white rounded-2xl border border-[#D2D2D7] flex flex-col overflow-hidden max-h-[50vh] lg:max-h-none">
+          <div className="col-span-4 bg-white rounded-2xl border border-[#D9D5CC] flex flex-col overflow-hidden">
             {/* Search & Filters */}
-            <div className="p-4 border-b border-[#D2D2D7] bg-[#F5F5F7]">
+            <div className="p-4 border-b border-[#D9D5CC] bg-[#F2F0EB]">
               <div className="relative mb-3">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#86868B]" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-[#5C5C5C]" />
                 <input
                   type="text"
                   placeholder="Rechercher..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-[#D2D2D7] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+                  className="w-full pl-10 pr-4 py-2 border border-[#D9D5CC] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
                 />
               </div>
               <div className="flex gap-2">
@@ -400,7 +253,7 @@ export function Support() {
                     className={`px-3 py-1 rounded-lg text-xs transition-all ${
                       filterStatus === status
                         ? 'bg-[#007AFF] text-white'
-                        : 'bg-white text-[#86868B] hover:bg-[#E5E5E7]'
+                        : 'bg-white text-[#5C5C5C] hover:bg-[#E8E5DE]'
                     }`}
                   >
                     {status === 'all' ? 'Tous' : status.charAt(0).toUpperCase() + status.slice(1)}
@@ -415,29 +268,26 @@ export function Support() {
                 <div
                   key={conv.id}
                   onClick={() => setSelectedConv(conv)}
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setSelectedConv(conv); }}
-                  className={`p-4 border-b border-[#D2D2D7] cursor-pointer transition-colors focus:outline-none focus:ring-2 focus:ring-[#007AFF]/50 ${
-                    selectedConv?.id === conv.id ? 'bg-[#007AFF]/10' : 'hover:bg-[#F5F5F7]'
+                  className={`p-4 border-b border-[#D9D5CC] cursor-pointer transition-colors ${
+                    selectedConv?.id === conv.id ? 'bg-[#007AFF]/10' : 'hover:bg-[#F2F0EB]'
                   }`}
                 >
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#007AFF] to-[#5856D6] flex items-center justify-center text-white">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#007AFF] to-[#007AFF] flex items-center justify-center text-white">
                         {conv.patient_name.charAt(0)}
                       </div>
                       <div className="flex-1">
-                        <h3 className={`text-sm ${conv.unread_count > 0 ? 'font-semibold' : ''} text-[#1D1D1F]`}>
+                        <h3 className={`text-sm ${conv.unread_count > 0 ? 'font-semibold' : ''} text-[#1A1A1A]`}>
                           {conv.patient_name}
                         </h3>
-                        <p className="text-xs text-[#86868B] truncate max-w-[200px]">
+                        <p className="text-xs text-[#5C5C5C] truncate max-w-[200px]">
                           {conv.subject}
                         </p>
                       </div>
                     </div>
                     <div className="flex flex-col items-end gap-1">
-                      <span className="text-xs text-[#86868B]">
+                      <span className="text-xs text-[#5C5C5C]">
                         {formatTimestamp(conv.last_message_at)}
                       </span>
                       {conv.unread_count > 0 && (
@@ -451,7 +301,7 @@ export function Support() {
                     {getStatusBadge(conv.status)}
                     {getPriorityBadge(conv.priority)}
                   </div>
-                  <p className="text-xs text-[#86868B] mt-2 truncate">
+                  <p className="text-xs text-[#5C5C5C] mt-2 truncate">
                     {conv.last_message}
                   </p>
                 </div>
@@ -460,19 +310,19 @@ export function Support() {
           </div>
 
           {/* Chat Area */}
-          <div className="lg:col-span-8 bg-white rounded-2xl border border-[#D2D2D7] flex flex-col overflow-hidden min-h-[400px]">
+          <div className="col-span-8 bg-white rounded-2xl border border-[#D9D5CC] flex flex-col overflow-hidden">
             {selectedConv ? (
               <>
                 {/* Chat Header */}
-                <div className="p-4 border-b border-[#D2D2D7] bg-gradient-to-r from-[#007AFF]/5 to-white">
+                <div className="p-4 border-b border-[#D9D5CC] bg-gradient-to-r from-[#007AFF]/5 to-white">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#007AFF] to-[#5856D6] flex items-center justify-center text-white text-lg">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#007AFF] to-[#007AFF] flex items-center justify-center text-white text-lg">
                         {selectedConv.patient_name.charAt(0)}
                       </div>
                       <div>
-                        <h2 className="text-lg text-[#1D1D1F]">{selectedConv.patient_name}</h2>
-                        <p className="text-sm text-[#86868B]">{selectedConv.subject}</p>
+                        <h2 className="text-lg text-[#1A1A1A]">{selectedConv.patient_name}</h2>
+                        <p className="text-sm text-[#5C5C5C]">{selectedConv.subject}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
@@ -488,7 +338,7 @@ export function Support() {
                           </Button>
                           <Button
                             onClick={handleResolve}
-                            className="bg-[#34C759] hover:bg-[#2FB34A] gap-2"
+                            className="bg-[#18753C] hover:bg-[#18753C] gap-2"
                           >
                             <CheckCircle className="w-4 h-4" />
                             Marquer résolu
@@ -511,11 +361,11 @@ export function Support() {
                       <div className={`max-w-[70%] ${
                         msg.sender === 'support'
                           ? 'bg-[#007AFF] text-white'
-                          : 'bg-[#F5F5F7] text-[#1D1D1F]'
+                          : 'bg-[#F2F0EB] text-[#1A1A1A]'
                       } rounded-2xl px-4 py-3`}>
                         <p className="text-sm">{msg.content}</p>
                         <p className={`text-xs mt-1 ${
-                          msg.sender === 'support' ? 'text-white/70' : 'text-[#86868B]'
+                          msg.sender === 'support' ? 'text-white/70' : 'text-[#5C5C5C]'
                         }`}>
                           {formatTimestamp(msg.timestamp)}
                         </p>
@@ -527,10 +377,10 @@ export function Support() {
 
                 {/* Input */}
                 {selectedConv.status !== 'resolved' && (
-                  <div className="p-4 border-t border-[#D2D2D7] bg-[#F5F5F7]">
+                  <div className="p-4 border-t border-[#D9D5CC] bg-[#F2F0EB]">
                     <div className="flex items-center gap-3">
-                      <button className="p-2 hover:bg-white rounded-lg transition-colors min-h-12 min-w-12 flex items-center justify-center" aria-label="Joindre un fichier">
-                        <Paperclip className="w-5 h-5 text-[#86868B]" />
+                      <button className="p-2 hover:bg-white rounded-lg transition-colors">
+                        <Paperclip className="w-5 h-5 text-[#5C5C5C]" />
                       </button>
                       <input
                         type="text"
@@ -538,7 +388,7 @@ export function Support() {
                         onChange={(e) => setMessageInput(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                         placeholder="Tapez votre message..."
-                        className="flex-1 px-4 py-3 border border-[#D2D2D7] rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
+                        className="flex-1 px-4 py-3 border border-[#D9D5CC] rounded-xl bg-white focus:outline-none focus:ring-2 focus:ring-[#007AFF]/20 focus:border-[#007AFF]"
                       />
                       <Button
                         onClick={handleSendMessage}
@@ -555,8 +405,8 @@ export function Support() {
             ) : (
               <div className="flex-1 flex items-center justify-center">
                 <div className="text-center">
-                  <MessageCircle className="w-16 h-16 text-[#86868B] mx-auto mb-4 opacity-30" />
-                  <p className="text-[#86868B]">Sélectionnez une conversation</p>
+                  <MessageCircle className="w-16 h-16 text-[#5C5C5C] mx-auto mb-4 opacity-30" />
+                  <p className="text-[#5C5C5C]">Sélectionnez une conversation</p>
                 </div>
               </div>
             )}

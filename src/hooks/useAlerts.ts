@@ -1,18 +1,10 @@
 /**
- * PILIER 1 - REACTIVITE & FLUIDITE
- * Hook pour gerer les alertes avec cache intelligent
- *
- * Gestion fine des droits :
- * - Patient : voit uniquement SES alertes
- * - Medecin : voit les alertes de SES patients
- * - Prestataire : voit les alertes techniques (disconnect, mask_old, leak)
- * - Admin : voit toutes les alertes
+ * PILIER 1 - RÉACTIVITÉ & FLUIDITÉ
+ * Hook pour gérer les alertes avec cache intelligent
  */
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { projectId, publicAnonKey } from '../utils/supabase/info';
-
-const API_URL = `https://${projectId}.supabase.co/functions/v1/make-server-50732e52`;
+import { apiPublic } from '../utils/api';
 
 interface Alert {
   id: string;
@@ -32,41 +24,6 @@ interface AlertsResponse {
   unreadCount: number;
 }
 
-type UserRole = 'patient' | 'medecin' | 'admin' | 'prestataire';
-
-// Alert types that are purely technical (visible to prestataire)
-const TECHNICAL_ALERT_TYPES: Alert['type'][] = ['disconnect', 'mask_old', 'leak', 'no_data'];
-
-// Alert types that are medical (NOT visible to prestataire)
-const MEDICAL_ALERT_TYPES: Alert['type'][] = ['iah_high', 'follow_up'];
-
-/**
- * Filter alerts based on user role
- */
-function filterAlertsByRole(alerts: Alert[], role: UserRole, currentUserId?: string): Alert[] {
-  switch (role) {
-    case 'admin':
-      // Admin sees everything
-      return alerts;
-
-    case 'patient':
-      // Patient sees only their own alerts
-      if (!currentUserId) return [];
-      return alerts.filter(a => a.patient_id === currentUserId);
-
-    case 'prestataire':
-      // Prestataire sees only technical alerts (no medical alerts like iah_high, follow_up)
-      return alerts.filter(a => TECHNICAL_ALERT_TYPES.includes(a.type));
-
-    case 'medecin':
-      // Medecin sees all alert types for their patients (RLS handles patient filtering server-side)
-      return alerts;
-
-    default:
-      return [];
-  }
-}
-
 // ============================================
 // QUERY KEYS - Pour la gestion du cache
 // ============================================
@@ -81,122 +38,62 @@ export const alertKeys = {
 // FETCH FUNCTIONS
 // ============================================
 async function fetchActiveAlerts(): Promise<AlertsResponse> {
-  const response = await fetch(`${API_URL}/alerts/active`, {
-    headers: {
-      'Authorization': `Bearer ${publicAnonKey}`,
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to fetch alerts: ${response.status} ${errorText}`);
-  }
-
-  return response.json();
+  return apiPublic('/alerts/active');
 }
 
 async function fetchPatientAlerts(patientId: string): Promise<Alert[]> {
-  const response = await fetch(`${API_URL}/alerts/patient/${patientId}`, {
-    headers: {
-      'Authorization': `Bearer ${publicAnonKey}`,
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to fetch patient alerts: ${response.status} ${errorText}`);
-  }
-
-  const data = await response.json();
+  const data = await apiPublic(`/alerts/patient/${patientId}`);
   return data.alerts || [];
 }
 
 async function acknowledgeAlert(alertId: string): Promise<void> {
-  const response = await fetch(`${API_URL}/alerts/${alertId}/acknowledge`, {
-    method: 'PATCH',
-    headers: {
-      'Authorization': `Bearer ${publicAnonKey}`,
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to acknowledge alert: ${response.status} ${errorText}`);
-  }
+  await apiPublic(`/alerts/${alertId}/acknowledge`, { method: 'PATCH' });
 }
 
 async function resolveAlert(alertId: string): Promise<void> {
-  const response = await fetch(`${API_URL}/alerts/${alertId}/resolve`, {
-    method: 'PATCH',
-    headers: {
-      'Authorization': `Bearer ${publicAnonKey}`,
-      'Content-Type': 'application/json',
-    },
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Failed to resolve alert: ${response.status} ${errorText}`);
-  }
+  await apiPublic(`/alerts/${alertId}/resolve`, { method: 'PATCH' });
 }
 
 // ============================================
 // HOOKS
 // ============================================
 
-interface UseActiveAlertsOptions {
-  userRole?: UserRole;
-  currentUserId?: string;
-}
-
 /**
  * Hook pour charger toutes les alertes actives
- * Filtre automatiquement selon le role de l'utilisateur
+ * ✅ Cache automatique pendant 30 secondes
+ * ✅ Refetch automatique toutes les 30 secondes
+ * ✅ Refetch au focus de la fenêtre
  */
-export function useActiveAlerts(options: UseActiveAlertsOptions = {}) {
-  const { userRole = 'admin', currentUserId } = options;
-
+export function useActiveAlerts() {
   return useQuery({
-    queryKey: [...alertKeys.active(), userRole],
-    queryFn: async () => {
-      const data = await fetchActiveAlerts();
-      // Apply role-based filtering client-side
-      const filteredAlerts = filterAlertsByRole(data.alerts, userRole, currentUserId);
-      return {
-        alerts: filteredAlerts,
-        unreadCount: filteredAlerts.filter(a => a.status === 'active').length,
-      };
-    },
-    staleTime: 30 * 1000,
-    refetchInterval: 30 * 1000,
+    queryKey: alertKeys.active(),
+    queryFn: fetchActiveAlerts,
+    staleTime: 30 * 1000, // 30 secondes
+    refetchInterval: 30 * 1000, // Refetch toutes les 30s pour les alertes
+    // En cas d'erreur, retourne des données vides pour ne pas casser l'UI
     placeholderData: { alerts: [], unreadCount: 0 },
   });
 }
 
 /**
- * Hook pour charger les alertes d'un patient specifique
- * Respecte les restrictions de role
+ * Hook pour charger les alertes d'un patient spécifique
+ * ✅ Cache automatique
+ * ✅ Réutilise le cache si déjà chargé
  */
-export function usePatientAlerts(patientId: string, options: { userRole?: UserRole } = {}) {
-  const { userRole = 'admin' } = options;
-
+export function usePatientAlerts(patientId: string) {
   return useQuery({
-    queryKey: [...alertKeys.patient(patientId), userRole],
-    queryFn: async () => {
-      const alerts = await fetchPatientAlerts(patientId);
-      return filterAlertsByRole(alerts, userRole, patientId);
-    },
-    enabled: !!patientId,
-    staleTime: 1 * 60 * 1000,
+    queryKey: alertKeys.patient(patientId),
+    queryFn: () => fetchPatientAlerts(patientId),
+    enabled: !!patientId, // Ne charge que si patientId existe
+    staleTime: 1 * 60 * 1000, // 1 minute
     placeholderData: [],
   });
 }
 
 /**
  * Hook pour marquer une alerte comme lue
+ * ✅ Invalide automatiquement le cache pour forcer le refresh
+ * ✅ Optimistic update pour mise à jour instantanée
  */
 export function useAcknowledgeAlert() {
   const queryClient = useQueryClient();
@@ -204,10 +101,13 @@ export function useAcknowledgeAlert() {
   return useMutation({
     mutationFn: acknowledgeAlert,
     onMutate: async (alertId) => {
+      // Annuler les refetch en cours
       await queryClient.cancelQueries({ queryKey: alertKeys.active() });
 
+      // Snapshot de l'état actuel
       const previousAlerts = queryClient.getQueryData<AlertsResponse>(alertKeys.active());
 
+      // Optimistic update - Mettre à jour immédiatement l'UI
       if (previousAlerts) {
         queryClient.setQueryData<AlertsResponse>(alertKeys.active(), {
           ...previousAlerts,
@@ -223,18 +123,22 @@ export function useAcknowledgeAlert() {
       return { previousAlerts };
     },
     onError: (err, alertId, context) => {
+      // Rollback en cas d'erreur
       if (context?.previousAlerts) {
         queryClient.setQueryData(alertKeys.active(), context.previousAlerts);
       }
     },
     onSuccess: () => {
+      // Invalider le cache pour refetch depuis le serveur
       queryClient.invalidateQueries({ queryKey: alertKeys.active() });
     },
   });
 }
 
 /**
- * Hook pour resoudre une alerte
+ * Hook pour résoudre une alerte
+ * ✅ Invalide automatiquement le cache
+ * ✅ Optimistic update
  */
 export function useResolveAlert() {
   const queryClient = useQueryClient();
@@ -246,6 +150,7 @@ export function useResolveAlert() {
 
       const previousAlerts = queryClient.getQueryData<AlertsResponse>(alertKeys.active());
 
+      // Optimistic update - Retirer l'alerte de la liste
       if (previousAlerts) {
         queryClient.setQueryData<AlertsResponse>(alertKeys.active(), {
           alerts: previousAlerts.alerts.filter(alert => alert.id !== alertId),

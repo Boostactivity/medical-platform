@@ -8,7 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { Badge } from '../ui/badge';
 import { Button } from '../ui/button';
 import { AlertTriangle, TrendingDown, Phone, Calendar } from 'lucide-react';
-import { projectId, publicAnonKey } from '../../utils/supabase/info';
+import { apiPublic } from '../../utils/api';
 
 interface RevenueAtRiskData {
   total_monthly_revenue: number;
@@ -47,19 +47,7 @@ export function RevenueRiskAlert({ onPatientClick }: RevenueRiskAlertProps) {
 
   const fetchRevenueRisk = async () => {
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-50732e52/business/revenue-at-risk`,
-        {
-          headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      if (!response.ok) throw new Error('Erreur réseau');
-
-      const result = await response.json();
+      const result = await apiPublic('/business/revenue-at-risk');
       setData(result);
     } catch (err) {
       console.error('Error fetching revenue risk:', err);

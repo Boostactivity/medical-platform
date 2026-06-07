@@ -14,11 +14,9 @@ export interface Intervention {
 interface InterventionTimelineProps {
   interventions: Intervention[];
   onEdit?: (id: string) => void;
-  onStart?: (id: string) => void;
-  onComplete?: (intervention: Intervention) => void;
 }
 
-export function InterventionTimeline({ interventions, onEdit, onStart, onComplete }: InterventionTimelineProps) {
+export function InterventionTimeline({ interventions, onEdit }: InterventionTimelineProps) {
   const getTypeConfig = (type: string) => {
     const configs = {
       installation: {
@@ -29,12 +27,12 @@ export function InterventionTimeline({ interventions, onEdit, onStart, onComplet
       maintenance: {
         icon: <Wrench className="w-4 h-4" />,
         label: 'Maintenance',
-        color: '#FF9500',
+        color: '#B34000',
       },
       mask_delivery: {
         icon: <Package className="w-4 h-4" />,
         label: 'Livraison masque',
-        color: '#34C759',
+        color: '#18753C',
       },
       phone_support: {
         icon: <Phone className="w-4 h-4" />,
@@ -44,7 +42,7 @@ export function InterventionTimeline({ interventions, onEdit, onStart, onComplet
       repair: {
         icon: <Wrench className="w-4 h-4" />,
         label: 'Réparation',
-        color: '#FF3B30',
+        color: '#CE0500',
       },
     };
     return configs[type as keyof typeof configs] || configs.installation;
@@ -60,20 +58,20 @@ export function InterventionTimeline({ interventions, onEdit, onStart, onComplet
       },
       in_progress: {
         label: 'En cours',
-        color: '#FF9500',
-        bg: 'bg-[#FF9500]/10',
+        color: '#B34000',
+        bg: 'bg-[#B34000]/10',
         icon: <Clock className="w-4 h-4" />,
       },
       completed: {
         label: 'Terminé',
-        color: '#34C759',
-        bg: 'bg-[#34C759]/10',
+        color: '#18753C',
+        bg: 'bg-[#18753C]/10',
         icon: <CheckCircle className="w-4 h-4" />,
       },
       cancelled: {
         label: 'Annulé',
-        color: '#86868B',
-        bg: 'bg-[#86868B]/10',
+        color: '#5C5C5C',
+        bg: 'bg-[#5C5C5C]/10',
         icon: <CheckCircle className="w-4 h-4" />,
       },
     };
@@ -88,8 +86,8 @@ export function InterventionTimeline({ interventions, onEdit, onStart, onComplet
     <div className="bg-white rounded-3xl p-6 shadow-sm">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-2xl text-[#1D1D1F] mb-1">Planning interventions</h3>
-          <p className="text-sm text-[#86868B]">
+          <h3 className="text-2xl text-[#1A1A1A] mb-1">Planning interventions</h3>
+          <p className="text-sm text-[#5C5C5C]">
             {interventions.filter(i => i.status === 'scheduled').length} prévues ·{' '}
             {interventions.filter(i => i.status === 'in_progress').length} en cours
           </p>
@@ -101,7 +99,7 @@ export function InterventionTimeline({ interventions, onEdit, onStart, onComplet
 
       <div className="relative">
         {/* Timeline line */}
-        <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-[#E5E5EA]"></div>
+        <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-[#D9D5CC]"></div>
 
         {/* Interventions */}
         <div className="space-y-6">
@@ -126,14 +124,14 @@ export function InterventionTimeline({ interventions, onEdit, onStart, onComplet
                 </div>
 
                 {/* Card */}
-                <div className="bg-[#F5F5F7] rounded-2xl p-4 hover:bg-[#EBEBED] transition-all">
+                <div className="bg-[#F2F0EB] rounded-2xl p-4 hover:bg-[#E8E5DE] transition-all">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="text-sm" style={{ color: typeConfig.color }}>
                           {typeConfig.label}
                         </span>
-                        <span className="text-[#86868B]">·</span>
+                        <span className="text-[#5C5C5C]">·</span>
                         <span
                           className={`text-xs px-2 py-1 rounded-full ${statusConfig.bg}`}
                           style={{ color: statusConfig.color }}
@@ -141,51 +139,33 @@ export function InterventionTimeline({ interventions, onEdit, onStart, onComplet
                           {statusConfig.label}
                         </span>
                       </div>
-                      <h4 className="text-[#1D1D1F] mb-1">{intervention.patientName}</h4>
+                      <h4 className="text-[#1A1A1A] mb-1">{intervention.patientName}</h4>
                       {intervention.technicianName && (
-                        <p className="text-sm text-[#86868B]">
+                        <p className="text-sm text-[#5C5C5C]">
                           Technicien : {intervention.technicianName}
                         </p>
                       )}
                       {intervention.notes && (
-                        <p className="text-sm text-[#86868B] mt-2 italic">{intervention.notes}</p>
+                        <p className="text-sm text-[#5C5C5C] mt-2 italic">{intervention.notes}</p>
                       )}
                     </div>
 
                     <div className="text-right flex-shrink-0 ml-4">
-                      <p className="text-sm text-[#86868B] mb-2">
+                      <p className="text-sm text-[#5C5C5C] mb-2">
                         {new Date(intervention.date).toLocaleDateString('fr-FR', {
                           day: 'numeric',
                           month: 'short',
                           year: 'numeric',
                         })}
                       </p>
-                      <div className="flex flex-col gap-1">
-                        {onStart && intervention.status === 'scheduled' && (
-                          <button
-                            onClick={() => onStart(intervention.id)}
-                            className="text-sm text-[#FF9500] hover:underline"
-                          >
-                            Démarrer
-                          </button>
-                        )}
-                        {onComplete && intervention.status === 'in_progress' && (
-                          <button
-                            onClick={() => onComplete(intervention)}
-                            className="text-sm text-[#34C759] hover:underline"
-                          >
-                            Terminer
-                          </button>
-                        )}
-                        {onEdit && (
-                          <button
-                            onClick={() => onEdit(intervention.id)}
-                            className="text-sm text-[#007AFF] hover:underline"
-                          >
-                            Modifier
-                          </button>
-                        )}
-                      </div>
+                      {onEdit && (
+                        <button
+                          onClick={() => onEdit(intervention.id)}
+                          className="text-sm text-[#007AFF] hover:underline"
+                        >
+                          Modifier
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

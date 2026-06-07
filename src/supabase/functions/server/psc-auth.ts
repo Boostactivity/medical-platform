@@ -315,7 +315,7 @@ async function createOrUpdateDoctor(doctorInfo: any, supabase: any): Promise<str
 
     // Créer user dans Supabase Auth (sans mot de passe)
     const { data: authUser, error: authError } = await supabase.auth.admin.createUser({
-      email: doctorInfo.email || `${doctorInfo.rpps}@psc.plateforme.fr`,
+      email: doctorInfo.email || `${doctorInfo.rpps}@psc.medical-sante.fr`,
       email_confirm: true,
       user_metadata: {
         first_name: doctorInfo.firstName,
@@ -334,7 +334,7 @@ async function createOrUpdateDoctor(doctorInfo: any, supabase: any): Promise<str
     // Créer profil dans profiles
     const { error: profileError } = await supabase.from('profiles').insert({
       id: authUser.user.id,
-      email: doctorInfo.email || `${doctorInfo.rpps}@psc.plateforme.fr`,
+      email: doctorInfo.email || `${doctorInfo.rpps}@psc.medical-sante.fr`,
       first_name: doctorInfo.firstName,
       last_name: doctorInfo.lastName,
       role: 'doctor',

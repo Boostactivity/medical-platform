@@ -16,7 +16,7 @@ import {
   Calendar,
   Activity
 } from 'lucide-react';
-import { projectId, publicAnonKey } from '../../utils/supabase/info';
+import { apiPublic } from '../../utils/api';
 
 interface BusinessDashboard {
   compliance: {
@@ -58,19 +58,7 @@ export function BusinessMetrics() {
 
   const fetchDashboard = async () => {
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-50732e52/business/dashboard`,
-        {
-          headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      if (!response.ok) throw new Error('Erreur réseau');
-
-      const data = await response.json();
+      const data = await apiPublic('/business/dashboard');
       setDashboard(data.dashboard);
       setLastUpdate(new Date());
     } catch (err) {

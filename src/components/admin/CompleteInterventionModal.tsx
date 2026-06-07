@@ -77,16 +77,16 @@ export function CompleteInterventionModal({ isOpen, onClose, onComplete, interve
               <div className="sticky top-0 bg-white border-b border-gray-200 px-8 py-6 rounded-t-3xl">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-2xl text-[#1D1D1F]">Terminer l'intervention</h2>
-                    <p className="text-sm text-[#86868B] mt-1">
+                    <h2 className="text-2xl text-[#1A1A1A]">Terminer l'intervention</h2>
+                    <p className="text-sm text-[#5C5C5C] mt-1">
                       {intervention.patientName} • {intervention.technicianName}
                     </p>
                   </div>
                   <button
                     onClick={onClose}
-                    className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#F5F5F7] transition-colors"
+                    className="w-10 h-10 flex items-center justify-center rounded-full hover:bg-[#F2F0EB] transition-colors"
                   >
-                    <X className="w-6 h-6 text-[#86868B]" />
+                    <X className="w-6 h-6 text-[#5C5C5C]" />
                   </button>
                 </div>
               </div>
@@ -95,7 +95,7 @@ export function CompleteInterventionModal({ isOpen, onClose, onComplete, interve
               <form onSubmit={handleSubmit} className="p-8 space-y-6">
                 {/* Durée */}
                 <div>
-                  <label className="block text-[#1D1D1F] mb-2">
+                  <label className="block text-[#1A1A1A] mb-2">
                     <Clock className="w-4 h-4 inline mr-2" />
                     Durée de l'intervention
                   </label>
@@ -103,14 +103,14 @@ export function CompleteInterventionModal({ isOpen, onClose, onComplete, interve
                     type="text"
                     value={formData.duration}
                     onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                    className="w-full px-4 py-3 bg-[#F5F5F7] border-2 border-transparent rounded-xl focus:border-[#34C759] focus:bg-white transition-all outline-none"
+                    className="w-full px-4 py-3 bg-[#F2F0EB] border-2 border-transparent rounded-xl focus:border-[#18753C] focus:bg-white transition-all outline-none"
                     placeholder="Ex: 1h30, 45 minutes..."
                   />
                 </div>
 
                 {/* Matériel utilisé */}
                 <div>
-                  <label className="block text-[#1D1D1F] mb-2">
+                  <label className="block text-[#1A1A1A] mb-2">
                     <Package className="w-4 h-4 inline mr-2" />
                     Matériel utilisé / livré
                   </label>
@@ -118,21 +118,21 @@ export function CompleteInterventionModal({ isOpen, onClose, onComplete, interve
                     type="text"
                     value={formData.materialUsed}
                     onChange={(e) => setFormData({ ...formData, materialUsed: e.target.value })}
-                    className="w-full px-4 py-3 bg-[#F5F5F7] border-2 border-transparent rounded-xl focus:border-[#34C759] focus:bg-white transition-all outline-none"
+                    className="w-full px-4 py-3 bg-[#F2F0EB] border-2 border-transparent rounded-xl focus:border-[#18753C] focus:bg-white transition-all outline-none"
                     placeholder="Ex: Masque nasal taille M, 2 filtres..."
                   />
                 </div>
 
                 {/* Compte-rendu */}
                 <div>
-                  <label className="block text-[#1D1D1F] mb-2">
+                  <label className="block text-[#1A1A1A] mb-2">
                     <FileText className="w-4 h-4 inline mr-2" />
                     Compte-rendu d'intervention *
                   </label>
                   <textarea
                     value={formData.notes}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                    className="w-full px-4 py-3 bg-[#F5F5F7] border-2 border-transparent rounded-xl focus:border-[#34C759] focus:bg-white transition-all outline-none resize-none"
+                    className="w-full px-4 py-3 bg-[#F2F0EB] border-2 border-transparent rounded-xl focus:border-[#18753C] focus:bg-white transition-all outline-none resize-none"
                     rows={6}
                     placeholder="Détails de l'intervention effectuée, problèmes rencontrés, solutions apportées, formation donnée au patient..."
                     required
@@ -141,7 +141,7 @@ export function CompleteInterventionModal({ isOpen, onClose, onComplete, interve
 
                 {/* Satisfaction patient */}
                 <div>
-                  <label className="block text-[#1D1D1F] mb-3">
+                  <label className="block text-[#1A1A1A] mb-3">
                     Satisfaction patient
                   </label>
                   <div className="flex items-center gap-2">
@@ -152,8 +152,8 @@ export function CompleteInterventionModal({ isOpen, onClose, onComplete, interve
                         onClick={() => setFormData({ ...formData, patientSatisfaction: rating })}
                         className={`flex-1 py-3 rounded-xl border-2 transition-all ${
                           formData.patientSatisfaction >= rating
-                            ? 'border-[#FFD60A] bg-[#FFD60A]/20'
-                            : 'border-gray-200 hover:border-[#FFD60A]/50'
+                            ? 'border-[#B34000] bg-[#B34000]/20'
+                            : 'border-gray-200 hover:border-[#B34000]/50'
                         }`}
                       >
                         <div className="text-2xl">
@@ -162,7 +162,7 @@ export function CompleteInterventionModal({ isOpen, onClose, onComplete, interve
                       </button>
                     ))}
                   </div>
-                  <p className="text-xs text-[#86868B] mt-2 text-center">
+                  <p className="text-xs text-[#5C5C5C] mt-2 text-center">
                     {formData.patientSatisfaction === 5 ? 'Très satisfait' :
                      formData.patientSatisfaction === 4 ? 'Satisfait' :
                      formData.patientSatisfaction === 3 ? 'Neutre' :
@@ -171,7 +171,7 @@ export function CompleteInterventionModal({ isOpen, onClose, onComplete, interve
                 </div>
 
                 {/* Suivi nécessaire */}
-                <div className="bg-[#F5F5F7] rounded-2xl p-6">
+                <div className="bg-[#F2F0EB] rounded-2xl p-6">
                   <label className="flex items-center gap-3 cursor-pointer">
                     <input
                       type="checkbox"
@@ -180,8 +180,8 @@ export function CompleteInterventionModal({ isOpen, onClose, onComplete, interve
                       className="w-6 h-6 rounded-lg border-2 border-gray-300 text-[#007AFF] focus:ring-[#007AFF]"
                     />
                     <div className="flex-1">
-                      <div className="text-[#1D1D1F]">Un suivi est nécessaire</div>
-                      <div className="text-sm text-[#86868B]">Cocher si une nouvelle intervention est à prévoir</div>
+                      <div className="text-[#1A1A1A]">Un suivi est nécessaire</div>
+                      <div className="text-sm text-[#5C5C5C]">Cocher si une nouvelle intervention est à prévoir</div>
                     </div>
                   </label>
 
@@ -208,13 +208,13 @@ export function CompleteInterventionModal({ isOpen, onClose, onComplete, interve
                   <button
                     type="button"
                     onClick={onClose}
-                    className="flex-1 px-6 py-4 bg-[#F5F5F7] text-[#1D1D1F] rounded-full hover:bg-[#E5E5EA] transition-all"
+                    className="flex-1 px-6 py-4 bg-[#F2F0EB] text-[#1A1A1A] rounded-full hover:bg-[#D9D5CC] transition-all"
                   >
                     Annuler
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 px-6 py-4 bg-[#34C759] text-white rounded-full hover:bg-[#2FB04C] transition-all shadow-lg flex items-center justify-center gap-2"
+                    className="flex-1 px-6 py-4 bg-[#18753C] text-white rounded-full hover:bg-[#18753C] transition-all shadow-lg flex items-center justify-center gap-2"
                   >
                     <CheckCircle className="w-5 h-5" />
                     Terminer l'intervention

@@ -3,7 +3,7 @@
  * CONVERTISSEUR HL7 FHIR R4
  * ============================================
  * 
- * Transforme les données internes la plateforme en ressources FHIR
+ * Transforme les données internes Medical en ressources FHIR
  * pour l'interopérabilité avec les systèmes hospitaliers et DMP
  * 
  * Standard : HL7 FHIR R4
@@ -149,7 +149,7 @@ export function patientToFHIR(patient: {
     id: patient.id,
     identifier: [
       {
-        system: 'https://plateforme.fr/patient-id',
+        system: 'https://medical-sante.fr/patient-id',
         value: patient.id,
       },
       ...(patient.ipp ? [{
@@ -318,7 +318,7 @@ export function deviceToFHIR(device: {
     resourceType: 'Device',
     identifier: [
       {
-        system: 'https://plateforme.fr/device-serial',
+        system: 'https://medical-sante.fr/device-serial',
         value: device.serial_number,
       },
     ],

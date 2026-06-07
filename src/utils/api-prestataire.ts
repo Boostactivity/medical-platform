@@ -1,48 +1,8 @@
-import { SupabaseClient } from '@supabase/supabase-js';
-import { projectId, publicAnonKey } from './supabase/info';
 import { createClient } from './supabase/client';
+import { api } from './api';
 
-// Use shared singleton from client.ts to avoid multiple instances
+// Use shared singleton from client.ts (realtime subscriptions)
 const supabase = createClient();
-
-const API_BASE = `https://${projectId}.supabase.co/functions/v1/make-server-50732e52`;
-
-// ============================================
-// HELPER FUNCTIONS
-// ============================================
-
-const getAuthHeaders = async () => {
-  // Try to get fresh session from Supabase
-  const { data: { session }, error } = await supabase.auth.getSession();
-  
-  if (error || !session) {
-    // No valid session - user needs to log in
-    console.error('[getAuthHeaders] No valid session:', error?.message);
-    throw new Error('Session expired - please log in again');
-  }
-  
-  // Update localStorage with fresh token
-  localStorage.setItem('access_token', session.access_token);
-  
-  return {
-    'Authorization': `Bearer ${session.access_token}`,
-    'Content-Type': 'application/json',
-  };
-};
-
-const handleResponse = async (response: Response) => {
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Network error' }));
-    console.error('[API ERROR]', {
-      status: response.status,
-      statusText: response.statusText,
-      url: response.url,
-      error
-    });
-    throw new Error(error.error || error.message || `HTTP ${response.status}: ${response.statusText}`);
-  }
-  return response.json();
-};
 
 // ============================================
 // ALERTS API
@@ -53,33 +13,21 @@ export const alertsApi = {
    * Get all active alerts
    */
   getAll: async () => {
-    const response = await fetch(`${API_BASE}/prestataire/alerts`, {
-      headers: await getAuthHeaders(),
-    });
-    return handleResponse(response);
+    return api.get('/prestataire/alerts');
   },
 
   /**
    * Resolve an alert
    */
   resolve: async (alertId: string, data: { method: string; notes: string }) => {
-    const response = await fetch(`${API_BASE}/prestataire/alerts/${alertId}/resolve`, {
-      method: 'POST',
-      headers: await getAuthHeaders(),
-      body: JSON.stringify(data),
-    });
-    return handleResponse(response);
+    return api.post(`/prestataire/alerts/${alertId}/resolve`, data);
   },
 
   /**
    * Ignore an alert
    */
   ignore: async (alertId: string) => {
-    const response = await fetch(`${API_BASE}/prestataire/alerts/${alertId}/ignore`, {
-      method: 'POST',
-      headers: await getAuthHeaders(),
-    });
-    return handleResponse(response);
+    return api.post(`/prestataire/alerts/${alertId}/ignore`);
   },
 
   /**
@@ -122,10 +70,7 @@ export const interventionsApi = {
    * @param status - Filter by status: 'all', 'scheduled', 'in_progress', 'completed'
    */
   getAll: async (status: string = 'all') => {
-    const response = await fetch(`${API_BASE}/prestataire/interventions?status=${status}`, {
-      headers: await getAuthHeaders(),
-    });
-    return handleResponse(response);
+    return api.get(`/prestataire/interventions?status=${status}`);
   },
 
   /**
@@ -140,23 +85,14 @@ export const interventionsApi = {
     material?: string;
     alert_id?: string;
   }) => {
-    const response = await fetch(`${API_BASE}/prestataire/interventions`, {
-      method: 'POST',
-      headers: await getAuthHeaders(),
-      body: JSON.stringify(data),
-    });
-    return handleResponse(response);
+    return api.post('/prestataire/interventions', data);
   },
 
   /**
    * Start an intervention
    */
   start: async (interventionId: string) => {
-    const response = await fetch(`${API_BASE}/prestataire/interventions/${interventionId}/start`, {
-      method: 'PATCH',
-      headers: await getAuthHeaders(),
-    });
-    return handleResponse(response);
+    return api.patch(`/prestataire/interventions/${interventionId}/start`);
   },
 
   /**
@@ -170,12 +106,7 @@ export const interventionsApi = {
     followUpNeeded?: boolean;
     followUpNotes?: string;
   }) => {
-    const response = await fetch(`${API_BASE}/prestataire/interventions/${interventionId}/complete`, {
-      method: 'PATCH',
-      headers: await getAuthHeaders(),
-      body: JSON.stringify(data),
-    });
-    return handleResponse(response);
+    return api.patch(`/prestataire/interventions/${interventionId}/complete`, data);
   },
 
   /**
@@ -216,10 +147,7 @@ export const dashboardApi = {
    * Get dashboard statistics
    */
   getStats: async () => {
-    const response = await fetch(`${API_BASE}/prestataire/dashboard/stats`, {
-      headers: await getAuthHeaders(),
-    });
-    return handleResponse(response);
+    return api.get('/prestataire/dashboard/stats');
   },
 };
 
@@ -237,10 +165,7 @@ export const auditApi = {
     if (filters?.action) params.append('action', filters.action);
     if (filters?.limit) params.append('limit', filters.limit.toString());
 
-    const response = await fetch(`${API_BASE}/prestataire/audit/logs?${params}`, {
-      headers: await getAuthHeaders(),
-    });
-    return handleResponse(response);
+    return api.get(`/prestataire/audit/logs?${params}`);
   },
 };
 

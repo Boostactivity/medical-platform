@@ -3,15 +3,10 @@
  * Transforme les données ResMed, Philips, Löwenstein en format standardisé
  */
 
-import { createClient } from 'jsr:@supabase/supabase-js@2';
-
-const supabase = createClient(
-  Deno.env.get('SUPABASE_URL') ?? '',
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-);
+import { supabase } from './lib/supabase.ts';
 
 /**
- * Format standardisé la plateforme
+ * Format standardisé Medical
  * Toutes les données constructeurs sont converties vers ce format
  */
 export interface StandardizedSleepData {

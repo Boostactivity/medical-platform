@@ -22,9 +22,9 @@ export function ScoreCircle({ score, maxScore = 100, size = 'lg', showLabel = tr
   const offset = circumference - (percentage / 100) * circumference;
   
   const getColor = () => {
-    if (percentage >= 80) return '#34C759'; // Vert
-    if (percentage >= 60) return '#FF9500'; // Orange
-    return '#FF3B30'; // Rouge
+    if (percentage >= 80) return '#18753C'; // Vert
+    if (percentage >= 60) return '#B34000'; // Orange
+    return '#CE0500'; // Rouge
   };
   
   const getMessage = () => {
@@ -44,7 +44,7 @@ export function ScoreCircle({ score, maxScore = 100, size = 'lg', showLabel = tr
             cx={config.circle / 2}
             cy={config.circle / 2}
             r={radius}
-            stroke="#E5E5EA"
+            stroke="#D9D5CC"
             strokeWidth={config.stroke}
             fill="none"
           />
@@ -72,12 +72,12 @@ export function ScoreCircle({ score, maxScore = 100, size = 'lg', showLabel = tr
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
-            className={`${config.text} text-[#1D1D1F]`}
+            className={`${config.text} text-[#1A1A1A]`}
             style={{ fontWeight: 300 }}
           >
             {Math.round(score)}
           </motion.div>
-          <div className="text-sm text-[#86868B]">/{maxScore}</div>
+          <div className="text-sm text-[#5C5C5C]">/{maxScore}</div>
         </div>
       </div>
       
@@ -88,7 +88,7 @@ export function ScoreCircle({ score, maxScore = 100, size = 'lg', showLabel = tr
           transition={{ delay: 0.8 }}
           className="text-center"
         >
-          <div className="text-lg text-[#1D1D1F] mb-1">Score sommeil</div>
+          <div className="text-lg text-[#1A1A1A] mb-1">Score sommeil</div>
           <div
             className="text-sm px-4 py-1 rounded-full inline-block"
             style={{ 

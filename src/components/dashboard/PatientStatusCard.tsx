@@ -23,8 +23,8 @@ export function PatientStatusCard({ patient, onExport, onMessage, index = 0 }: P
   const getStatusConfig = (status: string) => {
     const configs = {
       excellent: {
-        color: '#34C759',
-        bg: 'bg-[#34C759]/10',
+        color: '#18753C',
+        bg: 'bg-[#18753C]/10',
         label: 'Excellent',
         icon: <CheckCircle className="w-5 h-5" />,
       },
@@ -35,14 +35,14 @@ export function PatientStatusCard({ patient, onExport, onMessage, index = 0 }: P
         icon: <CheckCircle className="w-5 h-5" />,
       },
       warning: {
-        color: '#FF9500',
-        bg: 'bg-[#FF9500]/10',
+        color: '#B34000',
+        bg: 'bg-[#B34000]/10',
         label: 'À surveiller',
         icon: <AlertTriangle className="w-5 h-5" />,
       },
       alert: {
-        color: '#FF3B30',
-        bg: 'bg-[#FF3B30]/10',
+        color: '#CE0500',
+        bg: 'bg-[#CE0500]/10',
         label: 'Attention',
         icon: <AlertTriangle className="w-5 h-5" />,
       },
@@ -57,7 +57,7 @@ export function PatientStatusCard({ patient, onExport, onMessage, index = 0 }: P
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className="bg-[#F5F5F7] rounded-2xl p-6 hover:bg-[#EBEBED] transition-all group"
+      className="bg-[#F2F0EB] rounded-2xl p-6 hover:bg-[#E8E5DE] transition-all group"
     >
       <div className="flex items-center justify-between">
         {/* Patient info */}
@@ -70,8 +70,8 @@ export function PatientStatusCard({ patient, onExport, onMessage, index = 0 }: P
           </div>
 
           <div className="flex-1">
-            <h4 className="text-lg text-[#1D1D1F] mb-1">{patient.name}</h4>
-            <p className="text-sm text-[#86868B]">
+            <h4 className="text-lg text-[#1A1A1A] mb-1">{patient.name}</h4>
+            <p className="text-sm text-[#5C5C5C]">
               Traité depuis {patient.treatmentDays} jours · Dernière sync: {patient.lastSync}
             </p>
           </div>
@@ -80,13 +80,13 @@ export function PatientStatusCard({ patient, onExport, onMessage, index = 0 }: P
         {/* Stats */}
         <div className="flex items-center gap-8 mr-6">
           <div className="text-center">
-            <div className="text-2xl text-[#1D1D1F] mb-1">{patient.avgHours.toFixed(1)}h</div>
-            <div className="text-xs text-[#86868B]">Moy/nuit</div>
+            <div className="text-2xl text-[#1A1A1A] mb-1">{patient.avgHours.toFixed(1)}h</div>
+            <div className="text-xs text-[#5C5C5C]">Moy/nuit</div>
           </div>
 
           <div className="text-center">
-            <div className="text-2xl text-[#1D1D1F] mb-1">{patient.compliance.toFixed(0)}%</div>
-            <div className="text-xs text-[#86868B]">Observance</div>
+            <div className="text-2xl text-[#1A1A1A] mb-1">{patient.compliance.toFixed(0)}%</div>
+            <div className="text-xs text-[#5C5C5C]">Observance</div>
           </div>
 
           {/* Status badge */}
@@ -112,7 +112,7 @@ export function PatientStatusCard({ patient, onExport, onMessage, index = 0 }: P
           {onExport && (
             <button
               onClick={onExport}
-              className="p-3 bg-white hover:bg-[#34C759] hover:text-white rounded-xl transition-all shadow-sm"
+              className="p-3 bg-white hover:bg-[#18753C] hover:text-white rounded-xl transition-all shadow-sm"
               title="Exporter le rapport"
             >
               <Download className="w-5 h-5" />
@@ -139,9 +139,9 @@ interface FilterButtonsProps {
 export function FilterButtons({ activeFilter, onFilterChange, counts }: FilterButtonsProps) {
   const filters = [
     { key: 'all', label: 'Tous les patients', count: counts.all, color: '#007AFF' },
-    { key: 'excellent', label: 'Excellents', count: counts.excellent, color: '#34C759' },
-    { key: 'warning', label: 'À surveiller', count: counts.warning, color: '#FF9500' },
-    { key: 'alert', label: 'Alertes', count: counts.alert, color: '#FF3B30' },
+    { key: 'excellent', label: 'Excellents', count: counts.excellent, color: '#18753C' },
+    { key: 'warning', label: 'À surveiller', count: counts.warning, color: '#B34000' },
+    { key: 'alert', label: 'Alertes', count: counts.alert, color: '#CE0500' },
   ];
 
   return (
@@ -153,7 +153,7 @@ export function FilterButtons({ activeFilter, onFilterChange, counts }: FilterBu
           className={`px-5 py-3 rounded-xl transition-all ${
             activeFilter === filter.key
               ? 'text-white shadow-lg'
-              : 'bg-[#F5F5F7] text-[#86868B] hover:bg-[#EBEBED]'
+              : 'bg-[#F2F0EB] text-[#5C5C5C] hover:bg-[#E8E5DE]'
           }`}
           style={
             activeFilter === filter.key

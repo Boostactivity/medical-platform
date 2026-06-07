@@ -113,11 +113,8 @@ export function AlertsList({ alerts, maxItems = 5 }: AlertsListProps) {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: 0.5 + index * 0.1 }}
-                onClick={() => navigate(`/patients/${alert.patientId}`)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') navigate(`/patients/${alert.patientId}`); }}
-                className="group flex items-start gap-4 p-4 rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all cursor-pointer bg-gradient-to-r hover:from-blue-50/50 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                onClick={() => navigate(`/pro/patients/${alert.patientId}`)}
+                className="group flex items-start gap-4 p-4 rounded-xl border border-gray-200 hover:border-blue-300 hover:shadow-md transition-all cursor-pointer bg-gradient-to-r hover:from-blue-50/50"
               >
                 {/* Indicateur de sévérité */}
                 <div className="flex-shrink-0 mt-1">
@@ -171,7 +168,7 @@ export function AlertsList({ alerts, maxItems = 5 }: AlertsListProps) {
       {alerts.length > maxItems && (
         <div className="mt-4 pt-4 border-t border-gray-100">
           <button
-            onClick={() => navigate('/monitoring-dashboard')}
+            onClick={() => navigate('/pro/monitoring')}
             className="w-full text-center text-sm text-blue-600 hover:text-blue-700 font-medium hover:underline"
           >
             Voir toutes les alertes ({alerts.length})

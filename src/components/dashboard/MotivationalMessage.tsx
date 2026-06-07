@@ -14,7 +14,7 @@ export function MotivationalMessage({ score, streak = 0, improvement = 0 }: Moti
         icon: <Award className="w-6 h-6" />,
         title: 'Performance exceptionnelle !',
         message: 'Vous êtes sur la bonne voie. Continuez ainsi, votre corps vous en remercie.',
-        gradient: 'from-[#34C759] to-[#30D158]',
+        gradient: 'from-[#18753C] to-[#18753C]',
       };
     }
     if (score >= 80) {
@@ -30,14 +30,14 @@ export function MotivationalMessage({ score, streak = 0, improvement = 0 }: Moti
         icon: <TrendingUp className="w-6 h-6" />,
         title: 'Bon travail !',
         message: 'Vous êtes dans la bonne direction. Quelques ajustements peuvent encore améliorer votre sommeil.',
-        gradient: 'from-[#FF9500] to-[#FFD60A]',
+        gradient: 'from-[#B34000] to-[#B34000]',
       };
     }
     return {
       icon: <Heart className="w-6 h-6" />,
       title: 'Ensemble, on progresse',
       message: "Ne vous découragez pas. Chaque nuit compte. Contactez-nous si vous avez besoin d'aide.",
-      gradient: 'from-[#AF52DE] to-[#FF2D55]',
+      gradient: 'from-[#007AFF] to-[#CE0500]',
     };
   };
 

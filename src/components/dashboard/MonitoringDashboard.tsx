@@ -220,16 +220,16 @@ export function MonitoringDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F8F9FA] to-[#E9ECEF] py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#FAFAF7] to-[#E8E5DE] py-8 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-4xl text-[#1D1D1F] mb-2">
+              <h1 className="text-4xl text-[#1A1A1A] mb-2">
                 Monitoring des Alertes
               </h1>
-              <p className="text-lg text-[#86868B]">
+              <p className="text-lg text-[#5C5C5C]">
                 Surveillance en temps réel des alertes patients
               </p>
             </div>
@@ -249,15 +249,15 @@ export function MonitoringDashboard() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E5EA]"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-[#D9D5CC]"
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-[#007AFF]/10 rounded-xl flex items-center justify-center">
                   <AlertCircle className="w-6 h-6 text-[#007AFF]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#86868B]">Total Alertes</p>
-                  <p className="text-3xl text-[#1D1D1F]">{stats.total}</p>
+                  <p className="text-sm text-[#5C5C5C]">Total Alertes</p>
+                  <p className="text-3xl text-[#1A1A1A]">{stats.total}</p>
                 </div>
               </div>
             </motion.div>
@@ -266,15 +266,15 @@ export function MonitoringDashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E5EA]"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-[#D9D5CC]"
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#FF3B30]/10 rounded-xl flex items-center justify-center">
-                  <AlertTriangle className="w-6 h-6 text-[#FF3B30]" />
+                <div className="w-12 h-12 bg-[#CE0500]/10 rounded-xl flex items-center justify-center">
+                  <AlertTriangle className="w-6 h-6 text-[#CE0500]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#86868B]">Critiques</p>
-                  <p className="text-3xl text-[#1D1D1F]">{stats.critical}</p>
+                  <p className="text-sm text-[#5C5C5C]">Critiques</p>
+                  <p className="text-3xl text-[#1A1A1A]">{stats.critical}</p>
                 </div>
               </div>
             </motion.div>
@@ -283,25 +283,25 @@ export function MonitoringDashboard() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E5EA]"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-[#D9D5CC]"
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#34C759]/10 rounded-xl flex items-center justify-center">
-                  <CheckCircle className="w-6 h-6 text-[#34C759]" />
+                <div className="w-12 h-12 bg-[#18753C]/10 rounded-xl flex items-center justify-center">
+                  <CheckCircle className="w-6 h-6 text-[#18753C]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#86868B]">Résolues</p>
-                  <p className="text-3xl text-[#1D1D1F]">{stats.resolved}</p>
+                  <p className="text-sm text-[#5C5C5C]">Résolues</p>
+                  <p className="text-3xl text-[#1A1A1A]">{stats.resolved}</p>
                 </div>
               </div>
             </motion.div>
           </div>
 
           {/* Filters */}
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E5E5EA]">
+          <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#D9D5CC]">
             <div className="flex items-center gap-2">
-              <Filter className="w-5 h-5 text-[#86868B]" />
-              <span className="text-sm text-[#86868B]">Filtrer :</span>
+              <Filter className="w-5 h-5 text-[#5C5C5C]" />
+              <span className="text-sm text-[#5C5C5C]">Filtrer :</span>
               
               <div className="flex gap-2 ml-2">
                 <button
@@ -309,7 +309,7 @@ export function MonitoringDashboard() {
                   className={`px-4 py-2 rounded-lg text-sm transition-all ${
                     filter === 'all'
                       ? 'bg-[#007AFF] text-white'
-                      : 'bg-[#F2F2F7] text-[#1D1D1F] hover:bg-[#E5E5EA]'
+                      : 'bg-[#F2F0EB] text-[#1A1A1A] hover:bg-[#D9D5CC]'
                   }`}
                 >
                   Tout
@@ -319,8 +319,8 @@ export function MonitoringDashboard() {
                   onClick={() => setFilter('critical')}
                   className={`px-4 py-2 rounded-lg text-sm transition-all ${
                     filter === 'critical'
-                      ? 'bg-[#FF3B30] text-white'
-                      : 'bg-[#F2F2F7] text-[#1D1D1F] hover:bg-[#E5E5EA]'
+                      ? 'bg-[#CE0500] text-white'
+                      : 'bg-[#F2F0EB] text-[#1A1A1A] hover:bg-[#D9D5CC]'
                   }`}
                 >
                   Critiques
@@ -330,8 +330,8 @@ export function MonitoringDashboard() {
                   onClick={() => setFilter('resolved')}
                   className={`px-4 py-2 rounded-lg text-sm transition-all ${
                     filter === 'resolved'
-                      ? 'bg-[#34C759] text-white'
-                      : 'bg-[#F2F2F7] text-[#1D1D1F] hover:bg-[#E5E5EA]'
+                      ? 'bg-[#18753C] text-white'
+                      : 'bg-[#F2F0EB] text-[#1A1A1A] hover:bg-[#D9D5CC]'
                   }`}
                 >
                   Résolues
@@ -346,31 +346,31 @@ export function MonitoringDashboard() {
           {isLoading && (
             <div className="text-center py-12">
               <RefreshCw className="w-12 h-12 text-[#007AFF] animate-spin mx-auto mb-4" />
-              <p className="text-[#86868B]">Chargement des alertes...</p>
+              <p className="text-[#5C5C5C]">Chargement des alertes...</p>
             </div>
           )}
 
           {error && (
-            <div className="bg-[#FF3B30]/10 border border-[#FF3B30]/20 rounded-2xl p-6">
+            <div className="bg-[#CE0500]/10 border border-[#CE0500]/20 rounded-2xl p-6">
               <div className="flex items-start gap-4">
-                <AlertCircle className="w-6 h-6 text-[#FF3B30] flex-shrink-0 mt-1" />
+                <AlertCircle className="w-6 h-6 text-[#CE0500] flex-shrink-0 mt-1" />
                 <div>
-                  <h3 className="text-lg text-[#FF3B30] mb-2">
+                  <h3 className="text-lg text-[#CE0500] mb-2">
                     Erreur de chargement
                   </h3>
-                  <p className="text-[#86868B]">{error}</p>
+                  <p className="text-[#5C5C5C]">{error}</p>
                 </div>
               </div>
             </div>
           )}
 
           {!isLoading && !error && alerts.length === 0 && (
-            <div className="text-center py-12 bg-white rounded-2xl border border-[#E5E5EA]">
-              <CheckCircle className="w-16 h-16 text-[#34C759] mx-auto mb-4" />
-              <p className="text-xl text-[#1D1D1F] mb-2">
+            <div className="text-center py-12 bg-white rounded-2xl border border-[#D9D5CC]">
+              <CheckCircle className="w-16 h-16 text-[#18753C] mx-auto mb-4" />
+              <p className="text-xl text-[#1A1A1A] mb-2">
                 Aucune alerte {filter === 'critical' ? 'critique' : filter === 'resolved' ? 'résolue' : 'active'}
               </p>
-              <p className="text-[#86868B]">
+              <p className="text-[#5C5C5C]">
                 Tout est sous contrôle !
               </p>
             </div>

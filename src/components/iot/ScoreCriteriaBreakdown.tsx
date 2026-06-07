@@ -1,5 +1,5 @@
 /**
- * Détail des critères du score la plateforme
+ * Détail des critères du score Medical
  * Affichage des 6 critères avec leur pondération
  */
 

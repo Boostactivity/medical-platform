@@ -1,4 +1,4 @@
-// Utilitaires PWA - la plateforme
+// Utilitaires PWA - Medical
 // Gestion Service Worker, Mode Offline, Installation
 
 // ==============================================================
@@ -105,7 +105,7 @@ export async function cacheUserData(userId: string, data: any): Promise<void> {
   }
 
   try {
-    const cache = await caches.open('expair-user-data-v1');
+    const cache = await caches.open('medical-user-data-v1');
     const response = new Response(JSON.stringify({
       data,
       timestamp: Date.now(),
@@ -125,7 +125,7 @@ export async function getCachedUserData(userId: string): Promise<any | null> {
   }
 
   try {
-    const cache = await caches.open('expair-user-data-v1');
+    const cache = await caches.open('medical-user-data-v1');
     const response = await cache.match(`/api/user-data/${userId}`);
     
     if (response) {

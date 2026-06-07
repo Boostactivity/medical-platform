@@ -39,7 +39,7 @@ export function ProgressRing({
             cx={config.circle / 2}
             cy={config.circle / 2}
             r={radius}
-            stroke="#E5E5EA"
+            stroke="#D9D5CC"
             strokeWidth={config.stroke}
             fill="none"
           />
@@ -67,7 +67,7 @@ export function ProgressRing({
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.3 }}
-            className={`${config.text} text-[#1D1D1F]`}
+            className={`${config.text} text-[#1A1A1A]`}
             style={{ fontWeight: 400 }}
           >
             {showPercentage ? `${Math.round(percentage)}%` : value}
@@ -76,7 +76,7 @@ export function ProgressRing({
       </div>
 
       <div className="text-center">
-        <div className="text-sm text-[#86868B]">{label}</div>
+        <div className="text-sm text-[#5C5C5C]">{label}</div>
       </div>
     </div>
   );
@@ -95,7 +95,7 @@ interface ActivityRingsProps {
 export function ActivityRings({ rings }: ActivityRingsProps) {
   return (
     <div className="bg-white rounded-3xl p-6 shadow-sm">
-      <h3 className="text-2xl text-[#1D1D1F] mb-6">Mes objectifs</h3>
+      <h3 className="text-2xl text-[#1A1A1A] mb-6">Mes objectifs</h3>
 
       <div className="flex items-center justify-around">
         {rings.map((ring, index) => (

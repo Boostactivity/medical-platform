@@ -5,12 +5,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
-import { ExpAirScoreCard } from '../iot/ExpAirScoreCard';
+import { MedicalScoreCard } from '../iot/MedicalScoreCard';
 import { ScoreCriteriaBreakdown } from '../iot/ScoreCriteriaBreakdown';
 import { ScoreHistoryChart } from '../iot/ScoreHistoryChart';
 import { FileUploadZone } from '../iot/FileUploadZone';
 import { Loader2, Upload, TrendingUp, Award } from 'lucide-react';
-import { projectId, publicAnonKey } from '../../utils/supabase/info';
+import { apiPublic } from '../../utils/api';
 
 interface MyDataPageProps {
   userId: string;
@@ -25,25 +25,11 @@ export function MyDataPage({ userId }: MyDataPageProps) {
   const loadScoreData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-50732e52/iot/score/${userId}?days=30`,
-        {
-          headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
-          },
-        }
-      );
-
-      if (response.ok) {
-        const data = await response.json();
-        setScoreData(data);
-        setError(null);
-      } else {
-        const errorData = await response.json();
-        setError(errorData.error || 'Erreur chargement données');
-      }
+      const data = await apiPublic(`/iot/score/${userId}?days=30`);
+      setScoreData(data);
+      setError(null);
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || 'Erreur chargement données');
     } finally {
       setLoading(false);
     }
@@ -79,7 +65,7 @@ export function MyDataPage({ userId }: MyDataPageProps) {
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Mes Données</h1>
           <p className="text-gray-600">
-            Suivez votre score la plateforme et importez vos données machine
+            Suivez votre score Medical et importez vos données machine
           </p>
         </div>
 
@@ -114,7 +100,7 @@ export function MyDataPage({ userId }: MyDataPageProps) {
                     Aucune donnée disponible
                   </h3>
                   <p className="text-gray-600 mb-6">
-                    Importez vos données depuis votre machine PPC pour voir votre score la plateforme
+                    Importez vos données depuis votre machine PPC pour voir votre score Medical
                   </p>
                   <button
                     onClick={() => {
@@ -132,7 +118,7 @@ export function MyDataPage({ userId }: MyDataPageProps) {
                 {/* Score principal */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   <div className="lg:col-span-1">
-                    <ExpAirScoreCard
+                    <MedicalScoreCard
                       score={latestScore.total_score}
                       grade={latestScore.grade}
                       trend={latestScore.trend}

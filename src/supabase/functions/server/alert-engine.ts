@@ -4,12 +4,7 @@
  * Appelé automatiquement après chaque import de données machine
  */
 
-import { createClient } from 'jsr:@supabase/supabase-js@2';
-
-const supabase = createClient(
-  Deno.env.get('SUPABASE_URL') ?? '',
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-);
+import { supabase } from './lib/supabase.ts';
 
 /**
  * Types d'alertes disponibles
@@ -397,12 +392,12 @@ export async function analyzePatient(patientId: string): Promise<{
   try {
     // Exécuter toutes les règles en parallèle
     await Promise.all([
-      checkLowCompliance(patientId),
-      checkHighLeak(patientId),
-      checkHighAHI(patientId),
-      checkNoSync(patientId),
-      checkMaintenanceDue(patientId),
-      checkConsumableReplacement(patientId),
+      checkLowCompliance(patientId).then(() => alertsCreated++),
+      checkHighLeak(patientId).then(() => alertsCreated++),
+      checkHighAHI(patientId).then(() => alertsCreated++),
+      checkNoSync(patientId).then(() => alertsCreated++),
+      checkMaintenanceDue(patientId).then(() => alertsCreated++),
+      checkConsumableReplacement(patientId).then(() => alertsCreated++),
     ]);
 
     const duration = Date.now() - startTime;

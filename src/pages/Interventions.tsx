@@ -40,29 +40,29 @@ function getAlertTypeLabel(type: string): string {
 // Couleurs pour les types d'alertes
 function getAlertTypeColor(type: string): { bg: string; text: string } {
   const colorMap: Record<string, { bg: string; text: string }> = {
-    'DEVICE_OFFLINE': { bg: 'bg-[#FF3B30]/10', text: 'text-[#FF3B30]' },
-    'CONSUMABLE_OVERDUE': { bg: 'bg-[#FF9500]/10', text: 'text-[#FF9500]' },
-    'LEAK_CRITICAL': { bg: 'bg-[#FF3B30]/10', text: 'text-[#FF3B30]' },
-    'LEAK_MODERATE': { bg: 'bg-[#FF9500]/10', text: 'text-[#FF9500]' },
-    'AHI_HIGH': { bg: 'bg-[#FF3B30]/10', text: 'text-[#FF3B30]' },
-    'AHI_MODERATE': { bg: 'bg-[#FF9500]/10', text: 'text-[#FF9500]' },
-    'AHI_VERY_HIGH': { bg: 'bg-[#FF3B30]/10', text: 'text-[#FF3B30]' },
+    'DEVICE_OFFLINE': { bg: 'bg-[#CE0500]/10', text: 'text-[#CE0500]' },
+    'CONSUMABLE_OVERDUE': { bg: 'bg-[#B34000]/10', text: 'text-[#B34000]' },
+    'LEAK_CRITICAL': { bg: 'bg-[#CE0500]/10', text: 'text-[#CE0500]' },
+    'LEAK_MODERATE': { bg: 'bg-[#B34000]/10', text: 'text-[#B34000]' },
+    'AHI_HIGH': { bg: 'bg-[#CE0500]/10', text: 'text-[#CE0500]' },
+    'AHI_MODERATE': { bg: 'bg-[#B34000]/10', text: 'text-[#B34000]' },
+    'AHI_VERY_HIGH': { bg: 'bg-[#CE0500]/10', text: 'text-[#CE0500]' },
     'LOW_USAGE': { bg: 'bg-[#007AFF]/10', text: 'text-[#007AFF]' },
-    'MASK_INSTABILITY': { bg: 'bg-[#FF9500]/10', text: 'text-[#FF9500]' },
-    'SCORE_EXCELLENT': { bg: 'bg-[#34C759]/10', text: 'text-[#34C759]' },
+    'MASK_INSTABILITY': { bg: 'bg-[#B34000]/10', text: 'text-[#B34000]' },
+    'SCORE_EXCELLENT': { bg: 'bg-[#18753C]/10', text: 'text-[#18753C]' },
   };
-  return colorMap[type] || { bg: 'bg-[#86868B]/10', text: 'text-[#86868B]' };
+  return colorMap[type] || { bg: 'bg-[#5C5C5C]/10', text: 'text-[#5C5C5C]' };
 }
 
 // Couleurs pour les sévérités
 function getSeverityBadge(severity: string): { label: string; bg: string; text: string } {
   const badges: Record<string, { label: string; bg: string; text: string }> = {
-    'critical': { label: 'Critique', bg: 'bg-[#FF3B30]/20', text: 'text-[#FF3B30]' },
-    'high': { label: 'Élevée', bg: 'bg-[#FF9500]/20', text: 'text-[#FF9500]' },
-    'medium': { label: 'Moyenne', bg: 'bg-[#FFD60A]/20', text: 'text-[#FFD60A]' },
-    'low': { label: 'Faible', bg: 'bg-[#34C759]/20', text: 'text-[#34C759]' },
+    'critical': { label: 'Critique', bg: 'bg-[#CE0500]/20', text: 'text-[#CE0500]' },
+    'high': { label: 'Élevée', bg: 'bg-[#B34000]/20', text: 'text-[#B34000]' },
+    'medium': { label: 'Moyenne', bg: 'bg-[#B34000]/20', text: 'text-[#B34000]' },
+    'low': { label: 'Faible', bg: 'bg-[#18753C]/20', text: 'text-[#18753C]' },
   };
-  return badges[severity] || { label: severity, bg: 'bg-[#86868B]/20', text: 'text-[#86868B]' };
+  return badges[severity] || { label: severity, bg: 'bg-[#5C5C5C]/20', text: 'text-[#5C5C5C]' };
 }
 
 // Calculer la durée entre création et résolution
@@ -187,25 +187,24 @@ export function Interventions() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#F8F9FA] to-[#E9ECEF] py-8 px-4">
+    <div className="min-h-screen bg-gradient-to-br from-[#FAFAF7] to-[#E8E5DE] py-8 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+          <div className="flex items-center justify-between mb-6">
             <div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl text-[#1D1D1F] mb-2">
+              <h1 className="text-4xl text-[#1A1A1A] mb-2">
                 Historique des Interventions
               </h1>
-              <p className="text-base sm:text-lg text-[#86868B]">
+              <p className="text-lg text-[#5C5C5C]">
                 Toutes les alertes résolues
               </p>
             </div>
-
+            
             <button
               onClick={handleRefresh}
               disabled={isLoading}
-              aria-label="Actualiser la liste"
-              className="flex items-center justify-center gap-2 px-4 py-2 min-h-12 bg-[#007AFF] text-white rounded-lg hover:bg-[#0051D5] transition-all disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+              className="flex items-center gap-2 px-4 py-2 bg-[#007AFF] text-white rounded-lg hover:bg-[#0051D5] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <RefreshCw className={`w-5 h-5 ${isLoading ? 'animate-spin' : ''}`} />
               Actualiser
@@ -217,15 +216,15 @@ export function Interventions() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E5EA]"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-[#D9D5CC]"
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#34C759]/10 rounded-xl flex items-center justify-center">
-                  <CheckCircle className="w-6 h-6 text-[#34C759]" />
+                <div className="w-12 h-12 bg-[#18753C]/10 rounded-xl flex items-center justify-center">
+                  <CheckCircle className="w-6 h-6 text-[#18753C]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#86868B]">Total Résolues</p>
-                  <p className="text-3xl text-[#1D1D1F]">{stats.total}</p>
+                  <p className="text-sm text-[#5C5C5C]">Total Résolues</p>
+                  <p className="text-3xl text-[#1A1A1A]">{stats.total}</p>
                 </div>
               </div>
             </motion.div>
@@ -234,15 +233,15 @@ export function Interventions() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E5EA]"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-[#D9D5CC]"
             >
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-[#007AFF]/10 rounded-xl flex items-center justify-center">
                   <Calendar className="w-6 h-6 text-[#007AFF]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#86868B]">Ce Mois</p>
-                  <p className="text-3xl text-[#1D1D1F]">{stats.thisMonth}</p>
+                  <p className="text-sm text-[#5C5C5C]">Ce Mois</p>
+                  <p className="text-3xl text-[#1A1A1A]">{stats.thisMonth}</p>
                 </div>
               </div>
             </motion.div>
@@ -251,54 +250,54 @@ export function Interventions() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E5EA]"
+              className="bg-white rounded-2xl p-6 shadow-sm border border-[#D9D5CC]"
             >
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 bg-[#FF9500]/10 rounded-xl flex items-center justify-center">
-                  <Clock className="w-6 h-6 text-[#FF9500]" />
+                <div className="w-12 h-12 bg-[#B34000]/10 rounded-xl flex items-center justify-center">
+                  <Clock className="w-6 h-6 text-[#B34000]" />
                 </div>
                 <div>
-                  <p className="text-sm text-[#86868B]">Durée Moy.</p>
-                  <p className="text-3xl text-[#1D1D1F]">{stats.avgDuration}h</p>
+                  <p className="text-sm text-[#5C5C5C]">Durée Moy.</p>
+                  <p className="text-3xl text-[#1A1A1A]">{stats.avgDuration}h</p>
                 </div>
               </div>
             </motion.div>
           </div>
 
           {/* Barre de recherche */}
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#E5E5EA]">
+          <div className="bg-white rounded-2xl p-4 shadow-sm border border-[#D9D5CC]">
             <div className="flex items-center gap-3">
-              <Search className="w-5 h-5 text-[#86868B]" />
+              <Search className="w-5 h-5 text-[#5C5C5C]" />
               <input
                 type="text"
                 placeholder="Rechercher par patient, type d'alerte..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="flex-1 outline-none text-[#1D1D1F] placeholder:text-[#86868B]"
+                className="flex-1 outline-none text-[#1A1A1A] placeholder:text-[#5C5C5C]"
               />
             </div>
           </div>
         </div>
 
         {/* Table des interventions */}
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E5E5EA] overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#D9D5CC] overflow-hidden">
           {isLoading && (
             <div className="text-center py-12">
               <RefreshCw className="w-12 h-12 text-[#007AFF] animate-spin mx-auto mb-4" />
-              <p className="text-[#86868B]">Chargement des interventions...</p>
+              <p className="text-[#5C5C5C]">Chargement des interventions...</p>
             </div>
           )}
 
           {error && (
             <div className="p-6">
-              <div className="bg-[#FF3B30]/10 border border-[#FF3B30]/20 rounded-2xl p-6">
+              <div className="bg-[#CE0500]/10 border border-[#CE0500]/20 rounded-2xl p-6">
                 <div className="flex items-start gap-4">
-                  <AlertTriangle className="w-6 h-6 text-[#FF3B30] flex-shrink-0 mt-1" />
+                  <AlertTriangle className="w-6 h-6 text-[#CE0500] flex-shrink-0 mt-1" />
                   <div>
-                    <h3 className="text-lg text-[#FF3B30] mb-2">
+                    <h3 className="text-lg text-[#CE0500] mb-2">
                       Erreur de chargement
                     </h3>
-                    <p className="text-[#86868B]">{error}</p>
+                    <p className="text-[#5C5C5C]">{error}</p>
                   </div>
                 </div>
               </div>
@@ -307,11 +306,11 @@ export function Interventions() {
 
           {!isLoading && !error && filteredAlerts.length === 0 && (
             <div className="text-center py-12">
-              <CheckCircle className="w-16 h-16 text-[#34C759] mx-auto mb-4" />
-              <p className="text-xl text-[#1D1D1F] mb-2">
+              <CheckCircle className="w-16 h-16 text-[#18753C] mx-auto mb-4" />
+              <p className="text-xl text-[#1A1A1A] mb-2">
                 Aucune intervention trouvée
               </p>
-              <p className="text-[#86868B]">
+              <p className="text-[#5C5C5C]">
                 {searchTerm ? 'Essayez un autre terme de recherche' : 'Aucune alerte résolue pour le moment'}
               </p>
             </div>
@@ -322,26 +321,26 @@ export function Interventions() {
               {/* Table Desktop */}
               <div className="hidden md:block overflow-x-auto">
                 <table className="w-full">
-                  <thead className="bg-[#F2F2F7]">
+                  <thead className="bg-[#F2F0EB]">
                     <tr>
-                      <th className="px-6 py-4 text-left text-sm text-[#86868B]">
+                      <th className="px-6 py-4 text-left text-sm text-[#5C5C5C]">
                         Patient
                       </th>
-                      <th className="px-6 py-4 text-left text-sm text-[#86868B]">
+                      <th className="px-6 py-4 text-left text-sm text-[#5C5C5C]">
                         Type d&apos;Alerte
                       </th>
-                      <th className="px-6 py-4 text-left text-sm text-[#86868B]">
+                      <th className="px-6 py-4 text-left text-sm text-[#5C5C5C]">
                         Sévérité
                       </th>
-                      <th className="px-6 py-4 text-left text-sm text-[#86868B]">
+                      <th className="px-6 py-4 text-left text-sm text-[#5C5C5C]">
                         Résolution
                       </th>
-                      <th className="px-6 py-4 text-left text-sm text-[#86868B]">
+                      <th className="px-6 py-4 text-left text-sm text-[#5C5C5C]">
                         Durée
                       </th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#E5E5EA]">
+                  <tbody className="divide-y divide-[#D9D5CC]">
                     {filteredAlerts.map((alert, index) => {
                       const typeColor = getAlertTypeColor(alert.type);
                       const severityBadge = getSeverityBadge(alert.severity);
@@ -352,7 +351,7 @@ export function Interventions() {
                           initial={{ opacity: 0, x: -20 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: index * 0.03 }}
-                          className="hover:bg-[#F8F9FA] transition-colors"
+                          className="hover:bg-[#FAFAF7] transition-colors"
                         >
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-3">
@@ -360,11 +359,11 @@ export function Interventions() {
                                 <User className="w-5 h-5 text-[#007AFF]" />
                               </div>
                               <div>
-                                <p className="text-sm text-[#1D1D1F]">
+                                <p className="text-sm text-[#1A1A1A]">
                                   {alert.patient_name}
                                 </p>
                                 {alert.patient_phone && (
-                                  <p className="text-xs text-[#86868B]">
+                                  <p className="text-xs text-[#5C5C5C]">
                                     {alert.patient_phone}
                                   </p>
                                 )}
@@ -382,14 +381,14 @@ export function Interventions() {
                             </span>
                           </td>
                           <td className="px-6 py-4">
-                            <p className="text-sm text-[#1D1D1F]">
+                            <p className="text-sm text-[#1A1A1A]">
                               {new Date(alert.resolved_at).toLocaleDateString('fr-FR', {
                                 day: 'numeric',
                                 month: 'short',
                                 year: 'numeric',
                               })}
                             </p>
-                            <p className="text-xs text-[#86868B]">
+                            <p className="text-xs text-[#5C5C5C]">
                               {new Date(alert.resolved_at).toLocaleTimeString('fr-FR', {
                                 hour: '2-digit',
                                 minute: '2-digit',
@@ -398,8 +397,8 @@ export function Interventions() {
                           </td>
                           <td className="px-6 py-4">
                             <div className="flex items-center gap-2">
-                              <Clock className="w-4 h-4 text-[#86868B]" />
-                              <span className="text-sm text-[#1D1D1F]">
+                              <Clock className="w-4 h-4 text-[#5C5C5C]" />
+                              <span className="text-sm text-[#1A1A1A]">
                                 {calculateDuration(alert.created_at, alert.resolved_at)}
                               </span>
                             </div>
@@ -412,7 +411,7 @@ export function Interventions() {
               </div>
 
               {/* Cards Mobile */}
-              <div className="md:hidden divide-y divide-[#E5E5EA]">
+              <div className="md:hidden divide-y divide-[#D9D5CC]">
                 {filteredAlerts.map((alert, index) => {
                   const typeColor = getAlertTypeColor(alert.type);
                   const severityBadge = getSeverityBadge(alert.severity);
@@ -430,11 +429,11 @@ export function Interventions() {
                           <User className="w-5 h-5 text-[#007AFF]" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-[#1D1D1F] mb-1">
+                          <p className="text-sm text-[#1A1A1A] mb-1">
                             {alert.patient_name}
                           </p>
                           {alert.patient_phone && (
-                            <p className="text-xs text-[#86868B]">
+                            <p className="text-xs text-[#5C5C5C]">
                               {alert.patient_phone}
                             </p>
                           )}
@@ -450,7 +449,7 @@ export function Interventions() {
                         </span>
                       </div>
 
-                      <div className="flex items-center justify-between text-xs text-[#86868B]">
+                      <div className="flex items-center justify-between text-xs text-[#5C5C5C]">
                         <div>
                           <p>
                             {new Date(alert.resolved_at).toLocaleDateString('fr-FR', {
@@ -477,7 +476,7 @@ export function Interventions() {
         {/* Footer info */}
         {!isLoading && !error && filteredAlerts.length > 0 && (
           <div className="mt-4 text-center">
-            <p className="text-sm text-[#86868B]">
+            <p className="text-sm text-[#5C5C5C]">
               {filteredAlerts.length} intervention{filteredAlerts.length > 1 ? 's' : ''} affichée{filteredAlerts.length > 1 ? 's' : ''}
               {searchTerm && ` sur ${alerts.length} au total`}
             </p>

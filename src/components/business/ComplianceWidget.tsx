@@ -8,7 +8,7 @@ import { Card } from '../ui/card';
 import { Badge } from '../ui/badge';
 import { Progress } from '../ui/progress';
 import { AlertCircle, CheckCircle, XCircle, Clock } from 'lucide-react';
-import { projectId, publicAnonKey } from '../../utils/supabase/info';
+import { apiPublic } from '../../utils/api';
 
 interface CPAMComplianceData {
   patient_id: string;
@@ -43,21 +43,7 @@ export function ComplianceWidget({ patientId, compact = false }: ComplianceWidge
     setError(null);
 
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-50732e52/business/compliance/${patientId}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Erreur lors de la récupération des données');
-      }
-
-      const data = await response.json();
+      const data = await apiPublic(`/business/compliance/${patientId}`);
       setCompliance(data.compliance);
     } catch (err: any) {
       console.error('Error fetching compliance:', err);

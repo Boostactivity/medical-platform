@@ -8,7 +8,7 @@
 /**
  * Rôles utilisateurs
  */
-export type UserRole = 'patient' | 'medecin' | 'admin' | 'prestataire' | 'infirmier';
+export type UserRole = 'patient' | 'medecin' | 'admin' | 'prestataire';
 
 /**
  * Statuts génériques
@@ -89,9 +89,9 @@ export interface TelemetryData {
 }
 
 /**
- * Score la plateforme (gamification)
+ * Score Medical (gamification)
  */
-export interface ExpAirScore {
+export interface MedicalScore {
   id: string;
   patient_id: string;
   date: string;

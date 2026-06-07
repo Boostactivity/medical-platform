@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { projectId } from '../utils/supabase/info';
+import { API_BASE_URL } from '../utils/api';
 
 interface ProSanteConnectButtonProps {
   className?: string;
@@ -24,7 +24,7 @@ export function ProSanteConnectButton({
       onClick();
     } else {
       // Rediriger vers l'endpoint PSC de notre backend
-      const pscLoginUrl = `https://${projectId}.supabase.co/functions/v1/make-server-50732e52/auth/psc/login`;
+      const pscLoginUrl = `${API_BASE_URL}/auth/psc/login`;
       window.location.href = pscLoginUrl;
     }
   };
@@ -42,10 +42,10 @@ export function ProSanteConnectButton({
       onClick={handleClick}
       className={`
         flex items-center justify-center gap-3
-        bg-white border-2 border-[#1E3A8A] 
-        text-[#1E3A8A] 
+        bg-white border-2 border-[#003DA3] 
+        text-[#003DA3] 
         rounded-xl 
-        hover:bg-[#1E3A8A] hover:text-white
+        hover:bg-[#003DA3] hover:text-white
         transition-all duration-300
         shadow-md hover:shadow-xl
         ${sizeClasses[size]}
@@ -53,7 +53,7 @@ export function ProSanteConnectButton({
       `}
     >
       {/* Logo Pro Santé Connect (icône de santé stylisée) */}
-      <div className="flex items-center justify-center w-8 h-8 bg-[#1E3A8A] rounded-full">
+      <div className="flex items-center justify-center w-8 h-8 bg-[#003DA3] rounded-full">
         <svg 
           viewBox="0 0 24 24" 
           fill="none" 
@@ -66,7 +66,7 @@ export function ProSanteConnectButton({
           />
           <path 
             d="M12 6L8 8V11.5C8 14.26 9.58 16.87 12 18C14.42 16.87 16 14.26 16 11.5V8L12 6Z" 
-            fill="#1E3A8A"
+            fill="#003DA3"
           />
         </svg>
       </div>
@@ -84,8 +84,8 @@ export function ProSanteConnectButton({
  */
 export function ProSanteConnectBadge() {
   return (
-    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#1E3A8A]/10 border border-[#1E3A8A]/30 rounded-full">
-      <div className="flex items-center justify-center w-5 h-5 bg-[#1E3A8A] rounded-full">
+    <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#003DA3]/10 border border-[#003DA3]/30 rounded-full">
+      <div className="flex items-center justify-center w-5 h-5 bg-[#003DA3] rounded-full">
         <svg 
           viewBox="0 0 24 24" 
           fill="none" 
@@ -98,7 +98,7 @@ export function ProSanteConnectBadge() {
           />
         </svg>
       </div>
-      <span className="text-xs text-[#1E3A8A]">Authentifié via PSC</span>
+      <span className="text-xs text-[#003DA3]">Authentifié via PSC</span>
     </div>
   );
 }

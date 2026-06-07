@@ -18,10 +18,30 @@
 
 export const CRON_JOBS_SQL = `
 -- ============================================
+-- CRON JOB 0 : MOTEUR OBSERVANCE / LPPR (chantier 2)
+-- ============================================
+-- Exécution : chaque nuit à 2h30
+-- Objectif : recalcul fenêtres 28j glissantes + switch phase 9.INI
+--            + génération billing_lines hebdo + alertes seuils 56h/112h
+
+SELECT cron.schedule(
+  'observance-lppr-nightly',
+  '30 2 * * *',
+  $$
+  SELECT
+    net.http_post(
+      url := 'https://YOUR_PROJECT_ID.supabase.co/functions/v1/make-server-50732e52/observance/run-nightly',
+      headers := '{"x-cron-secret": "YOUR_CRON_SECRET", "Content-Type": "application/json"}'::jsonb,
+      body := '{}'::jsonb
+    ) as request_id;
+  $$
+);
+
+-- ============================================
 -- CRON JOB 1 : CALCUL DES SCORES DE SOMMEIL
 -- ============================================
 -- Exécution : Chaque matin à 6h
--- Objectif : Calculer le score la plateforme pour toutes les nuits
+-- Objectif : Calculer le score Medical pour toutes les nuits
 
 SELECT cron.schedule(
   'calculate-sleep-scores',           -- Job name
@@ -231,7 +251,7 @@ BEGIN
       headers := '{"Authorization": "Bearer YOUR_SERVICE_ROLE_KEY", "Content-Type": "application/json"}'::jsonb,
       body := json_build_object(
         'phone', '+33612345678',
-        'email', 'admin@plateforme.fr',
+        'email', 'admin@medical-sante.fr',
         'patient_name', 'Admin',
         'alert_message', 'Cron job failed: ' || NEW.jobname || ' - ' || NEW.return_message
       )::jsonb

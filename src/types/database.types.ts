@@ -26,7 +26,7 @@ export interface Users {
   id: string
   email: string
   password_hash?: string
-  role: 'patient' | 'medecin' | 'admin' | 'prestataire' | 'infirmier'
+  role: 'patient' | 'medecin' | 'admin' | 'prestataire'
   first_name: string
   last_name: string
   phone?: string
@@ -110,7 +110,7 @@ export interface Telemetry {
  * Système de gamification pour motivation patient
  * ============================================================================
  */
-export interface ExpAirScores {
+export interface MedicalScores {
   id: string
   patient_id: string
   date: string
@@ -295,15 +295,13 @@ export interface Billing {
 export interface AuditLogs {
   id: string
   user_id?: string
-  action: string // Ex: "login", "PATIENT_VIEW", "DATA_EXPORT"
+  action: string // Ex: "LOGIN", "PATIENT_VIEW", "DATA_EXPORT"
   resource_type?: string // Ex: "patient", "telemetry"
   resource_id?: string
   ip_address?: string
   user_agent?: string
   details?: Json
-  metadata?: Json // Additional context (user_agent, screen_resolution, etc.)
-  created_at: string
-  timestamp?: string // Legacy alias for created_at
+  timestamp: string
 }
 
 /**
@@ -335,9 +333,9 @@ export interface Database {
         Update: Partial<Omit<Telemetry, 'id' | 'created_at'>>
       }
       exp_air_scores: {
-        Row: ExpAirScores
-        Insert: Omit<ExpAirScores, 'id' | 'created_at'>
-        Update: Partial<Omit<ExpAirScores, 'id' | 'created_at'>>
+        Row: MedicalScores
+        Insert: Omit<MedicalScores, 'id' | 'created_at'>
+        Update: Partial<Omit<MedicalScores, 'id' | 'created_at'>>
       }
       alerts: {
         Row: Alerts

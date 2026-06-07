@@ -5,7 +5,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { Upload, FileText, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
-import { projectId, publicAnonKey } from '../../utils/supabase/info';
+import { apiPublic } from '../../utils/api';
 
 interface UploadResult {
   success: boolean;
@@ -30,19 +30,10 @@ export function FileUploadZone({ patientId, onUploadComplete }: FileUploadZonePr
   // Détecter format fichier
   const detectFormat = async (content: string) => {
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-50732e52/iot/detect-format`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ fileContent: content }),
-        }
-      );
-
-      const data = await response.json();
+      const data = await apiPublic('/iot/detect-format', {
+        method: 'POST',
+        body: { fileContent: content },
+      });
       return data.format;
     } catch (error) {
       console.error('Error detecting format:', error);
@@ -53,31 +44,17 @@ export function FileUploadZone({ patientId, onUploadComplete }: FileUploadZonePr
   // Upload fichier
   const uploadFile = async (content: string, format: string) => {
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-50732e52/iot/upload`,
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            fileContent: content,
-            patientId,
-            format: format !== 'unknown' ? format : undefined,
-          }),
-        }
-      );
-
-      const data = await response.json();
-      
-      if (response.ok) {
-        return { success: true, ...data };
-      } else {
-        return { success: false, error: data.error || 'Upload failed' };
-      }
+      const data = await apiPublic('/iot/upload', {
+        method: 'POST',
+        body: {
+          fileContent: content,
+          patientId,
+          format: format !== 'unknown' ? format : undefined,
+        },
+      });
+      return { success: true, ...data };
     } catch (error: any) {
-      return { success: false, error: error.message };
+      return { success: false, error: error.message || 'Upload failed' };
     }
   };
 

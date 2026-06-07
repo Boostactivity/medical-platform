@@ -12,11 +12,10 @@
 import React, { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { 
-  LayoutDashboard, 
-  Users, 
-  Activity, 
-  FileText, 
-  Settings, 
+  LayoutDashboard,
+  Users,
+  Activity,
+  Settings,
   Bell,
   LogOut,
   Menu,
@@ -78,61 +77,55 @@ const menuItems: MenuItem[] = [
   },
   {
     label: 'Mes Patients',
-    path: '/patients',
+    path: '/pro/patients',
     icon: <Users className="w-5 h-5" />,
     roles: ['medecin', 'prestataire']
   },
   {
     label: 'Mon Suivi',
-    path: '/suivi',
+    path: '/patient/dashboard',
     icon: <HeartPulse className="w-5 h-5" />,
     roles: ['patient']
   },
   {
-    label: 'Télémétrie',
-    path: '/telemetry',
-    icon: <Activity className="w-5 h-5" />,
-    roles: ['medecin', 'prestataire', 'admin']
-  },
-  {
     label: 'Interventions',
-    path: '/interventions',
+    path: '/pro/interventions',
     icon: <Stethoscope className="w-5 h-5" />,
     roles: ['prestataire', 'admin']
   },
   {
-    label: 'Documents',
-    path: '/documents',
-    icon: <FileText className="w-5 h-5" />,
-    roles: ['patient', 'medecin', 'admin', 'prestataire']
+    label: 'Planning',
+    path: '/pro/planning',
+    icon: <Activity className="w-5 h-5" />,
+    roles: ['prestataire', 'admin']
   },
   {
-    label: 'Stocks',
-    path: '/stocks',
+    label: 'Stock',
+    path: '/pro/stock',
     icon: <Package className="w-5 h-5" />,
     roles: ['prestataire', 'admin']
   },
   {
+    label: 'Parc machines',
+    path: '/pro/parc',
+    icon: <Building2 className="w-5 h-5" />,
+    roles: ['prestataire', 'admin']
+  },
+  {
     label: 'Finance',
-    path: '/finance',
+    path: '/pro/finance',
     icon: <DollarSign className="w-5 h-5" />,
     roles: ['admin']
   },
   {
     label: 'Conformité',
-    path: '/compliance',
+    path: '/pro/conformite',
     icon: <ShieldCheck className="w-5 h-5" />,
-    roles: ['admin']
-  },
-  {
-    label: 'Organisation',
-    path: '/organisation',
-    icon: <Building2 className="w-5 h-5" />,
-    roles: ['admin']
+    roles: ['admin', 'prestataire']
   },
   {
     label: 'Réglages',
-    path: '/settings',
+    path: '/pro/parametres',
     icon: <Settings className="w-5 h-5" />,
     roles: ['patient', 'medecin', 'admin', 'prestataire']
   }
@@ -199,7 +192,7 @@ export function DashboardLayout({
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Activity className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="font-medium text-sidebar-foreground">la plateforme</span>
+              <span className="font-medium text-sidebar-foreground">Medical</span>
             </Link>
           )}
           <Button
@@ -207,7 +200,6 @@ export function DashboardLayout({
             size="sm"
             onClick={() => setSidebarOpen(!sidebarOpen)}
             className="ml-auto"
-            aria-label={sidebarOpen ? 'Réduire la barre latérale' : 'Agrandir la barre latérale'}
           >
             <Menu className="w-5 h-5" />
           </Button>
@@ -274,13 +266,12 @@ export function DashboardLayout({
                 <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                   <Activity className="w-5 h-5 text-primary-foreground" />
                 </div>
-                <span className="font-medium">la plateforme</span>
+                <span className="font-medium">Medical</span>
               </Link>
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setMobileMenuOpen(false)}
-                aria-label="Fermer le menu"
               >
                 <X className="w-5 h-5" />
               </Button>
@@ -330,9 +321,8 @@ export function DashboardLayout({
           <Button
             variant="ghost"
             size="sm"
-            className="lg:hidden min-h-12 min-w-12"
+            className="lg:hidden"
             onClick={() => setMobileMenuOpen(true)}
-            aria-label="Ouvrir le menu de navigation"
           >
             <Menu className="w-6 h-6" />
           </Button>
@@ -347,7 +337,7 @@ export function DashboardLayout({
           {/* Actions TopBar */}
           <div className="flex items-center gap-3">
             {/* Notifications */}
-            <Button variant="ghost" size="sm" className="relative" aria-label="Notifications (3 non lues)">
+            <Button variant="ghost" size="sm" className="relative">
               <Bell className="w-5 h-5" />
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-destructive text-destructive-foreground rounded-full text-xs flex items-center justify-center">
                 3
@@ -355,7 +345,7 @@ export function DashboardLayout({
             </Button>
 
             {/* Aide */}
-            <Button variant="ghost" size="sm" aria-label="Aide">
+            <Button variant="ghost" size="sm">
               <HelpCircle className="w-5 h-5" />
             </Button>
 
@@ -388,13 +378,13 @@ export function DashboardLayout({
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
-                  <Link to="/settings" className="flex items-center cursor-pointer">
+                  <Link to="/profile" className="flex items-center cursor-pointer">
                     <User className="w-4 h-4 mr-2" />
                     Mon Profil
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link to="/settings" className="flex items-center cursor-pointer">
+                  <Link to="/pro/parametres" className="flex items-center cursor-pointer">
                     <Settings className="w-4 h-4 mr-2" />
                     Paramètres
                   </Link>
@@ -417,7 +407,7 @@ export function DashboardLayout({
         {/* ===== FOOTER (Optionnel) ===== */}
         <footer className="h-12 border-t border-border flex items-center justify-center px-6 bg-card">
           <p className="text-xs text-muted-foreground">
-            © 2024 la plateforme - Tous droits réservés - Données Santé sécurisées (HDS)
+            © 2024 Medical - Tous droits réservés - Données Santé sécurisées (HDS)
           </p>
         </footer>
       </div>

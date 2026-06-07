@@ -28,26 +28,26 @@ export function PatientList({ patients, onPatientClick }: PatientListProps) {
     if (iah < 5) {
       return {
         label: 'Normal',
-        color: 'text-[#34C759]',
-        bgColor: 'bg-[#34C759]/10'
+        color: 'text-[#18753C]',
+        bgColor: 'bg-[#18753C]/10'
       };
     } else if (iah >= 5 && iah < 15) {
       return {
         label: 'Léger',
-        color: 'text-[#FFD60A]',
-        bgColor: 'bg-[#FFD60A]/10'
+        color: 'text-[#B34000]',
+        bgColor: 'bg-[#B34000]/10'
       };
     } else if (iah >= 15 && iah < 30) {
       return {
         label: 'Modéré',
-        color: 'text-[#FF9500]',
-        bgColor: 'bg-[#FF9500]/10'
+        color: 'text-[#B34000]',
+        bgColor: 'bg-[#B34000]/10'
       };
     } else {
       return {
         label: 'Sévère',
-        color: 'text-[#FF3B30]',
-        bgColor: 'bg-[#FF3B30]/10'
+        color: 'text-[#CE0500]',
+        bgColor: 'bg-[#CE0500]/10'
       };
     }
   };
@@ -106,17 +106,17 @@ export function PatientList({ patients, onPatientClick }: PatientListProps) {
   return (
     <div className="space-y-4">
       {/* Header avec recherche et filtres */}
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#E5E5EA]">
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-[#D9D5CC]">
         <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
           {/* Barre de recherche */}
           <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#86868B]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#5C5C5C]" />
             <input
               type="text"
               placeholder="Rechercher un patient..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2.5 bg-[#F8F9FA] border border-[#E5E5EA] rounded-lg text-[#1D1D1F] placeholder:text-[#86868B] focus:outline-none focus:ring-2 focus:ring-[#007AFF] focus:border-transparent transition-all"
+              className="w-full pl-10 pr-4 py-2.5 bg-[#FAFAF7] border border-[#D9D5CC] rounded-lg text-[#1A1A1A] placeholder:text-[#5C5C5C] focus:outline-none focus:ring-2 focus:ring-[#007AFF] focus:border-transparent transition-all"
             />
           </div>
 
@@ -127,14 +127,14 @@ export function PatientList({ patients, onPatientClick }: PatientListProps) {
               className={`px-4 py-2.5 rounded-lg transition-all ${
                 filter === 'tous'
                   ? 'bg-[#007AFF] text-white shadow-sm'
-                  : 'bg-[#F8F9FA] text-[#86868B] hover:bg-[#E9ECEF]'
+                  : 'bg-[#FAFAF7] text-[#5C5C5C] hover:bg-[#E8E5DE]'
               }`}
             >
               Tous
               <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                 filter === 'tous'
                   ? 'bg-white/20 text-white'
-                  : 'bg-[#E5E5EA] text-[#86868B]'
+                  : 'bg-[#D9D5CC] text-[#5C5C5C]'
               }`}>
                 {patients.length}
               </span>
@@ -144,15 +144,15 @@ export function PatientList({ patients, onPatientClick }: PatientListProps) {
               onClick={() => setFilter('alerte')}
               className={`relative px-4 py-2.5 rounded-lg transition-all ${
                 filter === 'alerte'
-                  ? 'bg-[#FF3B30] text-white shadow-sm'
-                  : 'bg-[#F8F9FA] text-[#86868B] hover:bg-[#E9ECEF]'
+                  ? 'bg-[#CE0500] text-white shadow-sm'
+                  : 'bg-[#FAFAF7] text-[#5C5C5C] hover:bg-[#E8E5DE]'
               }`}
             >
               Alertes
               <span className={`ml-2 px-2 py-0.5 rounded-full text-xs ${
                 filter === 'alerte'
                   ? 'bg-white/20 text-white'
-                  : 'bg-[#FF3B30]/10 text-[#FF3B30]'
+                  : 'bg-[#CE0500]/10 text-[#CE0500]'
               }`}>
                 {alertCount}
               </span>
@@ -162,32 +162,32 @@ export function PatientList({ patients, onPatientClick }: PatientListProps) {
       </div>
 
       {/* Tableau des patients */}
-      <div className="bg-white rounded-2xl shadow-sm border border-[#E5E5EA] overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-sm border border-[#D9D5CC] overflow-hidden">
         {/* Header du tableau (desktop uniquement) */}
-        <div className="hidden md:grid md:grid-cols-12 gap-4 px-6 py-4 bg-[#F8F9FA] border-b border-[#E5E5EA]">
+        <div className="hidden md:grid md:grid-cols-12 gap-4 px-6 py-4 bg-[#FAFAF7] border-b border-[#D9D5CC]">
           <div className="col-span-3">
-            <p className="text-sm text-[#86868B]">Patient</p>
+            <p className="text-sm text-[#5C5C5C]">Patient</p>
           </div>
           <div className="col-span-3">
-            <p className="text-sm text-[#86868B]">N° Série Machine</p>
+            <p className="text-sm text-[#5C5C5C]">N° Série Machine</p>
           </div>
           <div className="col-span-2">
-            <p className="text-sm text-[#86868B]">Dernière Synchro</p>
+            <p className="text-sm text-[#5C5C5C]">Dernière Synchro</p>
           </div>
           <div className="col-span-2">
-            <p className="text-sm text-[#86868B]">Statut IAH</p>
+            <p className="text-sm text-[#5C5C5C]">Statut IAH</p>
           </div>
           <div className="col-span-2">
-            <p className="text-sm text-[#86868B]">Actions</p>
+            <p className="text-sm text-[#5C5C5C]">Actions</p>
           </div>
         </div>
 
         {/* Liste des patients */}
-        <div className="divide-y divide-[#E5E5EA]">
+        <div className="divide-y divide-[#D9D5CC]">
           {filteredPatients.length === 0 ? (
             <div className="px-6 py-12 text-center">
-              <AlertCircle className="w-12 h-12 text-[#86868B] mx-auto mb-3" />
-              <p className="text-[#86868B]">
+              <AlertCircle className="w-12 h-12 text-[#5C5C5C] mx-auto mb-3" />
+              <p className="text-[#5C5C5C]">
                 {searchTerm ? 'Aucun patient trouvé' : 'Aucun patient'}
               </p>
             </div>
@@ -202,7 +202,7 @@ export function PatientList({ patients, onPatientClick }: PatientListProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.05 }}
                   onClick={() => onPatientClick?.(patient)}
-                  className={`grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 px-6 py-4 hover:bg-[#F8F9FA] transition-all ${
+                  className={`grid grid-cols-1 md:grid-cols-12 gap-3 md:gap-4 px-6 py-4 hover:bg-[#FAFAF7] transition-all ${
                     onPatientClick ? 'cursor-pointer' : ''
                   }`}
                 >
@@ -217,10 +217,10 @@ export function PatientList({ patients, onPatientClick }: PatientListProps) {
                       )}
                     </div>
                     <div>
-                      <p className="text-[#1D1D1F]">
+                      <p className="text-[#1A1A1A]">
                         {patient.prenom} {patient.nom}
                       </p>
-                      <p className="text-xs text-[#86868B] md:hidden">
+                      <p className="text-xs text-[#5C5C5C] md:hidden">
                         ID: {patient.id}
                       </p>
                     </div>
@@ -229,8 +229,8 @@ export function PatientList({ patients, onPatientClick }: PatientListProps) {
                   {/* Numéro de série machine */}
                   <div className="col-span-1 md:col-span-3 flex items-center">
                     <div>
-                      <p className="text-sm md:hidden text-[#86868B] mb-1">N° Série Machine</p>
-                      <p className="text-[#1D1D1F] font-mono text-sm">
+                      <p className="text-sm md:hidden text-[#5C5C5C] mb-1">N° Série Machine</p>
+                      <p className="text-[#1A1A1A] font-mono text-sm">
                         {patient.numeroSerieMachine}
                       </p>
                     </div>
@@ -239,10 +239,10 @@ export function PatientList({ patients, onPatientClick }: PatientListProps) {
                   {/* Dernière synchro */}
                   <div className="col-span-1 md:col-span-2 flex items-center gap-2">
                     <div className="md:hidden">
-                      <p className="text-sm text-[#86868B] mb-1">Dernière Synchro</p>
+                      <p className="text-sm text-[#5C5C5C] mb-1">Dernière Synchro</p>
                     </div>
-                    <Clock className="w-4 h-4 text-[#86868B] hidden md:block" />
-                    <p className="text-sm text-[#86868B]">
+                    <Clock className="w-4 h-4 text-[#5C5C5C] hidden md:block" />
+                    <p className="text-sm text-[#5C5C5C]">
                       {formatSynchroDate(patient.derniereSynchro)}
                     </p>
                   </div>
@@ -250,12 +250,12 @@ export function PatientList({ patients, onPatientClick }: PatientListProps) {
                   {/* Statut IAH */}
                   <div className="col-span-1 md:col-span-2 flex items-center">
                     <div>
-                      <p className="text-sm md:hidden text-[#86868B] mb-1">Statut IAH</p>
+                      <p className="text-sm md:hidden text-[#5C5C5C] mb-1">Statut IAH</p>
                       <div className="flex items-center gap-2">
                         <span className={`px-3 py-1 rounded-full text-xs ${iahStatus.color} ${iahStatus.bgColor}`}>
                           {iahStatus.label}
                         </span>
-                        <span className="text-sm text-[#86868B]">
+                        <span className="text-sm text-[#5C5C5C]">
                           ({patient.statutIAH})
                         </span>
                       </div>
@@ -265,12 +265,12 @@ export function PatientList({ patients, onPatientClick }: PatientListProps) {
                   {/* Actions */}
                   <div className="col-span-1 md:col-span-2 flex items-center gap-2">
                     {patient.hasAlert ? (
-                      <div className="flex items-center gap-2 text-[#FF3B30]">
+                      <div className="flex items-center gap-2 text-[#CE0500]">
                         <AlertCircle className="w-4 h-4" />
                         <span className="text-sm">Alerte</span>
                       </div>
                     ) : (
-                      <div className="flex items-center gap-2 text-[#34C759]">
+                      <div className="flex items-center gap-2 text-[#18753C]">
                         <CheckCircle className="w-4 h-4" />
                         <span className="text-sm md:hidden">OK</span>
                       </div>
@@ -285,17 +285,17 @@ export function PatientList({ patients, onPatientClick }: PatientListProps) {
 
       {/* Footer avec résumé */}
       {filteredPatients.length > 0 && (
-        <div className="bg-white rounded-2xl px-6 py-4 shadow-sm border border-[#E5E5EA]">
+        <div className="bg-white rounded-2xl px-6 py-4 shadow-sm border border-[#D9D5CC]">
           <div className="flex items-center justify-between text-sm">
-            <p className="text-[#86868B]">
-              Affichage de <span className="text-[#1D1D1F]">{filteredPatients.length}</span> patient{filteredPatients.length > 1 ? 's' : ''}
+            <p className="text-[#5C5C5C]">
+              Affichage de <span className="text-[#1A1A1A]">{filteredPatients.length}</span> patient{filteredPatients.length > 1 ? 's' : ''}
               {searchTerm && ` sur ${patients.length} au total`}
             </p>
             
             {alertCount > 0 && (
               <div className="flex items-center gap-2">
-                <AlertCircle className="w-4 h-4 text-[#FF3B30]" />
-                <p className="text-[#FF3B30]">
+                <AlertCircle className="w-4 h-4 text-[#CE0500]" />
+                <p className="text-[#CE0500]">
                   {alertCount} alerte{alertCount > 1 ? 's' : ''} active{alertCount > 1 ? 's' : ''}
                 </p>
               </div>

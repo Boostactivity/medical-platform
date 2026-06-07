@@ -93,7 +93,7 @@ export function StatCard({
             initial={{ scale: 0.5, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: 0.5, delay: delay + 0.2 }}
-            className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-900"
+            className="text-4xl font-semibold text-gray-900"
           >
             {value}
           </motion.p>

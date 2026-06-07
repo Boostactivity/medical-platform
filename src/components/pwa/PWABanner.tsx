@@ -89,7 +89,7 @@ export function PWABanner() {
               <div className="flex items-center gap-3 flex-1">
                 <Download className="w-6 h-6 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold">Installez l'app la plateforme</p>
+                  <p className="font-semibold">Installez l'app Medical</p>
                   <p className="text-sm opacity-90">
                     Accédez rapidement à vos données depuis votre écran d'accueil
                   </p>

@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { Bell, X, CheckCheck, AlertCircle, TrendingDown, Package } from 'lucide-react';
-import { toast } from 'sonner';
+import { toast } from 'sonner@2.0.3';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 
@@ -139,10 +139,9 @@ export function NotificationBell() {
       {/* Bell Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2 rounded-lg hover:bg-[#F5F5F7] transition-colors"
-        aria-label={`Notifications${unreadCount > 0 ? ` (${unreadCount} non lues)` : ''}`}
+        className="relative p-2 rounded-lg hover:bg-[#F2F0EB] transition-colors"
       >
-        <Bell className="w-5 h-5 text-[#1D1D1F]" />
+        <Bell className="w-5 h-5 text-[#1A1A1A]" />
         {unreadCount > 0 && (
           <motion.div
             initial={{ scale: 0 }}
@@ -178,19 +177,18 @@ export function NotificationBell() {
               className="fixed top-0 right-0 h-full w-full md:w-[480px] bg-white shadow-2xl z-50 flex flex-col"
             >
               {/* Header */}
-              <div className="p-6 border-b border-[#D2D2D7] bg-gradient-to-br from-[#007AFF]/5 to-white">
+              <div className="p-6 border-b border-[#D9D5CC] bg-gradient-to-br from-[#007AFF]/5 to-white">
                 <div className="flex items-center justify-between mb-2">
-                  <h2 className="text-2xl text-[#1D1D1F]">Notifications</h2>
+                  <h2 className="text-2xl text-[#1A1A1A]">Notifications</h2>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="p-2 hover:bg-[#F5F5F7] rounded-lg transition-colors"
-                    aria-label="Fermer les notifications"
+                    className="p-2 hover:bg-[#F2F0EB] rounded-lg transition-colors"
                   >
-                    <X className="w-5 h-5 text-[#86868B]" />
+                    <X className="w-5 h-5 text-[#5C5C5C]" />
                   </button>
                 </div>
                 <div className="flex items-center justify-between">
-                  <p className="text-sm text-[#86868B]">
+                  <p className="text-sm text-[#5C5C5C]">
                     {unreadCount > 0 
                       ? `${unreadCount} notification${unreadCount > 1 ? 's' : ''} non lue${unreadCount > 1 ? 's' : ''}`
                       : 'Aucune nouvelle notification'
@@ -213,16 +211,16 @@ export function NotificationBell() {
                 {isLoading ? (
                   <div className="p-12 text-center">
                     <div className="w-8 h-8 border-4 border-[#007AFF] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                    <p className="text-sm text-[#86868B]">Chargement...</p>
+                    <p className="text-sm text-[#5C5C5C]">Chargement...</p>
                   </div>
                 ) : notifications.length === 0 ? (
                   <div className="p-12 text-center">
-                    <Bell className="w-16 h-16 text-[#86868B] mx-auto mb-4 opacity-30" />
-                    <p className="text-[#86868B] mb-2">Aucune notification</p>
-                    <p className="text-xs text-[#86868B]">Les alertes apparaîtront ici</p>
+                    <Bell className="w-16 h-16 text-[#5C5C5C] mx-auto mb-4 opacity-30" />
+                    <p className="text-[#5C5C5C] mb-2">Aucune notification</p>
+                    <p className="text-xs text-[#5C5C5C]">Les alertes apparaîtront ici</p>
                   </div>
                 ) : (
-                  <div className="divide-y divide-[#D2D2D7]">
+                  <div className="divide-y divide-[#D9D5CC]">
                     {notifications.map((notif, index) => (
                       <motion.div
                         key={notif.id}
@@ -230,7 +228,7 @@ export function NotificationBell() {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.05 }}
                         onClick={() => handleNotificationClick(notif)}
-                        className={`p-4 cursor-pointer hover:bg-[#F5F5F7] transition-colors ${
+                        className={`p-4 cursor-pointer hover:bg-[#F2F0EB] transition-colors ${
                           !notif.read ? 'bg-blue-50/50' : ''
                         } ${getSeverityColor(notif.severity)}`}
                       >
@@ -240,7 +238,7 @@ export function NotificationBell() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between mb-1">
-                              <h3 className={`text-sm ${!notif.read ? 'font-semibold' : ''} text-[#1D1D1F]`}>
+                              <h3 className={`text-sm ${!notif.read ? 'font-semibold' : ''} text-[#1A1A1A]`}>
                                 {notif.title}
                               </h3>
                               {!notif.read && (
@@ -252,11 +250,11 @@ export function NotificationBell() {
                                 👤 {notif.patient_name}
                               </p>
                             )}
-                            <p className="text-xs text-[#86868B] mb-2 line-clamp-2">
+                            <p className="text-xs text-[#5C5C5C] mb-2 line-clamp-2">
                               {notif.message}
                             </p>
                             <div className="flex items-center gap-2">
-                              <span className="text-xs text-[#86868B]">
+                              <span className="text-xs text-[#5C5C5C]">
                                 {formatTimestamp(notif.created_at)}
                               </span>
                               {notif.severity && (
@@ -278,11 +276,11 @@ export function NotificationBell() {
               </div>
 
               {/* Footer */}
-              <div className="p-4 border-t border-[#D2D2D7] bg-[#F5F5F7]">
+              <div className="p-4 border-t border-[#D9D5CC] bg-[#F2F0EB]">
                 <Button
                   onClick={() => {
                     setIsOpen(false);
-                    navigate('/dashboard-admin');
+                    navigate('/pro/dashboard');
                   }}
                   variant="outline"
                   className="w-full"

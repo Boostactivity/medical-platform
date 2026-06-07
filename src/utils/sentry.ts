@@ -40,7 +40,7 @@ export function initSentry() {
       environment: import.meta.env.VITE_ENV || 'production',
 
       // Version de l'application (pour tracking des releases)
-      release: `expair-medical@${import.meta.env.VITE_APP_VERSION || '1.0.0'}`,
+      release: `medical-medical@${import.meta.env.VITE_APP_VERSION || '1.0.0'}`,
 
       // Intégrations
       integrations: [

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Bell, AlertCircle, Info, AlertTriangle, Check, X, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { projectId, publicAnonKey } from '../../utils/supabase/info';
+import { apiPublic } from '../../utils/api';
 
 interface Alert {
   id: string;
@@ -33,21 +33,7 @@ export function AlertsCenter({ userId }: { userId: string }) {
 
   async function fetchAlerts() {
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-50732e52/alerts/patient/${userId}`,
-        {
-          headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch alerts');
-      }
-
-      const data = await response.json();
+      const data = await apiPublic(`/alerts/patient/${userId}`);
       setAlerts(data.alerts || []);
       setUnreadCount(data.unreadCount || 0);
     } catch (err) {
@@ -59,21 +45,10 @@ export function AlertsCenter({ userId }: { userId: string }) {
 
   async function acknowledgeAlert(alertId: string) {
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-50732e52/alerts/${alertId}/acknowledge`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userId }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to acknowledge alert');
-      }
+      await apiPublic(`/alerts/${alertId}/acknowledge`, {
+        method: 'PATCH',
+        body: { userId },
+      });
 
       // Refresh alerts
       fetchAlerts();
@@ -84,20 +59,7 @@ export function AlertsCenter({ userId }: { userId: string }) {
 
   async function dismissAlert(alertId: string) {
     try {
-      const response = await fetch(
-        `https://${projectId}.supabase.co/functions/v1/make-server-50732e52/alerts/${alertId}/resolve`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Authorization': `Bearer ${publicAnonKey}`,
-            'Content-Type': 'application/json',
-          },
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to dismiss alert');
-      }
+      await apiPublic(`/alerts/${alertId}/resolve`, { method: 'PATCH' });
 
       // Refresh alerts
       fetchAlerts();
@@ -110,15 +72,15 @@ export function AlertsCenter({ userId }: { userId: string }) {
     switch (severity) {
       case 'high':
         return {
-          bg: 'from-[#FF3B30] to-[#FF9500]',
+          bg: 'from-[#CE0500] to-[#B34000]',
           icon: <AlertCircle className="w-6 h-6" />,
-          badge: 'bg-[#FF3B30]',
+          badge: 'bg-[#CE0500]',
         };
       case 'medium':
         return {
-          bg: 'from-[#FF9500] to-[#FFCC00]',
+          bg: 'from-[#B34000] to-[#B34000]',
           icon: <AlertTriangle className="w-6 h-6" />,
-          badge: 'bg-[#FF9500]',
+          badge: 'bg-[#B34000]',
         };
       case 'low':
         return {
@@ -128,9 +90,9 @@ export function AlertsCenter({ userId }: { userId: string }) {
         };
       default:
         return {
-          bg: 'from-[#86868B] to-[#1D1D1F]',
+          bg: 'from-[#5C5C5C] to-[#1A1A1A]',
           icon: <Bell className="w-6 h-6" />,
-          badge: 'bg-[#86868B]',
+          badge: 'bg-[#5C5C5C]',
         };
     }
   };
@@ -163,12 +125,12 @@ export function AlertsCenter({ userId }: { userId: string }) {
 
   if (alerts.length === 0) {
     return (
-      <div className="bg-gradient-to-br from-[#34C759]/10 to-[#30D158]/10 rounded-2xl p-8 border-2 border-[#34C759]/30 text-center">
-        <div className="w-16 h-16 bg-gradient-to-br from-[#34C759] to-[#30D158] rounded-full flex items-center justify-center mx-auto mb-4">
+      <div className="bg-gradient-to-br from-[#18753C]/10 to-[#18753C]/10 rounded-2xl p-8 border-2 border-[#18753C]/30 text-center">
+        <div className="w-16 h-16 bg-gradient-to-br from-[#18753C] to-[#18753C] rounded-full flex items-center justify-center mx-auto mb-4">
           <Check className="w-8 h-8 text-white" />
         </div>
-        <h3 className="text-xl text-[#1D1D1F] mb-2">Tout va bien !</h3>
-        <p className="text-[#86868B]">
+        <h3 className="text-xl text-[#1A1A1A] mb-2">Tout va bien !</h3>
+        <p className="text-[#5C5C5C]">
           Aucune alerte en cours. Continuez comme ça ! 🎉
         </p>
       </div>
@@ -184,9 +146,9 @@ export function AlertsCenter({ userId }: { userId: string }) {
             <Bell className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="text-xl text-[#1D1D1F]">Notifications</h3>
+            <h3 className="text-xl text-[#1A1A1A]">Notifications</h3>
             {unreadCount > 0 && (
-              <p className="text-sm text-[#86868B]">
+              <p className="text-sm text-[#5C5C5C]">
                 {unreadCount} nouvelle{unreadCount > 1 ? 's' : ''}
               </p>
             )}
@@ -194,7 +156,7 @@ export function AlertsCenter({ userId }: { userId: string }) {
         </div>
         
         {unreadCount > 0 && (
-          <div className="px-3 py-1 bg-[#FF3B30] text-white text-sm rounded-full">
+          <div className="px-3 py-1 bg-[#CE0500] text-white text-sm rounded-full">
             {unreadCount}
           </div>
         )}

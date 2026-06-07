@@ -97,6 +97,15 @@ const Parc = lazy(() => import('./pages/pro/Parc').then(m => ({ default: m.Parc 
 const Planning = lazy(() => import('./pages/pro/Planning').then(m => ({ default: m.Planning })));
 const Conformite = lazy(() => import('./pages/pro/Conformite').then(m => ({ default: m.Conformite })));
 
+// VAGUE 6 : services patient + messagerie + connecteurs
+const CommandesPatient = lazy(() => import('./pages/patient/Commandes').then(m => ({ default: m.Commandes })));
+const RendezVousPatient = lazy(() => import('./pages/patient/RendezVous').then(m => ({ default: m.RendezVous })));
+const DocumentsPatient = lazy(() => import('./pages/patient/Documents').then(m => ({ default: m.Documents })));
+const MessagesPatient = lazy(() => import('./pages/patient/Messages').then(m => ({ default: m.MessagesPatient })));
+const CommandesPro = lazy(() => import('./pages/pro/Commandes').then(m => ({ default: m.CommandesPro })));
+const DemandesRdv = lazy(() => import('./pages/pro/DemandesRdv').then(m => ({ default: m.DemandesRdv })));
+const Connecteurs = lazy(() => import('./pages/pro/Connecteurs').then(m => ({ default: m.Connecteurs })));
+
 // Loading component
 function PageLoader() {
   return (
@@ -216,6 +225,38 @@ export default function App() {
                         </ProtectedRoute>
                       }
                     />
+                    <Route
+                      path="/patient/commandes"
+                      element={
+                        <ProtectedRoute roles={['patient']}>
+                          <CommandesPatient />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/patient/rendez-vous"
+                      element={
+                        <ProtectedRoute roles={['patient']}>
+                          <RendezVousPatient />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/patient/documents"
+                      element={
+                        <ProtectedRoute roles={['patient']}>
+                          <DocumentsPatient />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/patient/messages"
+                      element={
+                        <ProtectedRoute roles={['patient']}>
+                          <MessagesPatient />
+                        </ProtectedRoute>
+                      }
+                    />
 
                     {/* ============ AUDIENCE MÉDECIN ============ */}
                     <Route path="/medecin/connexion" element={<EspaceMedecin />} />
@@ -283,6 +324,30 @@ export default function App() {
                       element={
                         <ProtectedRoute roles={['admin', 'prestataire']}>
                           <Conformite />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/commandes"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <CommandesPro />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/demandes-rdv"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <DemandesRdv />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/connecteurs"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <Connecteurs />
                         </ProtectedRoute>
                       }
                     />

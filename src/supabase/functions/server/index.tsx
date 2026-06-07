@@ -22,6 +22,8 @@ import stockParcRoutes from './routes/stock-parc.ts';
 import psdmRoutes from './routes/psdm.ts';
 import patientPortalRoutes from './routes/patient-portal.ts';
 import publicVitrineRoutes from './routes/public-vitrine.ts';
+import patientServicesRoutes from './routes/patient-services.ts';
+import connectorsRoutes from './routes/connectors.ts';
 
 // Existing route modules
 import { setupPrestataireTablesRoute } from './setup.tsx';
@@ -95,6 +97,12 @@ app.route(prefix, psdmRoutes);
 // /patient/* (score, observance, gamification, préférences, tickets) — portail patient (chantier 3)
 // Pas de collision : /patient/dashboard reste dans dashboardsRoutes.
 app.route(prefix, patientPortalRoutes);
+
+// /patient/marketplace|rdv|documents + /pro-services/* — services patient (vague 6)
+app.route(prefix, patientServicesRoutes);
+
+// /connectors/* — extraction télésuivi via accès portails du PSAD (vague 6)
+app.route(prefix, connectorsRoutes);
 
 // ============================================
 // EXISTING ROUTE MODULES

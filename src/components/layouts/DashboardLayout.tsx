@@ -100,6 +100,18 @@ const menuItems: MenuItem[] = [
     roles: ['prestataire', 'admin']
   },
   {
+    label: 'Demandes RDV',
+    path: '/pro/demandes-rdv',
+    icon: <Bell className="w-5 h-5" />,
+    roles: ['prestataire', 'admin']
+  },
+  {
+    label: 'Commandes',
+    path: '/pro/commandes',
+    icon: <Package className="w-5 h-5" />,
+    roles: ['prestataire', 'admin']
+  },
+  {
     label: 'Stock',
     path: '/pro/stock',
     icon: <Package className="w-5 h-5" />,
@@ -121,6 +133,12 @@ const menuItems: MenuItem[] = [
     label: 'Conformité',
     path: '/pro/conformite',
     icon: <ShieldCheck className="w-5 h-5" />,
+    roles: ['admin', 'prestataire']
+  },
+  {
+    label: 'Connecteurs',
+    path: '/pro/connecteurs',
+    icon: <Activity className="w-5 h-5" />,
     roles: ['admin', 'prestataire']
   },
   {

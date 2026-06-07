@@ -50,11 +50,32 @@
 - [x] 5.3 App patient : écran matinal réel (cercle score + 6 critères expliqués + jauge observance 28j + progression), historique 7/30/90/365j, profil avec switch streaks opt-in confirmé serveur, barre d'onglets créée (il n'y en avait aucune), cache offline database.localStorage avec bandeau date, copy anti-shame — fini le PATIENT_ID_HERE en dur qui crashait. tsc zéro erreur ✓
 - [ ] 5.4 Test device réel (expo start sur téléphone) — SEULE étape mobile restante, impossible sans device/émulateur sur ce PC. Restes connus : night/[id] et alerts/ encore sur données simulées locales (pas d'équivalent API patient), garde de session globale racine à câbler, scan QR à ajouter (expo-barcode-scanner)
 
-## 📌 Dépendances externes (à lancer en parallèle — PAS codables)
-- [ ] Dossier Pro Santé Connect : prêt depuis mars, manque SIRET → **à envoyer (action Adel)**
+## ✅ DÉPLOIEMENT (FAIT 08/06/2026)
+- [x] Source pushé : Sitewebmedical2 branche rebuild/fondations-design-system (20 commits)
+- [x] Vercel live : medical2-two.vercel.app (repo medical-platform resynchronisé, node_modules sorti du repo)
+- [x] ⚠️ Projet Supabase historique ilskgkcbqnyydetsiwvi MORT (pause >90j, irrécupérable) → bascule sur le projet "Medical" **nwpbrxxxwrutacixeuxq** restauré
+- [x] Base : wipe schéma démo medconnect.fr (vérifié 100% fictif) + réinstallation complète — 34 tables, 24/24 essentielles, 10 codes LPPR seedés, tenant medical, 4 chapitres PSDM. Fixes : sleep_data DDL reconstruit (n'existait nulle part), profiles en vue, tables runtime devices/assignments/inventory (les fichiers legacy 001/002/003/business/URGENT/iot_triggers se contredisent — remplacés chirurgicalement, voir deploy/fixes/)
+- [x] Edge Functions déployées (verify_jwt=false) + fix montage Hono (routes publiques en premier, middleware patient scopé /patient/*)
+- [x] QA backend : /health 200, /public/agencies 200, guard 401 sans session ; front live branché sur le nouveau projet
+- ⚠️ Plan gratuit Supabase : pause auto après ~1 sem d'inactivité, mort à 90j → passer Pro (~25$/mois) ou HDS pour la vraie prod
+
+## 🔄 Vague 6 — Services patient + Connecteur extraction (EN COURS 08/06)
+- [ ] 6.1 Marketplace consommables : catalogue, commande, calendrier remplacement, transparence Sécu, suivi commandes (web patient + gestion pro)
+- [ ] 6.2 Prise de RDV : créneaux proposés par le prestataire, demande/modification patient, lien planning techniciens
+- [ ] 6.3 Documents : attestation voyage auto-générée, rapports PDF partageables, espace documents patient
+- [ ] 6.4 Messagerie sécurisée patient↔prestataire↔médecin (threads, non-lus, pièces jointes métadonnées)
+- [ ] 6.5 **CONNECTEUR EXTRACTION AUTO (idée Adel 08/06)** : les PSAD ont déjà leurs accès aux portails fabricants (AirView, Care Orchestrator...) → worker d'extraction automatique N×/jour avec les identifiants DU PRESTATAIRE (chiffrés par tenant), ingestion via universal-adapter existant → alimente observance_data → moteur LPPR. Pas besoin de NDA fabricant.
+
+## ⏳ Vague 7 — Engagement (sleep school structure+quiz, communauté modérée, FFAAIR, newsletter, care check-in J1-J28)
+## ⏳ Vague 8 — Pro avancé (segmentation patients, tickets SAV/SLA, optimisation tournées, CRM prescripteurs, exports CPAM, comparaison agences)
+## ⏳ Vague 9 — Intelligence (lecteur SD EDF+ universel, score risque décrochage, forecasting, benchmark)
+
+## 📌 Dépendances externes restantes (PAS codables)
+- [ ] Dossier Pro Santé Connect : prêt depuis mars, manque SIRET → **à envoyer (action Adel)** + reconfigurer PSC_* env sur le NOUVEAU projet Supabase
 - [ ] SDK FSE SESAM-Vitale agréé (Area Santé) → module codé avec interface mockable en attendant
 - [ ] Connecteurs fabricants (ResMed AirView...) : NDA requis → fallback lecteur SD EDF+ universel
-- [ ] Appliquer migration 100 (multi-tenant) sur le Supabase live au premier déploiement
+- [ ] Créer les comptes réels (admin tenant, 1 médecin, 1 technicien) + saisir les agences (la carte vitrine est en état vide)
+- [ ] Cron pg_cron observance nightly à activer sur le nouveau projet (cron-config.ts, URL + secret à poser)
 - [ ] Hébergement HDS (OVH Healthcare / Scaleway HDH) pour la prod réelle (décision tranchée : Voie A sous-traitée)
 - [ ] White-label multi-domaines (V2) : policy RLS lecture PUBLIQUE sur brands (résolution par custom_domain pour visiteurs anonymes) — aujourd'hui TenantContext fallback Medical, suffisant en mono-tenant
 - [ ] Note architecture RLS : les nouvelles tables (observance, billing, psdm, stock) sont deny-all côté client direct (RESTRICTIVE sans permissive) — accès uniquement via Edge Functions service-role scopées tenant. C'est voulu (sécurisé par défaut).

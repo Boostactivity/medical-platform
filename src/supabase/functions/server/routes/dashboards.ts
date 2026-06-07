@@ -8,6 +8,7 @@ import { Hono } from 'npm:hono';
 import { supabase } from '../lib/supabase.ts';
 import { requireAuth, requireRole, type AuthEnv } from '../middleware/auth.ts';
 import doctorPortalRoutes from './doctor-portal.ts';
+import messagingRoutes from './messaging.ts';
 
 const app = new Hono<AuthEnv>();
 
@@ -386,5 +387,14 @@ app.post('/admin/update-doctor-panel-code', requireAuth, requireRole('admin'), a
 // ============================================
 
 app.route('/', doctorPortalRoutes);
+
+// ============================================
+// MESSAGERIE SÉCURISÉE (chantier 6.4)
+// /messages/patient/*, /messages/pro/*, /messages/doctor/*
+// Monté ici pour ne pas toucher index.tsx ; messaging.ts porte ses
+// propres middlewares scopés par chemin (jamais use('*')).
+// ============================================
+
+app.route('/', messagingRoutes);
 
 export default app;

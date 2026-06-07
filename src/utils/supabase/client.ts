@@ -9,7 +9,7 @@ const supabaseClient = createSupabaseClient(supabaseUrl, publicAnonKey, {
     autoRefreshToken: true,
     detectSessionInUrl: true,
     storage: typeof window !== 'undefined' ? window.localStorage : undefined,
-    storageKey: 'sb-ilskgkcbqnyydetsiwvi-auth-token',
+    storageKey: 'sb-nwpbrxxxwrutacixeuxq-auth-token',
   },
 });
 

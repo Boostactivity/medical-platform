@@ -244,7 +244,7 @@ END $$;`;
                 <div className="flex-1">
                   <h3 className="text-[#1A1A1A] mb-2">Ouvrir Supabase SQL Editor</h3>
                   <a
-                    href="https://supabase.com/dashboard/project/ilskgkcbqnyydetsiwvi/sql/new"
+                    href="https://supabase.com/dashboard/project/nwpbrxxxwrutacixeuxq/sql/new"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 px-4 py-2 bg-[#18753C] text-white rounded-lg hover:bg-[#18753C] transition-colors text-sm"
@@ -318,7 +318,7 @@ END $$;`;
                     <li>Cliquer sur "Save"</li>
                   </ol>
                   <a
-                    href="https://supabase.com/dashboard/project/ilskgkcbqnyydetsiwvi/database/replication"
+                    href="https://supabase.com/dashboard/project/nwpbrxxxwrutacixeuxq/database/replication"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 mt-2 text-[#007AFF] hover:text-[#0051D5] text-sm"

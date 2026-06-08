@@ -27,6 +27,8 @@ import connectorsRoutes from './routes/connectors.ts';
 import educationRoutes from './routes/education.ts';
 import communityRoutes from './routes/community.ts';
 import checkinNewsletterRoutes from './routes/checkin-newsletter.ts';
+import segmentsSavRoutes from './routes/segments-sav.ts';
+import crmExportsRoutes from './routes/crm-exports.ts';
 
 // Existing route modules
 import { setupPrestataireTablesRoute } from './setup.tsx';
@@ -111,6 +113,10 @@ app.route(prefix, connectorsRoutes);
 app.route(prefix, educationRoutes);
 app.route(prefix, communityRoutes);
 app.route(prefix, checkinNewsletterRoutes);
+
+// Vague 8 — pro avancé : segmentation patients + SAV/SLA + CRM/exports/agences
+app.route(prefix, segmentsSavRoutes);
+app.route(prefix, crmExportsRoutes);
 
 // ============================================
 // EXISTING ROUTE MODULES

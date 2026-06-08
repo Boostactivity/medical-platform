@@ -67,7 +67,12 @@
 - [x] 6.5 CONNECTEUR EXTRACTION (idée Adel) : apps/connector-worker autonome (Playwright + AES-256-GCM clé locale + planificateur OS), plugin csv_watch **opérationnel à 100% testé**, plugin AirView best-effort à calibrer au pilote (sélecteurs surchargeables sans recompiler), routes /connectors/* + ingestion via universal-adapter → moteur LPPR, page /pro/connecteurs — migration 107. ⚠️ mapping patient portail→plateforme = travail du premier pilote
 - Migrations 107-109 appliquées en prod, Edge Functions redéployées, QA guards OK, push 2 repos
 
-## ⏳ Vague 7 — Engagement (sleep school structure+quiz, communauté modérée, FFAAIR, newsletter, care check-in J1-J28)
+## ✅ Vague 7 — Engagement (TERMINÉ 08/06, EN PROD)
+- [x] Sleep school : 3 modules éducation seedés (contenu plateforme factuel anti-hallu, leçons markdown + quiz feedback bienveillant), progression — migration 110, /patient/ecole-du-sommeil
+- [x] Communauté modérée : pseudonymes, TOUT en modération avant publication, charte, signalements, partners FFAAIR + Alliance Apnées seedés — migration 111, /patient/communaute + /pro/moderation
+- [x] Care check-in J1-J28 puis semestriel : 3 questions douces, flagged auto → file suivi staff, ANTI-SHAME (aucun score montré au patient) — migration 112, /patient/check-in + /pro/suivi-patients
+- [x] Newsletter : inscription publique vitrine (NewsletterSignup dans Footer, testé 200) + envoi mockable
+- [x] Câblage : grille "Mes services" dashboard patient (8 raccourcis), nav pro, migrations en prod, Edge Functions redéployées, QA guards OK, push 2 repos
 ## ⏳ Vague 8 — Pro avancé (segmentation patients, tickets SAV/SLA, optimisation tournées, CRM prescripteurs, exports CPAM, comparaison agences)
 ## ⏳ Vague 9 — Intelligence (lecteur SD EDF+ universel, score risque décrochage, forecasting, benchmark)
 

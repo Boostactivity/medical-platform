@@ -109,6 +109,20 @@ export const api = {
 };
 
 /**
+ * Variante authentifiée de apiPublicRaw : token session frais, retourne la
+ * Response brute (téléchargements blob/CSV sur routes protégées).
+ * Throw ApiError comme les autres helpers si la réponse est en erreur.
+ */
+export async function apiRaw(
+  endpoint: string,
+  options: ApiOptions = {},
+): Promise<Response> {
+  const { method = 'GET', body, token } = options;
+  const authToken = token || await getFreshToken();
+  return coreFetch(endpoint, { method, body, authToken });
+}
+
+/**
  * Appel non-authentifié : Authorization = publicAnonKey (endpoints publics).
  */
 export async function apiPublic(

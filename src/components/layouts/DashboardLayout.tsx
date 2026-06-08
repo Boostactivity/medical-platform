@@ -28,7 +28,8 @@ import {
   ShieldCheck,
   Stethoscope,
   Building2,
-  HeartPulse
+  HeartPulse,
+  FileText
 } from 'lucide-react'
 import { Button } from '../ui/button'
 import {
@@ -146,6 +147,36 @@ const menuItems: MenuItem[] = [
     path: '/pro/suivi-patients',
     icon: <HeartPulse className="w-5 h-5" />,
     roles: ['admin', 'prestataire']
+  },
+  {
+    label: 'Segments',
+    path: '/pro/segments',
+    icon: <Users className="w-5 h-5" />,
+    roles: ['admin', 'prestataire']
+  },
+  {
+    label: 'SAV',
+    path: '/pro/sav',
+    icon: <Stethoscope className="w-5 h-5" />,
+    roles: ['admin', 'prestataire']
+  },
+  {
+    label: 'Prescripteurs',
+    path: '/pro/prescripteurs',
+    icon: <Users className="w-5 h-5" />,
+    roles: ['admin', 'prestataire']
+  },
+  {
+    label: 'Exports CPAM',
+    path: '/pro/exports-cpam',
+    icon: <FileText className="w-5 h-5" />,
+    roles: ['admin', 'prestataire']
+  },
+  {
+    label: 'Comparaison agences',
+    path: '/pro/comparaison-agences',
+    icon: <Building2 className="w-5 h-5" />,
+    roles: ['admin']
   },
   {
     label: 'Modération',

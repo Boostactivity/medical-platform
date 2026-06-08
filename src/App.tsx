@@ -113,6 +113,13 @@ const CheckIn = lazy(() => import('./pages/patient/CheckIn').then(m => ({ defaul
 const Moderation = lazy(() => import('./pages/pro/Moderation').then(m => ({ default: m.Moderation })));
 const SuiviPatients = lazy(() => import('./pages/pro/SuiviPatients').then(m => ({ default: m.SuiviPatients })));
 
+// VAGUE 8 : pro avancé
+const Segments = lazy(() => import('./pages/pro/Segments').then(m => ({ default: m.Segments })));
+const SAV = lazy(() => import('./pages/pro/SAV').then(m => ({ default: m.SAV })));
+const CRM = lazy(() => import('./pages/pro/CRM').then(m => ({ default: m.CRM })));
+const ExportsCpam = lazy(() => import('./pages/pro/ExportsCpam').then(m => ({ default: m.ExportsCpam })));
+const ComparaisonAgences = lazy(() => import('./pages/pro/ComparaisonAgences').then(m => ({ default: m.ComparaisonAgences })));
+
 // Loading component
 function PageLoader() {
   return (
@@ -395,6 +402,46 @@ export default function App() {
                       element={
                         <ProtectedRoute roles={['admin', 'prestataire']}>
                           <SuiviPatients />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/segments"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <Segments />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/sav"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <SAV />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/prescripteurs"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <CRM />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/exports-cpam"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <ExportsCpam />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/comparaison-agences"
+                      element={
+                        <ProtectedRoute roles={['admin']}>
+                          <ComparaisonAgences />
                         </ProtectedRoute>
                       }
                     />

@@ -12,7 +12,7 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { LogOut, Upload } from 'lucide-react';
+import { LogOut, Upload, ShoppingBag, CalendarClock, FileText, MessageCircle, GraduationCap, Users, HeartPulse } from 'lucide-react';
 import { toast } from 'sonner';
 import { api, ApiError } from '../utils/api';
 import { createClient } from '../utils/supabase/client';
@@ -196,14 +196,31 @@ export function DashboardPatient() {
             {/* 6. Préférences (streaks opt-in, rappels) */}
             <PreferencesCard preferences={preferences} onChange={handlePreferencesChange} />
 
-            {/* 7. Lien vers l'import de données machine */}
-            <Link
-              to="/patient/mes-donnees"
-              className="w-full h-14 rounded-2xl bg-white border border-[#E8E5DE] text-[#1A1A1A] text-base inline-flex items-center justify-center gap-3 hover:border-[#007AFF]/40 transition-colors shadow-sm"
-            >
-              <Upload className="w-5 h-5 text-[#007AFF]" />
-              Mes données machine (import et détail)
-            </Link>
+            {/* 7. Mes services — accès à toutes les fonctions patient */}
+            <div>
+              <h2 className="text-lg text-[#1A1A1A] mb-3">Mes services</h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {[
+                  { to: '/patient/check-in', icon: HeartPulse, label: 'Comment je vais' },
+                  { to: '/patient/commandes', icon: ShoppingBag, label: 'Mes commandes' },
+                  { to: '/patient/rendez-vous', icon: CalendarClock, label: 'Mes rendez-vous' },
+                  { to: '/patient/messages', icon: MessageCircle, label: 'Messages' },
+                  { to: '/patient/documents', icon: FileText, label: 'Mes documents' },
+                  { to: '/patient/ecole-du-sommeil', icon: GraduationCap, label: 'École du sommeil' },
+                  { to: '/patient/communaute', icon: Users, label: 'Communauté' },
+                  { to: '/patient/mes-donnees', icon: Upload, label: 'Mes données machine' },
+                ].map(({ to, icon: Icon, label }) => (
+                  <Link
+                    key={to}
+                    to={to}
+                    className="rounded-2xl bg-white border border-[#E8E5DE] p-4 flex flex-col items-center justify-center gap-2 text-center hover:border-[#007AFF]/40 transition-colors shadow-sm min-h-[96px]"
+                  >
+                    <Icon className="w-6 h-6 text-[#007AFF]" />
+                    <span className="text-base text-[#1A1A1A] leading-tight">{label}</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
           </>
         )}
       </main>

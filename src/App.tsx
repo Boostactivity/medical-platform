@@ -106,6 +106,13 @@ const CommandesPro = lazy(() => import('./pages/pro/Commandes').then(m => ({ def
 const DemandesRdv = lazy(() => import('./pages/pro/DemandesRdv').then(m => ({ default: m.DemandesRdv })));
 const Connecteurs = lazy(() => import('./pages/pro/Connecteurs').then(m => ({ default: m.Connecteurs })));
 
+// VAGUE 7 : engagement — sleep school, communauté, check-in
+const SleepSchool = lazy(() => import('./pages/patient/SleepSchool').then(m => ({ default: m.SleepSchool })));
+const Communaute = lazy(() => import('./pages/patient/Communaute').then(m => ({ default: m.Communaute })));
+const CheckIn = lazy(() => import('./pages/patient/CheckIn').then(m => ({ default: m.CheckIn })));
+const Moderation = lazy(() => import('./pages/pro/Moderation').then(m => ({ default: m.Moderation })));
+const SuiviPatients = lazy(() => import('./pages/pro/SuiviPatients').then(m => ({ default: m.SuiviPatients })));
+
 // Loading component
 function PageLoader() {
   return (
@@ -257,6 +264,30 @@ export default function App() {
                         </ProtectedRoute>
                       }
                     />
+                    <Route
+                      path="/patient/ecole-du-sommeil"
+                      element={
+                        <ProtectedRoute roles={['patient']}>
+                          <SleepSchool />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/patient/communaute"
+                      element={
+                        <ProtectedRoute roles={['patient']}>
+                          <Communaute />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/patient/check-in"
+                      element={
+                        <ProtectedRoute roles={['patient']}>
+                          <CheckIn />
+                        </ProtectedRoute>
+                      }
+                    />
 
                     {/* ============ AUDIENCE MÉDECIN ============ */}
                     <Route path="/medecin/connexion" element={<EspaceMedecin />} />
@@ -348,6 +379,22 @@ export default function App() {
                       element={
                         <ProtectedRoute roles={['admin', 'prestataire']}>
                           <Connecteurs />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/moderation"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <Moderation />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/suivi-patients"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <SuiviPatients />
                         </ProtectedRoute>
                       }
                     />

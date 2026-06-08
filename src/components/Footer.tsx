@@ -1,6 +1,7 @@
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTenant } from '../contexts/TenantContext';
+import { NewsletterSignup } from './vitrine/NewsletterSignup';
 
 export function Footer() {
   const { branding } = useTenant();
@@ -31,6 +32,11 @@ export function Footer() {
   return (
     <footer className="bg-[#F2F0EB] border-t border-gray-200">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-16">
+        {/* Newsletter (inscription publique) */}
+        <div className="mb-12 pb-12 border-b border-gray-300">
+          <NewsletterSignup />
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 mb-12">
           {/* Brand */}
           <div className="lg:col-span-2">

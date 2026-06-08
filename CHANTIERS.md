@@ -59,12 +59,13 @@
 - [x] QA backend : /health 200, /public/agencies 200, guard 401 sans session ; front live branché sur le nouveau projet
 - ⚠️ Plan gratuit Supabase : pause auto après ~1 sem d'inactivité, mort à 90j → passer Pro (~25$/mois) ou HDS pour la vraie prod
 
-## 🔄 Vague 6 — Services patient + Connecteur extraction (EN COURS 08/06)
-- [ ] 6.1 Marketplace consommables : catalogue, commande, calendrier remplacement, transparence Sécu, suivi commandes (web patient + gestion pro)
-- [ ] 6.2 Prise de RDV : créneaux proposés par le prestataire, demande/modification patient, lien planning techniciens
-- [ ] 6.3 Documents : attestation voyage auto-générée, rapports PDF partageables, espace documents patient
-- [ ] 6.4 Messagerie sécurisée patient↔prestataire↔médecin (threads, non-lus, pièces jointes métadonnées)
-- [ ] 6.5 **CONNECTEUR EXTRACTION AUTO (idée Adel 08/06)** : les PSAD ont déjà leurs accès aux portails fabricants (AirView, Care Orchestrator...) → worker d'extraction automatique N×/jour avec les identifiants DU PRESTATAIRE (chiffrés par tenant), ingestion via universal-adapter existant → alimente observance_data → moteur LPPR. Pas besoin de NDA fabricant.
+## ✅ Vague 6 — Services patient + Connecteur extraction (TERMINÉ 08/06, EN PROD)
+- [x] 6.1 Marketplace : catalogue (transparence Sécu, zéro prix en avant, zéro urgence), calendrier de renouvellement (equipment_inventory), commandes patient + file pro avec machine à états — migration 108, /patient/commandes + /pro/commandes
+- [x] 6.2 RDV : demande patient (type + disponibilités) → proposition créneau pro → confirmation → conversion intervention + technician_schedules — /patient/rendez-vous + /pro/demandes-rdv
+- [x] 6.3 Documents : attestation voyage auto-générée (texte réglementaire PPC en cabine), espace documents — /patient/documents (PDF via pdf-generator à brancher plus tard)
+- [x] 6.4 Messagerie 3 acteurs : conversations + conversation_messages (legacy messages évitée), sender_role dérivé du JWT, non-lus read_by, RLS par rôle (médecin = kind medical de SA cohorte) — migration 109, /patient/messages + Support.tsx rebranché + MessagesPanel médecin (composant prêt, intégration portail à faire)
+- [x] 6.5 CONNECTEUR EXTRACTION (idée Adel) : apps/connector-worker autonome (Playwright + AES-256-GCM clé locale + planificateur OS), plugin csv_watch **opérationnel à 100% testé**, plugin AirView best-effort à calibrer au pilote (sélecteurs surchargeables sans recompiler), routes /connectors/* + ingestion via universal-adapter → moteur LPPR, page /pro/connecteurs — migration 107. ⚠️ mapping patient portail→plateforme = travail du premier pilote
+- Migrations 107-109 appliquées en prod, Edge Functions redéployées, QA guards OK, push 2 repos
 
 ## ⏳ Vague 7 — Engagement (sleep school structure+quiz, communauté modérée, FFAAIR, newsletter, care check-in J1-J28)
 ## ⏳ Vague 8 — Pro avancé (segmentation patients, tickets SAV/SLA, optimisation tournées, CRM prescripteurs, exports CPAM, comparaison agences)

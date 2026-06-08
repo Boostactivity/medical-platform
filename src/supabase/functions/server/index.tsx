@@ -24,6 +24,9 @@ import patientPortalRoutes from './routes/patient-portal.ts';
 import publicVitrineRoutes from './routes/public-vitrine.ts';
 import patientServicesRoutes from './routes/patient-services.ts';
 import connectorsRoutes from './routes/connectors.ts';
+import educationRoutes from './routes/education.ts';
+import communityRoutes from './routes/community.ts';
+import checkinNewsletterRoutes from './routes/checkin-newsletter.ts';
 
 // Existing route modules
 import { setupPrestataireTablesRoute } from './setup.tsx';
@@ -103,6 +106,11 @@ app.route(prefix, patientServicesRoutes);
 
 // /connectors/* — extraction télésuivi via accès portails du PSAD (vague 6)
 app.route(prefix, connectorsRoutes);
+
+// Vague 7 — engagement : sleep school, communauté modérée, check-in + newsletter
+app.route(prefix, educationRoutes);
+app.route(prefix, communityRoutes);
+app.route(prefix, checkinNewsletterRoutes);
 
 // ============================================
 // EXISTING ROUTE MODULES

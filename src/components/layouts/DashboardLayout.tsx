@@ -142,6 +142,18 @@ const menuItems: MenuItem[] = [
     roles: ['admin', 'prestataire']
   },
   {
+    label: 'Suivi patients',
+    path: '/pro/suivi-patients',
+    icon: <HeartPulse className="w-5 h-5" />,
+    roles: ['admin', 'prestataire']
+  },
+  {
+    label: 'Modération',
+    path: '/pro/moderation',
+    icon: <ShieldCheck className="w-5 h-5" />,
+    roles: ['admin', 'prestataire']
+  },
+  {
     label: 'Réglages',
     path: '/pro/parametres',
     icon: <Settings className="w-5 h-5" />,

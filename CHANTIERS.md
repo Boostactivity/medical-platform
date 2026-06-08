@@ -4,6 +4,38 @@
 > Branche de travail : `rebuild/fondations-design-system`
 > Règles verrouillées : nom = **Medical**, bleu = **#007AFF** (choix Adel 07/06), vouvoiement, anti-shame, ≥16px patient.
 
+---
+## 🟢 ÉTAT VÉRIFIÉ (08/06/2026 — audit de bout en bout avec vrais comptes)
+
+**EN PRODUCTION ET TESTÉ FONCTIONNEL :**
+- Site : https://medical2-two.vercel.app
+- Backend : projet Supabase `nwpbrxxxwrutacixeuxq` (l'ancien `ilskgkcbqnyydetsiwvi` est MORT, pause >90j)
+- **30 routes patient + pro testées avec comptes authentifiés réels → toutes 200 / 403 corrects**
+- Token admin Supabase : NON STOCKÉ ICI (secret — gardé hors git ; régénérable sur le dashboard Supabase)
+- 9 vagues (0-9) + services + engagement + pro avancé + intelligence = tout le cœur codable du cahier des charges
+- ~62 tables en prod, ~115 routes, 17 migrations (100-117), 2 apps mobiles + 1 worker connecteur
+
+**COMPTES DE DÉMO (pour se connecter et voir la plateforme tourner) :**
+- Patient : `patient.test@medical-demo.fr` / `TestMedical2026!` → /patient/connexion
+- Admin PSAD : `pro.test@medical-demo.fr` / `TestMedical2026!` → /pro/connexion
+- ⚠️ À SUPPRIMER avant la vraie prod client (ce sont des comptes de test)
+
+**5 BUGS CRITIQUES corrigés à l'audit final (invisibles au "build OK", trouvés au test réel) :**
+1. `use('*')` nu sur observance-billing/psdm/stock-parc → 403 sur TOUT le portail patient (corrigé : scope par chemin)
+2. Messagerie médecin non branchée au dashboard (corrigée)
+3. Colonnes consumables fantômes (migration 115)
+4. tenant_id absent sur 6 tables (migration 116)
+5. Colonnes devices/equipment mal nommées (migration 117)
+
+**RESTE À FAIRE (pas du code — activation / dépendances) :**
+- Saisir les vraies agences (la carte vitrine est vide tant qu'aucune agence)
+- Activer le cron pg_cron observance nocturne (cron-config.ts : URL + secret)
+- Reconfigurer les variables PSC sur le nouveau projet Supabase
+- Tester les apps mobiles sur un vrai téléphone (`expo start` dans apps/mobile)
+- ⚠️ Passer Supabase en plan Pro (~25$/mois) ou HDS — le gratuit re-pausera le projet (cause de la perte de l'ancien)
+- Actions Adel : dossier PSC (SIRET), SDK FSE agréé, calibration connecteurs AirView/SD avec un PSAD pilote, décision marquage CE IIa
+---
+
 ## ✅ Chantier 0 — Fondations (TERMINÉ 07/06/2026)
 - [x] 0.1 Nettoyage : 12 pages debug/test + 3 composants debug supprimés, credentials démo retirés du login, 153 docs Figma Make archivés, deps RN sorties du package web, build réparé (jspdf, react-virtual)
 - [x] 0.2 Backend : index.tsx 2080→100 lignes, middleware auth (requireAuth/requireRole), 4 modules routes, routes démo dangereuses supprimées

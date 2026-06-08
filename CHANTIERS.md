@@ -73,8 +73,22 @@
 - [x] Care check-in J1-J28 puis semestriel : 3 questions douces, flagged auto → file suivi staff, ANTI-SHAME (aucun score montré au patient) — migration 112, /patient/check-in + /pro/suivi-patients
 - [x] Newsletter : inscription publique vitrine (NewsletterSignup dans Footer, testé 200) + envoi mockable
 - [x] Câblage : grille "Mes services" dashboard patient (8 raccourcis), nav pro, migrations en prod, Edge Functions redéployées, QA guards OK, push 2 repos
-## ⏳ Vague 8 — Pro avancé (segmentation patients, tickets SAV/SLA, optimisation tournées, CRM prescripteurs, exports CPAM, comparaison agences)
-## ⏳ Vague 9 — Intelligence (lecteur SD EDF+ universel, score risque décrochage, forecasting, benchmark)
+## ✅ Vague 8 — Pro avancé (TERMINÉ 08/06, EN PROD)
+- [x] Segmentation patients : segments dynamiques (règles bande observance/phase/ancienneté, 3 seedés), liste patients par segment — migration 113, /pro/segments
+- [x] SAV/SLA : tickets priorité + échéance SLA auto (urgent 4h..low 7j), timeline events, assignation, conversion déclarations patient, stats retard — /pro/sav
+- [x] CRM prescripteurs : suivi médecins apporteurs + interactions + patients rattachés — migration 114, /pro/prescripteurs
+- [x] Exports CPAM : agrégat conformité 112h/28j 100% réel (observance_periods+LPPR), CSV BOM Excel FR, historique — /pro/exports-cpam
+- [x] Comparaison agences : patients/observance/interventions/CA LPPR (rattachement via machines installées, NULL honnête sinon) — /pro/comparaison-agences
+- [x] Câblage 5 routes front + nav, helper apiRaw (download CSV authentifié), migrations en prod, Edge Functions redéployées, QA guards OK, push 2 repos
+- NOTE : "optimisation tournées IA" = P1 reporté (nécessite service externe type AntsRoute/Nomadia) ; le planning techniciens manuel existe (vague 2)
+## ✅ Vague 9 — Intelligence (TERMINÉ 08/06, EN PROD)
+- [x] Lecteur SD EDF+ universel : parser EDF/EDF+ pur (apps/connector-worker/src/edf/, testé 24 assertions, format OUVERT sans NDA), provider sd_card (scan dossier carte SD → parse → observance), route /connectors/ingest-observance (JSON normalisé + tenant_id propre), section "Lecture carte SD" dans /pro/connecteurs — pas de migration (observance_data suffit)
+- [x] Score risque décrochage : dropout-risk-engine.ts HEURISTIQUE TRANSPARENTE (5 facteurs nommés/pondérés : tendance observance 30 / bande 25 / phase initiale 15 / franchissement seuil 20 / check-ins 10), niveau faible/modéré/élevé, calcul live
+- [x] Forecasting : régression linéaire sur historique réel (activité interventions, revenus LPPR billing_lines, file active), points réel vs estimation distincts, jamais présenté comme certitude — /pro/analytics
+- [x] Câblage route + nav "Analyses & risques", Edge Functions redéployées
+- NOTE : benchmark inter-PSAD anonymisé = nécessite PLUSIEURS tenants en prod (pas pertinent en mono-tenant), reporté ; tarif lignes LPPR NULL exclu+compté honnêtement du forecast revenus
+
+## 🎯 ÉTAT GLOBAL : tout le cœur codable du cahier des charges est EN PROD (vagues 0-9)
 
 ## 📌 Dépendances externes restantes (PAS codables)
 - [ ] Dossier Pro Santé Connect : prêt depuis mars, manque SIRET → **à envoyer (action Adel)** + reconfigurer PSC_* env sur le NOUVEAU projet Supabase

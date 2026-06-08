@@ -173,6 +173,12 @@ const menuItems: MenuItem[] = [
     roles: ['admin', 'prestataire']
   },
   {
+    label: 'Analyses & risques',
+    path: '/pro/analytics',
+    icon: <Activity className="w-5 h-5" />,
+    roles: ['admin', 'prestataire']
+  },
+  {
     label: 'Comparaison agences',
     path: '/pro/comparaison-agences',
     icon: <Building2 className="w-5 h-5" />,

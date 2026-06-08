@@ -56,7 +56,7 @@ import { Switch } from '../../components/ui/switch';
 // Types & libellés
 // ----------------------------------------------------------------------
 
-type Provider = 'airview' | 'care_orchestrator' | 'prisma_cloud' | 'csv_watch';
+type Provider = 'airview' | 'care_orchestrator' | 'prisma_cloud' | 'csv_watch' | 'sd_card';
 type RunStatus = 'running' | 'success' | 'partial' | 'failed';
 
 interface ConnectorConfig {
@@ -89,6 +89,7 @@ const PROVIDER_LABELS: Record<Provider, string> = {
   care_orchestrator: 'Philips Care Orchestrator',
   prisma_cloud: 'Löwenstein prisma CLOUD',
   csv_watch: 'Dossier local (CSV / exports)',
+  sd_card: 'Lecture carte SD (EDF / EDF+)',
 };
 
 const PROVIDER_HINTS: Record<Provider, string> = {
@@ -100,6 +101,8 @@ const PROVIDER_HINTS: Record<Provider, string> = {
     'Plugin en préparation — utilisez le connecteur « Dossier local » avec vos exports prisma CLOUD en attendant.',
   csv_watch:
     'Le worker surveille un dossier de votre machine : déposez-y vos exports portail (CSV, JSON, XML), ils sont ingérés automatiquement. Opérationnel immédiatement.',
+  sd_card:
+    'Insérez la carte SD du patient : le worker lit directement les fichiers .edf (format ouvert EDF/EDF+, aucun accord fabricant requis), les agrège en observance et les remonte. Complément du portail quand celui-ci n’est pas accessible. Indiquez la lettre du lecteur (ex. E:\\) comme dossier surveillé.',
 };
 
 function formatDateTime(iso: string | null): string {
@@ -213,7 +216,7 @@ export function Connecteurs() {
     try {
       setSaving(true);
       const options: Record<string, unknown> = {};
-      if (newProvider === 'csv_watch' && newWatchDir.trim()) {
+      if ((newProvider === 'csv_watch' || newProvider === 'sd_card') && newWatchDir.trim()) {
         options.watchDir = newWatchDir.trim();
       }
       await api.post('/connectors', {
@@ -488,12 +491,16 @@ export function Connecteurs() {
               </p>
             </div>
 
-            {newProvider === 'csv_watch' && (
+            {(newProvider === 'csv_watch' || newProvider === 'sd_card') && (
               <div className="space-y-2">
-                <Label htmlFor="connector-watchdir">Dossier surveillé (sur la machine du worker)</Label>
+                <Label htmlFor="connector-watchdir">
+                  {newProvider === 'sd_card'
+                    ? 'Lecteur / point de montage de la carte SD'
+                    : 'Dossier surveillé (sur la machine du worker)'}
+                </Label>
                 <Input
                   id="connector-watchdir"
-                  placeholder="C:\exports\telesuivi"
+                  placeholder={newProvider === 'sd_card' ? 'E:\\' : 'C:\\exports\\telesuivi'}
                   value={newWatchDir}
                   onChange={(e) => setNewWatchDir(e.target.value)}
                 />

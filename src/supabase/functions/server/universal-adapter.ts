@@ -234,6 +234,15 @@ export function parseLowensteinData(xmlData: string, patientId: string): Standar
 
 /**
  * DÉTECTION AUTOMATIQUE DU FORMAT
+ *
+ * NOTE EDF/EDF+ (carte SD) — décision d'architecture :
+ *   Le format EDF est BINAIRE (header ASCII + data records int16). Il NE transite
+ *   PAS par parseUniversalData : le faire passer dans `fileContent` (string) le
+ *   corromprait. Le provider `sd_card` du worker (apps/connector-worker) parse le
+ *   binaire localement (accès au Buffer brut) et POST des lignes d'observance
+ *   DÉJÀ NORMALISÉES vers /connectors/ingest-observance — qui les upsert
+ *   directement dans observance_data. Cet adapter reste donc volontairement
+ *   inchangé pour l'EDF (choix le plus sûr, zéro régression sur CSV/JSON/XML).
  */
 export function detectFileFormat(content: string): 'resmed' | 'philips' | 'lowenstein' | 'unknown' {
   // ResMed = JSON avec clés spécifiques

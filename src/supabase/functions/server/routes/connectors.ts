@@ -29,7 +29,7 @@ import { parseUniversalData, saveSleepData } from '../universal-adapter.ts';
 
 const app = new Hono<TenantEnv>();
 
-const PROVIDERS = ['airview', 'care_orchestrator', 'prisma_cloud', 'csv_watch'] as const;
+const PROVIDERS = ['airview', 'care_orchestrator', 'prisma_cloud', 'csv_watch', 'sd_card'] as const;
 type Provider = (typeof PROVIDERS)[number];
 
 // Colonnes exposées au front — credentials_encrypted JAMAIS renvoyé.
@@ -260,6 +260,146 @@ app.post('/connectors/ingest', async (c) => {
   } catch (e) {
     const message = e instanceof Error ? e.message : 'ingestion échouée';
     console.error('[CONNECTOR INGEST] Error:', message);
+    return c.json({ error: message }, 400);
+  }
+});
+
+// ------------------------------------------------------------------
+// POST /connectors/ingest-observance — réception de lignes d'observance
+// DÉJÀ NORMALISÉES par le worker (provider sd_card / EDF).
+//
+// Pourquoi un endpoint distinct de /connectors/ingest :
+//   Le format EDF/EDF+ est BINAIRE (int16 little-endian). Le faire transiter
+//   dans `fileContent` (string JSON) le corromprait, et parseUniversalData ne
+//   sait pas lire du binaire. Le parsing lourd se fait donc côté worker, qui a
+//   accès au Buffer brut de la carte SD ; le serveur reçoit ici du JSON propre.
+//   C'est le choix le plus sûr : universal-adapter.ts reste inchangé.
+//
+// Auth machine-à-machine identique à /connectors/ingest (service key OU
+// x-connector-secret). tenant_id résolu depuis la config en DB, jamais du
+// payload. Écriture directe observance_data AVEC tenant_id (pas de scope-after
+// comme l'ancien endpoint) → upsert idempotent sur (patient_id, date).
+// ------------------------------------------------------------------
+
+interface ObservanceLine {
+  patient_id?: string;
+  date?: string;
+  usage_hours?: number;
+  ahi?: number;
+  leak_95?: number;
+  pressure_95?: number;
+  pressure_median?: number;
+  leak_median?: number;
+  leak_max?: number;
+  mask_events?: number;
+  compliance_score?: number;
+  total_sleep_time?: number;
+  device_serial?: string;
+  manufacturer?: string;
+}
+
+const num = (v: unknown, fallback = 0): number => {
+  const n = typeof v === 'number' ? v : parseFloat(String(v));
+  return Number.isFinite(n) ? n : fallback;
+};
+const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
+const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}/;
+
+app.post('/connectors/ingest-observance', async (c) => {
+  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+  const connectorSecret = Deno.env.get('CONNECTOR_INGEST_SECRET');
+  const bearer = c.req.header('Authorization')?.split(' ')[1];
+  const secretHeader = c.req.header('x-connector-secret');
+
+  const authorized =
+    (!!serviceKey && bearer === serviceKey) ||
+    (!!connectorSecret && secretHeader === connectorSecret);
+
+  if (!authorized) {
+    return c.json({ error: 'Unauthorized - service key ou x-connector-secret requis' }, 401);
+  }
+
+  const body = await c.req.json().catch(() => null);
+  if (!body) return c.json({ error: 'Corps JSON invalide' }, 400);
+
+  const { configId, runId, patientId, filename } = body;
+  const rows = body.rows as ObservanceLine[] | undefined;
+  if (!configId || !patientId || !Array.isArray(rows)) {
+    return c.json({ error: 'configId, patientId et rows[] requis' }, 400);
+  }
+  if (rows.length === 0) {
+    return c.json({ success: true, sessionsProcessed: 0 });
+  }
+
+  // tenant_id vient de la config en DB — jamais du payload.
+  const { data: config, error: cfgError } = await supabase
+    .from('connector_configs')
+    .select('id, tenant_id, provider')
+    .eq('id', configId)
+    .maybeSingle();
+
+  if (cfgError) return c.json({ error: cfgError.message }, 500);
+  if (!config) return c.json({ error: 'Connecteur inconnu' }, 404);
+
+  try {
+    // Normalisation + clamps défensifs (le worker a déjà arrondi, on re-borne
+    // côté serveur : ne jamais faire confiance à un payload machine).
+    const cleanRows = rows
+      .filter((r) => typeof r.date === 'string' && ISO_DATE_RE.test(r.date))
+      .map((r) => {
+        const usage = clamp(num(r.usage_hours), 0, 24);
+        return {
+          tenant_id: config.tenant_id,
+          patient_id: patientId, // patient résolu = source de vérité
+          date: (r.date as string).slice(0, 10),
+          usage_hours: usage,
+          ahi: Math.max(0, num(r.ahi)),
+          leak_95: Math.max(0, num(r.leak_95)),
+          pressure_95: clamp(num(r.pressure_95), 0, 30),
+          pressure_median: clamp(num(r.pressure_median), 0, 30),
+          leak_median: Math.max(0, num(r.leak_median)),
+          mask_events: Math.max(0, Math.round(num(r.mask_events))),
+          compliance_score: clamp(num(r.compliance_score, usage >= 4 ? 100 : (usage / 4) * 100), 0, 100),
+          total_sleep_time: Math.max(0, num(r.total_sleep_time, usage)),
+          device_serial: String(r.device_serial ?? 'EDF-SDCARD').slice(0, 128),
+          manufacturer: String(r.manufacturer ?? 'other').slice(0, 32),
+        };
+      });
+
+    if (cleanRows.length === 0) {
+      return c.json({ error: 'Aucune ligne valide (date YYYY-MM-DD requise)' }, 400);
+    }
+
+    const { error: upsertError } = await supabase
+      .from('observance_data')
+      .upsert(cleanRows, { onConflict: 'patient_id,date' });
+
+    if (upsertError) return c.json({ error: upsertError.message }, 400);
+
+    console.log(
+      `[CONNECTOR INGEST-OBS] ${filename ?? 'EDF'} → ${cleanRows.length} ligne(s) observance (config ${configId})`,
+    );
+
+    // Compteur du run (best effort — le worker clôture le run lui-même).
+    if (runId) {
+      const { data: run } = await supabase
+        .from('connector_runs')
+        .select('id, records_ingested')
+        .eq('id', runId)
+        .eq('config_id', configId)
+        .maybeSingle();
+      if (run) {
+        await supabase
+          .from('connector_runs')
+          .update({ records_ingested: (run.records_ingested ?? 0) + cleanRows.length })
+          .eq('id', run.id);
+      }
+    }
+
+    return c.json({ success: true, sessionsProcessed: cleanRows.length });
+  } catch (e) {
+    const message = e instanceof Error ? e.message : 'ingestion observance échouée';
+    console.error('[CONNECTOR INGEST-OBS] Error:', message);
     return c.json({ error: message }, 400);
   }
 });

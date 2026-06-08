@@ -120,6 +120,9 @@ const CRM = lazy(() => import('./pages/pro/CRM').then(m => ({ default: m.CRM }))
 const ExportsCpam = lazy(() => import('./pages/pro/ExportsCpam').then(m => ({ default: m.ExportsCpam })));
 const ComparaisonAgences = lazy(() => import('./pages/pro/ComparaisonAgences').then(m => ({ default: m.ComparaisonAgences })));
 
+// VAGUE 9 : intelligence
+const Analytics = lazy(() => import('./pages/pro/Analytics').then(m => ({ default: m.Analytics })));
+
 // Loading component
 function PageLoader() {
   return (
@@ -442,6 +445,14 @@ export default function App() {
                       element={
                         <ProtectedRoute roles={['admin']}>
                           <ComparaisonAgences />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/pro/analytics"
+                      element={
+                        <ProtectedRoute roles={['admin', 'prestataire']}>
+                          <Analytics />
                         </ProtectedRoute>
                       }
                     />

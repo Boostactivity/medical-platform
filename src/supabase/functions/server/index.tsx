@@ -29,6 +29,7 @@ import communityRoutes from './routes/community.ts';
 import checkinNewsletterRoutes from './routes/checkin-newsletter.ts';
 import segmentsSavRoutes from './routes/segments-sav.ts';
 import crmExportsRoutes from './routes/crm-exports.ts';
+import analyticsRoutes from './routes/analytics.ts';
 
 // Existing route modules
 import { setupPrestataireTablesRoute } from './setup.tsx';
@@ -117,6 +118,9 @@ app.route(prefix, checkinNewsletterRoutes);
 // Vague 8 — pro avancé : segmentation patients + SAV/SLA + CRM/exports/agences
 app.route(prefix, segmentsSavRoutes);
 app.route(prefix, crmExportsRoutes);
+
+// Vague 9 — intelligence : score risque décrochage + forecasting
+app.route(prefix, analyticsRoutes);
 
 // ============================================
 // EXISTING ROUTE MODULES

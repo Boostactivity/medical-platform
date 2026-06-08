@@ -47,7 +47,13 @@ app.post('/observance/run-nightly', async (c) => {
 // ------------------------------------------------------------------
 
 const pro = new Hono<TenantEnv>();
-pro.use('*', requireAuth, requireRole('admin', 'prestataire'), requireTenant);
+// Scopé par chemin (PAS '*' nu) : ce sous-app est monté via app.route('/', pro)
+// à la racine du préfixe — un '*' nu intercepterait /patient/* et toutes les
+// autres sub-apps (cause du 403 généralisé). /observance/run-nightly reste
+// hors de ce guard (cron, défini sur l'app principale avant ce montage).
+const proGuard = [requireAuth, requireRole('admin', 'prestataire'), requireTenant] as const;
+pro.use('/observance/*', ...proGuard);
+pro.use('/billing/*', ...proGuard);
 
 pro.post('/observance/run/:patientId', async (c) => {
   try {

@@ -30,8 +30,13 @@ import { requireAuth, requireRole } from '../middleware/auth.ts';
 import { requireTenant, type TenantEnv } from '../middleware/tenant.ts';
 
 const app = new Hono<TenantEnv>();
-// technicien : accès lecture planning + stock depuis l'app mobile terrain
-app.use('*', requireAuth, requireRole('admin', 'prestataire', 'technicien'), requireTenant);
+// technicien : accès lecture planning + stock depuis l'app mobile terrain.
+// Scopé par chemin (PAS '*' nu) : monté au préfixe racine, un '*' nu
+// intercepterait /patient/* et les autres sub-apps (bug Hono).
+const stockGuard = [requireAuth, requireRole('admin', 'prestataire', 'technicien'), requireTenant] as const;
+app.use('/stock/*', ...stockGuard);
+app.use('/parc/*', ...stockGuard);
+app.use('/planning/*', ...stockGuard);
 
 const MASK_LIFESPAN_DAYS = 90;
 const TECHNICIAN_ROLES = ['technicien', 'technician', 'prestataire'];

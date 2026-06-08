@@ -20,6 +20,7 @@ import { DashboardLayout } from '../components/layouts/DashboardLayout';
 import { AlertsPanel } from '../components/doctor/AlertsPanel';
 import { CohortTable } from '../components/doctor/CohortTable';
 import { PatientDrawer } from '../components/doctor/PatientDrawer';
+import { MessagesPanel } from '../components/doctor/MessagesPanel';
 import {
   BAND_META,
   BAND_ORDER,
@@ -152,6 +153,10 @@ export function DashboardMedecin() {
               <>
                 <AlertsPanel alerts={alerts} onSelectPatient={setSelectedPatientId} />
                 <CohortTable patients={patients} onSelect={setSelectedPatientId} />
+                {/* Messagerie sécurisée du médecin (conversations médicales de sa cohorte) */}
+                <div className="mt-6">
+                  <MessagesPanel />
+                </div>
               </>
             ) : null}
           </>

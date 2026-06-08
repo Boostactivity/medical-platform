@@ -163,26 +163,39 @@ async function fetchPatientIdentities(patientIds: string[]) {
 // Les consommables PPC (masques, filtres, tubulures…) relèvent du
 // forfait LPP : covered_by_insurance = true, prix INDICATIF seulement.
 app.get('/patient/marketplace/catalogue', async (c) => {
+  // La table consumables tient les consommables RÉELS du tenant (colonnes :
+  // type, name, replacement_frequency_days). Pas de table catalogue/prix
+  // dédiée — on en dérive les modèles distincts commandables.
   const { data, error } = await supabase
     .from('consumables')
-    .select('id, type, name, size, manufacturer, replacement_frequency_days, unit_price_ht, stock_quantity')
+    .select('id, type, name, replacement_frequency_days')
     .eq('tenant_id', c.get('tenantId'))
     .order('type', { ascending: true })
     .order('name', { ascending: true });
 
   if (error) return c.json({ error: error.message }, 500);
 
+  // Dédoublonnage par (type, name) : un modèle de consommable = une entrée.
+  const seen = new Map<string, { id: string; type: string; name: string; replacement_frequency_days: number | null }>();
+  for (const item of data ?? []) {
+    const key = `${item.type}|${item.name}`;
+    if (!seen.has(key)) {
+      seen.set(key, {
+        id: item.id,
+        type: item.type,
+        name: item.name,
+        replacement_frequency_days: item.replacement_frequency_days ?? null,
+      });
+    }
+  }
+
   return c.json({
-    items: (data ?? []).map((item) => ({
-      id: item.id,
-      type: item.type,
-      name: item.name,
-      size: item.size,
-      manufacturer: item.manufacturer,
-      replacement_frequency_days: item.replacement_frequency_days,
-      unit_price_indicatif: item.unit_price_ht != null ? Number(item.unit_price_ht) : null,
+    items: [...seen.values()].map((item) => ({
+      ...item,
+      // Prix non géré en base (consommables LPP remboursés Sécu) : null assumé.
+      unit_price_indicatif: null,
       covered_by_insurance: true,
-      available: (item.stock_quantity ?? 0) > 0,
+      available: true,
     })),
   });
 });
@@ -241,11 +254,11 @@ app.post('/patient/marketplace/commandes', async (c) => {
 
   const note = typeof body.note === 'string' ? body.note.trim().slice(0, 1000) : null;
 
-  // Photo du catalogue : libellé + prix indicatif au moment de la commande
+  // Photo du catalogue : libellé au moment de la commande (colonnes réelles)
   const consumableIds = [...new Set(rawItems.map((i: any) => i.consumable_id))];
   const { data: consumables, error: consError } = await supabase
     .from('consumables')
-    .select('id, name, size, unit_price_ht')
+    .select('id, name')
     .eq('tenant_id', tenantId)
     .in('id', consumableIds);
   if (consError) return c.json({ error: consError.message }, 500);
@@ -278,9 +291,9 @@ app.post('/patient/marketplace/commandes', async (c) => {
       tenant_id: tenantId,
       order_id: order.id,
       consumable_id: cons.id,
-      item_label: cons.size ? `${cons.name} (${cons.size})` : cons.name,
+      item_label: cons.name,
       quantity: Number(item.quantity),
-      unit_price_indicatif: cons.unit_price_ht ?? null,
+      unit_price_indicatif: null,
       covered_by_insurance: true,
     };
   });

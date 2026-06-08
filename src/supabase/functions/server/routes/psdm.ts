@@ -30,7 +30,9 @@ import { requireAuth, requireRole } from '../middleware/auth.ts';
 import { requireTenant, type TenantEnv } from '../middleware/tenant.ts';
 
 const app = new Hono<TenantEnv>();
-app.use('*', requireAuth, requireRole('admin', 'prestataire'), requireTenant);
+// Scopé /psdm/* : monté au préfixe racine, un '*' nu intercepterait les
+// routes des autres sub-apps (ex. 403 sur /patient/* — bug Hono connu).
+app.use('/psdm/*', requireAuth, requireRole('admin', 'prestataire'), requireTenant);
 
 const ASSESSMENT_STATUSES = ['conforme', 'non_conforme', 'partiel', 'non_evalue'] as const;
 const ACTION_STATUSES = ['todo', 'in_progress', 'done'] as const;
